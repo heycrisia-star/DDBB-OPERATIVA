@@ -33,7 +33,14 @@ export default function Calendar({ currentUser }) {
     const [currentMonth, setCurrentMonth] = useState(new Date(2026, 2, 8)); // Marzo 2026 as reference
     const [viewMode, setViewMode] = useState('agenda'); // 'month', 'week', 'agenda'
     const [searchTerm, setSearchTerm] = useState('');
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
     const isDriver = currentUser?.role === 'driver';
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const [selectedVehicles, setSelectedVehicles] = useState(VEHICLES);
     const [selectedDrivers, setSelectedDrivers] = useState(DRIVERS);
@@ -80,51 +87,52 @@ export default function Calendar({ currentUser }) {
     const renderHeader = () => {
         return (
             <>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <h1 className="page-title" style={{ margin: 0, textTransform: 'capitalize' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? '0.5rem' : '1rem', width: isMobile ? '100%' : 'auto', justifyContent: isMobile ? 'space-between' : 'flex-start' }}>
+                        <h1 className="page-title" style={{ margin: 0, textTransform: 'capitalize', fontSize: isMobile ? '1.25rem' : '1.75rem' }}>
                             {format(currentMonth, 'MMMM yyyy', { locale: es })}
                         </h1>
-                        <div style={{ display: 'flex', gap: '0.25rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)', padding: '0.25rem' }}>
-                            <button onClick={prevMonth} style={{ padding: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', borderRadius: 'var(--radius-sm)' }}><ChevronLeft size={20} color="var(--text-secondary)" /></button>
-                            <button onClick={goToToday} style={{ padding: '0.5rem 1rem', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500, color: 'var(--text-secondary)' }}>Hoy</button>
-                            <button onClick={nextMonth} style={{ padding: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', borderRadius: 'var(--radius-sm)' }}><ChevronRight size={20} color="var(--text-secondary)" /></button>
+                        <div style={{ display: 'flex', gap: '0.25rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)', padding: '0.2rem' }}>
+                            <button onClick={prevMonth} style={{ padding: '0.4rem', background: 'none', border: 'none', cursor: 'pointer', borderRadius: 'var(--radius-sm)' }}><ChevronLeft size={isMobile ? 18 : 20} color="var(--text-secondary)" /></button>
+                            <button onClick={goToToday} style={{ padding: '0.4rem 0.75rem', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, color: 'var(--text-secondary)', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>Hoy</button>
+                            <button onClick={nextMonth} style={{ padding: '0.4rem', background: 'none', border: 'none', cursor: 'pointer', borderRadius: 'var(--radius-sm)' }}><ChevronRight size={isMobile ? 18 : 20} color="var(--text-secondary)" /></button>
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', width: isMobile ? '100%' : 'auto', flexWrap: 'wrap' }}>
                         {/* View mode toggle */}
-                        <div style={{ display: 'flex', backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', overflow: 'hidden' }}>
+                        <div style={{ display: 'flex', backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', overflow: 'hidden', flex: isMobile ? 1 : 'none' }}>
                             <button
                                 onClick={() => setViewMode('month')}
-                                style={{ padding: '0.5rem 1rem', border: 'none', background: viewMode === 'month' ? 'var(--brand-light)' : 'transparent', color: viewMode === 'month' ? 'var(--brand-primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 500 }}
+                                style={{ flex: isMobile ? 1 : 'none', padding: isMobile ? '0.4rem 0.5rem' : '0.5rem 1rem', border: 'none', background: viewMode === 'month' ? 'var(--brand-light)' : 'transparent', color: viewMode === 'month' ? 'var(--brand-primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? '0.8rem' : '0.875rem' }}
                             >
                                 Mes
                             </button>
                             <button
                                 onClick={() => setViewMode('agenda')}
-                                style={{ padding: '0.5rem 1rem', border: 'none', background: viewMode === 'agenda' ? 'var(--brand-light)' : 'transparent', color: viewMode === 'agenda' ? 'var(--brand-primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 500 }}
+                                style={{ flex: isMobile ? 1 : 'none', padding: isMobile ? '0.4rem 0.5rem' : '0.5rem 1rem', border: 'none', background: viewMode === 'agenda' ? 'var(--brand-light)' : 'transparent', color: viewMode === 'agenda' ? 'var(--brand-primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? '0.8rem' : '0.875rem' }}
                             >
                                 Agenda
                             </button>
                         </div>
 
                         {/* Search */}
-                        <div style={{ position: 'relative' }}>
-                            <Search size={18} color="var(--text-tertiary)" style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)' }} />
+                        <div style={{ position: 'relative', flex: isMobile ? 1.5 : 'none' }}>
+                            <Search size={16} color="var(--text-tertiary)" style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)' }} />
                             <input
                                 type="text"
-                                placeholder="Buscar tours..."
+                                placeholder="Buscar..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 style={{
-                                    padding: '0.5rem 1rem 0.5rem 2.5rem',
+                                    padding: '0.4rem 1rem 0.4rem 2.25rem',
                                     borderRadius: 'var(--radius-md)',
                                     border: '1px solid var(--border-color)',
                                     backgroundColor: 'var(--bg-card)',
                                     color: 'var(--text-primary)',
-                                    width: '200px',
-                                    outline: 'none'
+                                    width: '100%',
+                                    outline: 'none',
+                                    fontSize: isMobile ? '0.8rem' : '0.875rem'
                                 }}
                             />
                         </div>
@@ -132,8 +140,8 @@ export default function Calendar({ currentUser }) {
                 </div>
 
                 <div className="card" style={{ marginBottom: '2rem', padding: 0 }}>
-                    <div style={{ padding: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end' }}>
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <div style={{ padding: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', justifyContent: isMobile ? 'center' : 'flex-end' }}>
+                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
                             <MultiSelect
                                 label="Coches" options={VEHICLES}
                                 selected={selectedVehicles} onChange={toggleVehicle} onToggleAll={toggleAllVehicles}
@@ -189,9 +197,11 @@ export default function Calendar({ currentUser }) {
         const startDate = startOfWeek(currentMonth, { weekStartsOn: 1 }); // Comienza en Lunes
 
         for (let i = 0; i < 7; i++) {
+            const date = addDays(startDate, i);
+            const label = isMobile ? format(date, 'eeeee', { locale: es }) : format(date, 'EEE', { locale: es });
             days.push(
-                <div key={i} style={{ padding: '0.75rem', textAlign: 'center', fontWeight: 600, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-color)', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
-                    {format(addDays(startDate, i), 'EEE', { locale: es })}
+                <div key={i} style={{ padding: isMobile ? '0.5rem 0.25rem' : '0.75rem', textAlign: 'center', fontWeight: 600, color: 'var(--text-secondary)', borderBottom: '1px solid var(--border-color)', textTransform: 'uppercase', fontSize: isMobile ? '0.65rem' : '0.75rem', letterSpacing: '0.05em' }}>
+                    {label}
                 </div>
             );
         }
@@ -233,15 +243,19 @@ export default function Calendar({ currentUser }) {
                     <div
                         key={day}
                         style={{
-                            minHeight: '120px',
-                            padding: '0.5rem',
+                            minHeight: isMobile ? '80px' : '120px',
+                            padding: isMobile ? '0.25rem' : '0.5rem',
                             borderRight: '1px solid var(--border-color)',
                             borderBottom: '1px solid var(--border-color)',
                             backgroundColor: isCurrentMonth ? 'var(--bg-card)' : 'var(--bg-hover)',
                             opacity: isCurrentMonth ? 1 : 0.5,
                             display: 'flex',
                             flexDirection: 'column',
-                            gap: '0.25rem'
+                            gap: '0.25rem',
+                            cursor: isMobile ? 'pointer' : 'default'
+                        }}
+                        onClick={() => {
+                            if (isMobile) setViewMode('agenda');
                         }}
                     >
                         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.25rem' }}>
@@ -261,10 +275,33 @@ export default function Calendar({ currentUser }) {
                             </span>
                         </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', overflowY: 'auto', flex: 1 }}>
+                        <div style={{
+                            display: 'flex',
+                            flexDirection: isMobile ? 'row' : 'column',
+                            flexWrap: isMobile ? 'wrap' : 'nowrap',
+                            gap: isMobile ? '2px' : '0.25rem',
+                            overflowY: isMobile ? 'hidden' : 'auto',
+                            flex: 1,
+                            justifyContent: isMobile ? 'center' : 'flex-start'
+                        }}>
                             {dayTours.map(tour => {
                                 const colors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
                                 const isCancelled = tour.status === 'cancelado';
+
+                                if (isMobile) {
+                                    return (
+                                        <div
+                                            key={tour.id}
+                                            style={{
+                                                width: '8px',
+                                                height: '8px',
+                                                borderRadius: '50%',
+                                                backgroundColor: colors.text,
+                                                opacity: isCancelled ? 0.4 : 1
+                                            }}
+                                        />
+                                    );
+                                }
 
                                 return (
                                     <div
@@ -343,37 +380,41 @@ export default function Calendar({ currentUser }) {
                 {sortedTours.map(tour => {
                     const colors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
                     return (
-                        <div key={tour.id} style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '60px', height: '60px', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)' }}>
-                                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>{format(parseISO(tour.date), 'MMM', { locale: es })}</span>
-                                <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>{format(parseISO(tour.date), 'dd')}</span>
+                        <div key={tour.id} style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'center', gap: isMobile ? '0.75rem' : '1rem', padding: isMobile ? '0.85rem' : '1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)', position: 'relative' }}>
+                            <div style={{ display: 'flex', flexDirection: isMobile ? 'row' : 'column', alignItems: 'center', justifyContent: isMobile ? 'flex-start' : 'center', width: isMobile ? 'auto' : '60px', minHeight: isMobile ? 'auto' : '60px', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)', padding: isMobile ? '0.5rem 0.75rem' : '0', gap: isMobile ? '0.5rem' : '0' }}>
+                                <span style={{ fontSize: isMobile ? '0.85rem' : '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>{format(parseISO(tour.date), isMobile ? 'EEEE' : 'MMM', { locale: es })}</span>
+                                <span style={{ fontSize: isMobile ? '1.125rem' : '1.5rem', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1 }}>{format(parseISO(tour.date), 'dd')}</span>
+                                {isMobile && <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{format(parseISO(tour.date), 'MMMM', { locale: es })}</span>}
                             </div>
 
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                    <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{tour.start}</span>
-                                    <span className={`badge`} style={{ backgroundColor: colors.bg, color: colors.text }}>{tour.operator}</span>
-                                    <span style={{ color: 'var(--brand-primary)', fontWeight: 600 }}>{tour.clientName}</span>
-                                    <span style={{ color: 'var(--text-tertiary)', fontSize: '0.75rem' }}>{tour.code}</span>
+                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                        <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: isMobile ? '1rem' : '1.125rem' }}>{tour.start}</span>
+                                        <span className={`badge`} style={{ backgroundColor: colors.bg, color: colors.text, fontSize: '0.65rem', padding: '0.15rem 0.4rem' }}>{tour.operator}</span>
+                                        {!isMobile && <span style={{ color: 'var(--text-tertiary)', fontSize: '0.75rem' }}>{tour.code}</span>}
+                                    </div>
+                                    <span className={`badge badge-${tour.status}`} style={{ fontSize: isMobile ? '0.65rem' : '0.75rem' }}>{tour.status}</span>
                                 </div>
-                                <div style={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', color: 'var(--text-secondary)', flexWrap: 'wrap' }}>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Phone size={14} /> {tour.phone}</span>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Globe size={14} /> {LANG_MAP[tour.language] || tour.language}</span>
+
+                                <div style={{ color: 'var(--brand-primary)', fontWeight: 700, fontSize: isMobile ? '1.1rem' : '1.25rem' }}>{tour.clientName}</div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.5rem', fontSize: isMobile ? '0.75rem' : '0.875rem', color: 'var(--text-secondary)' }}>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Phone size={isMobile ? 12 : 14} /> {tour.phone}</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Globe size={isMobile ? 12 : 14} /> {LANG_MAP[tour.language] || tour.language}</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Clock size={isMobile ? 12 : 14} /> {tour.duration}h</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Users size={isMobile ? 12 : 14} /> {tour.pax} pax</span>
                                 </div>
-                                <div style={{ display: 'flex', gap: '1rem', fontSize: '0.875rem', color: 'var(--text-secondary)', flexWrap: 'wrap' }}>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Clock size={14} /> {tour.duration}h</span>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Users size={14} /> {tour.pax}</span>
-                                    {tour.driver && (
-                                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: DRIVER_COLORS[tour.driver] || 'var(--text-secondary)', fontWeight: 600 }}>
-                                            <UserCircle size={14} /> {tour.driver}
-                                            <span style={{ color: VEHICLE_COLORS[tour.vehicle] || 'inherit' }}>({tour.vehicle})</span>
+
+                                {tour.driver && (
+                                    <div style={{ marginTop: '0.25rem', padding: '0.5rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>
+                                        <UserCircle size={isMobile ? 16 : 18} color={DRIVER_COLORS[tour.driver] || 'var(--brand-primary)'} />
+                                        <span>
+                                            <strong style={{ color: 'var(--text-primary)' }}>{tour.driver}</strong>
+                                            <span style={{ color: 'var(--text-tertiary)', marginLeft: '0.4rem' }}>{tour.vehicle}</span>
                                         </span>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <span className={`badge badge-${tour.status}`}>{tour.status}</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     );
