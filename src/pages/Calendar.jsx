@@ -31,7 +31,7 @@ const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'Fren
 
 export default function Calendar({ currentUser }) {
     const [currentMonth, setCurrentMonth] = useState(new Date(2026, 2, 8)); // Marzo 2026 as reference
-    const [viewMode, setViewMode] = useState('month'); // 'month', 'week', 'agenda'
+    const [viewMode, setViewMode] = useState('agenda'); // 'month', 'week', 'agenda'
     const [searchTerm, setSearchTerm] = useState('');
     const isDriver = currentUser?.role === 'driver';
 

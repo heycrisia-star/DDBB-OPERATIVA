@@ -4,50 +4,70 @@ import { User, LogOut, Shield } from 'lucide-react';
 export default function Configuracion({ currentUser, onLogout }) {
     return (
         <div className="section animate-fade-in" style={{ padding: '0 2rem' }}>
-            <div className="section-header">
+            <div className="page-header" style={{ marginBottom: '2rem' }}>
                 <div>
-                    <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>Configuración</h1>
-                    <p style={{ color: 'var(--text-secondary)' }}>Ajustes de cuenta y sistema</p>
+                    <h1 className="page-title">Configuración</h1>
+                    <p style={{ color: 'var(--text-secondary)' }}>Ajustes de cuenta, preferencias y sistema</p>
                 </div>
             </div>
 
-            <div className="card" style={{ maxWidth: '600px', margin: '2rem auto' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '1.5rem', marginBottom: '1.5rem' }}>
-                    <div style={{ width: '64px', height: '64px', backgroundColor: 'var(--bg-hover)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <User size={32} color="var(--brand-primary)" />
+            <div className="card" style={{ maxWidth: '600px', margin: '0 auto' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '2rem', marginBottom: '2rem' }}>
+                    <div style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, var(--brand-light), #e0e7ff)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
+                        <User size={40} color="var(--brand-primary)" />
                     </div>
                     <div>
-                        <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)' }}>{currentUser.name}</h2>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.25rem' }}>
-                            <Shield size={14} />
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>{currentUser.name}</h2>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: currentUser.role === 'admin' ? '#f0fdf4' : '#f0f9ff', color: currentUser.role === 'admin' ? '#166534' : '#0369a1', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 600, marginTop: '0.5rem', border: `1px solid ${currentUser.role === 'admin' ? '#bbf7d0' : '#bae6fd'}` }}>
+                            <Shield size={16} />
                             {currentUser.role === 'admin' ? 'Administrador del Sistema' : 'Chofer Asignado'}
                         </div>
                     </div>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <div style={{ padding: '1rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)' }}>
-                        <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)' }}>Permisos Activos</h3>
-                        <ul style={{ marginTop: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem', marginLeft: '1.5rem', listStyleType: 'disc' }}>
-                            {currentUser.role === 'admin' ? (
-                                <>
-                                    <li>Acceso total a todos los tours y calendarios.</li>
-                                    <li>Visualización de facturación y KPIs globales.</li>
-                                    <li>Gestión de todos los vehículos y choferes.</li>
-                                </>
-                            ) : (
-                                <>
-                                    <li>Visualización de tours asignados a tu nombre.</li>
-                                    <li>Acceso a hoja de ruta personal.</li>
-                                    <li>Visualización de métricas y facturación propias.</li>
-                                </>
-                            )}
-                        </ul>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                    <div>
+                        <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1rem' }}>Permisos Activos</h3>
+                        <div style={{ padding: '1.5rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
+                            <ul style={{ color: 'var(--text-secondary)', fontSize: '0.925rem', margin: 0, paddingLeft: '1.25rem', listStyleType: 'disc', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                {currentUser.role === 'admin' ? (
+                                    <>
+                                        <li><strong>Acceso total:</strong> Visualización de todos los tours y calendarios.</li>
+                                        <li><strong>Métricas:</strong> Visualización de facturación y KPIs globales.</li>
+                                        <li><strong>Gestión:</strong> Control total sobre vehículos y choferes.</li>
+                                    </>
+                                ) : (
+                                    <>
+                                        <li><strong>Tours:</strong> Visualización de tours asignados a tu nombre.</li>
+                                        <li><strong>Agenda:</strong> Acceso a la hoja de ruta personal.</li>
+                                        <li><strong>Facturación:</strong> Visualización de métricas y facturación propias.</li>
+                                    </>
+                                )}
+                            </ul>
+                        </div>
                     </div>
 
-                    <button className="button" onClick={onLogout} style={{ marginTop: '1rem', backgroundColor: 'var(--bg-card)', border: '1px solid var(--status-cancelled)', color: 'var(--status-cancelled)', justifyContent: 'center' }}>
-                        <LogOut size={18} /> Cerrar Sesión
-                    </button>
+                    <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '2rem', display: 'flex', justifyContent: 'center' }}>
+                        <button
+                            className="btn"
+                            onClick={onLogout}
+                            style={{
+                                backgroundColor: '#ef4444',
+                                color: 'white',
+                                border: 'none',
+                                width: '100%',
+                                justifyContent: 'center',
+                                padding: '0.875rem',
+                                fontSize: '1rem',
+                                fontWeight: 600,
+                                boxShadow: '0 4px 6px -1px rgba(239, 68, 68, 0.2), 0 2px 4px -1px rgba(239, 68, 68, 0.1)'
+                            }}
+                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#dc2626'}
+                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ef4444'}
+                        >
+                            <LogOut size={20} /> Cerrar Sesión Segura
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
