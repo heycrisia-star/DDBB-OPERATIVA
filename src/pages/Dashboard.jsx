@@ -199,7 +199,7 @@ export default function Dashboard({ currentUser }) {
             </div>
 
             {/* Filter Bar */}
-            <div className="card" style={{ marginBottom: '2rem', padding: 0, overflow: 'hidden' }}>
+            <div className="card" style={{ marginBottom: '2rem', padding: 0 }}>
                 <div style={{ padding: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'flex-end' }}>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                         <MultiSelect
@@ -222,7 +222,7 @@ export default function Dashboard({ currentUser }) {
                     </div>
                 </div>
 
-                <div style={{ padding: '0.75rem 1rem', backgroundColor: 'var(--bg-hover)', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                <div style={{ padding: '0.75rem 1rem', backgroundColor: 'var(--bg-hover)', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', borderBottomLeftRadius: 'inherit', borderBottomRightRadius: 'inherit' }}>
                     <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Operadores:</span>
                     <button
                         style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)', background: selectedOperators.length === OPERATORS.length ? 'var(--brand-primary)' : 'var(--bg-card)', color: selectedOperators.length === OPERATORS.length ? '#fff' : 'var(--text-primary)', cursor: 'pointer' }}

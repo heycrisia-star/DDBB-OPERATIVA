@@ -141,7 +141,7 @@ export default function Tours({ currentUser }) {
                 </div>
             </div>
 
-            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+            <div className="card" style={{ padding: 0 }}>
                 {/* Superior Filter Bar */}
                 <div style={{ padding: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
                     <div style={{ position: 'relative', minWidth: '250px', flex: 1 }}>
@@ -211,7 +211,7 @@ export default function Tours({ currentUser }) {
                     })}
                 </div>
 
-                <div className="data-table-container">
+                <div className="data-table-container" style={{ borderBottomLeftRadius: 'inherit', borderBottomRightRadius: 'inherit' }}>
                     <table className="data-table">
                         <thead>
                             <tr>
