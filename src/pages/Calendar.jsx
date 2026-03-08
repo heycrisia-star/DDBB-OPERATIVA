@@ -29,7 +29,7 @@ const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Roger': '#0d9488', 'Marco': '#be
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };
 
-export default function Calendar() {
+export default function Calendar({ currentUser }) {
     const [currentMonth, setCurrentMonth] = useState(new Date(2026, 2, 8)); // Marzo 2026 as reference
     const [viewMode, setViewMode] = useState('month'); // 'month', 'week', 'agenda'
     const [searchTerm, setSearchTerm] = useState('');
@@ -213,6 +213,7 @@ export default function Calendar() {
 
                 // Obtener tours del día
                 const dayTours = MOCK_TOURS.filter(t => {
+                    if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
                     if (t.date !== format(day, 'yyyy-MM-dd')) return false;
                     if (searchTerm && !t.code.toLowerCase().includes(searchTerm.toLowerCase()) && !t.driver.toLowerCase().includes(searchTerm.toLowerCase()) && !t.clientName?.toLowerCase().includes(searchTerm.toLowerCase())) return false;
                     if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
@@ -319,6 +320,7 @@ export default function Calendar() {
         // Simple list view for agenda mode (better for mobile)
         const sortedTours = [...MOCK_TOURS]
             .filter(t => {
+                if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
                 if (searchTerm && !t.code.toLowerCase().includes(searchTerm.toLowerCase()) && !t.driver.toLowerCase().includes(searchTerm.toLowerCase()) && !t.clientName?.toLowerCase().includes(searchTerm.toLowerCase())) return false;
                 if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
                 if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;

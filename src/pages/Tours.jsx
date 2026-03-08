@@ -33,7 +33,7 @@ const OPERATOR_COLORS = {
 
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };
 
-export default function Tours() {
+export default function Tours({ currentUser }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTour, setSelectedTour] = useState(null);
 
@@ -94,6 +94,7 @@ export default function Tours() {
     }
 
     const filteredTours = MOCK_TOURS.filter(t => {
+        if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
         if (!t.code.toLowerCase().includes(searchTerm.toLowerCase())) return false;
         if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
         if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;

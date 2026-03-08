@@ -50,8 +50,9 @@ const ProgressBar = ({ label, value, max, color, count, extraLabel, striped }) =
     )
 }
 
-export default function Dashboard() {
+export default function Dashboard({ currentUser }) {
     const [timeRange, setTimeRange] = useState('today'); // 'today', 'weekly', 'monthly', 'year', 'cumulative'
+    const isDriver = currentUser?.role === 'driver';
 
     // Time Range Options aligned globally
     const TIME_FILTERS = [
@@ -99,7 +100,12 @@ export default function Dashboard() {
     const toggleAllVehicles = () => setSelectedVehicles(VEHICLES);
 
     // Mock Data based on the selected timeRange
-    const kpis = {
+    const kpis = isDriver ? {
+        today: { sales: '150', hours: 2, tours: 1, ticket: '150', cancelRate: 0 },
+        weekly: { sales: '1,050', hours: 14, tours: 6, ticket: '175', cancelRate: 0 },
+        monthly: { sales: '4,100', hours: 55, tours: 24, ticket: '170', cancelRate: 5 },
+        year: { sales: '15,200', hours: 206, tours: 93, ticket: '163', cancelRate: 8 }
+    }[timeRange] : {
         today: { sales: '450', hours: 6, tours: 3, ticket: '150', cancelRate: 5 },
         weekly: { sales: '3,150', hours: 42, tours: 18, ticket: '175', cancelRate: 8 },
         monthly: { sales: '12,400', hours: 165, tours: 72, ticket: '172', cancelRate: 12 },
@@ -109,7 +115,9 @@ export default function Dashboard() {
     const vehicleHours = { '01-DR': 95, '02-NR': 70 };
     const maxVehicle = 100;
 
-    const driverStats = {
+    const driverStats = isDriver ? {
+        [currentUser.name]: { hours: currentUser.name === 'Roger' ? 50 : 40, sales: currentUser.name === 'Roger' ? '3,200' : '2,600' }
+    } : {
         'Cristian': { hours: 75, sales: '4,500' },
         'Roger': { hours: 50, sales: '3,200' },
         'Marco': { hours: 40, sales: '2,600' }
