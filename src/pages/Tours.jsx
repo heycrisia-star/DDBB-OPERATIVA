@@ -48,17 +48,21 @@ export default function Tours({ currentUser }) {
 
     const toggleVehicle = (v) => {
         if (selectedVehicles.includes(v)) {
-            if (selectedVehicles.length > 1) setSelectedVehicles(selectedVehicles.filter(x => x !== v));
+            setSelectedVehicles(selectedVehicles.filter(x => x !== v));
         } else setSelectedVehicles([...selectedVehicles, v]);
     };
-    const toggleAllVehicles = () => setSelectedVehicles(VEHICLES);
+    const toggleAllVehicles = () => {
+        setSelectedVehicles(selectedVehicles.length === VEHICLES.length ? [] : VEHICLES);
+    };
 
     const toggleDriver = (d) => {
         if (selectedDrivers.includes(d)) {
-            if (selectedDrivers.length > 1) setSelectedDrivers(selectedDrivers.filter(x => x !== d));
+            setSelectedDrivers(selectedDrivers.filter(x => x !== d));
         } else setSelectedDrivers([...selectedDrivers, d]);
     };
-    const toggleAllDrivers = () => setSelectedDrivers(DRIVERS);
+    const toggleAllDrivers = () => {
+        setSelectedDrivers(selectedDrivers.length === DRIVERS.length ? [] : DRIVERS);
+    };
 
     const handleEditClick = (tour) => {
         setSelectedTour({ ...tour });

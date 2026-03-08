@@ -80,24 +80,30 @@ export default function Dashboard({ currentUser }) {
 
     const toggleOperator = (op) => {
         if (selectedOperators.includes(op)) {
-            if (selectedOperators.length > 1) setSelectedOperators(selectedOperators.filter(o => o !== op));
+            setSelectedOperators(selectedOperators.filter(o => o !== op));
         } else setSelectedOperators([...selectedOperators, op]);
     };
-    const toggleAllOperators = () => setSelectedOperators(OPERATORS);
+    const toggleAllOperators = () => {
+        setSelectedOperators(selectedOperators.length === OPERATORS.length ? [] : OPERATORS);
+    };
 
     const toggleDriver = (d) => {
         if (selectedDrivers.includes(d)) {
-            if (selectedDrivers.length > 1) setSelectedDrivers(selectedDrivers.filter(x => x !== d));
+            setSelectedDrivers(selectedDrivers.filter(x => x !== d));
         } else setSelectedDrivers([...selectedDrivers, d]);
     };
-    const toggleAllDrivers = () => setSelectedDrivers(DRIVERS);
+    const toggleAllDrivers = () => {
+        setSelectedDrivers(selectedDrivers.length === DRIVERS.length ? [] : DRIVERS);
+    };
 
     const toggleVehicle = (v) => {
         if (selectedVehicles.includes(v)) {
-            if (selectedVehicles.length > 1) setSelectedVehicles(selectedVehicles.filter(x => x !== v));
+            setSelectedVehicles(selectedVehicles.filter(x => x !== v));
         } else setSelectedVehicles([...selectedVehicles, v]);
     };
-    const toggleAllVehicles = () => setSelectedVehicles(VEHICLES);
+    const toggleAllVehicles = () => {
+        setSelectedVehicles(selectedVehicles.length === VEHICLES.length ? [] : VEHICLES);
+    };
 
     // Mock Data based on the selected timeRange
     const kpis = isDriver ? {
