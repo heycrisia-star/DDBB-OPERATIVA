@@ -158,11 +158,11 @@ export default function Dashboard({ currentUser }) {
                         <div style={{ display: 'flex', gap: '1.5rem', paddingRight: '1.5rem', borderRight: '1px solid var(--border-color)' }}>
                             <div>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>{timeRange === 'year' ? 'Acum. Hasta Hoy' : 'Venta Mes'}</div>
-                                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>12,400</div>
+                                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>{isDriver ? '4,100' : '12,400'}</div>
                             </div>
                             <div>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>{timeRange === 'year' ? 'Forecast Año' : 'Forecast'}</div>
-                                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--brand-primary)' }}>14,500</div>
+                                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--brand-primary)' }}>{isDriver ? '5,500' : '14,500'}</div>
                             </div>
                         </div>
 
@@ -204,13 +204,15 @@ export default function Dashboard({ currentUser }) {
                             onToggleAll={toggleAllVehicles}
                         />
 
-                        <MultiSelect
-                            label="Choferes"
-                            options={DRIVERS}
-                            selected={selectedDrivers}
-                            onChange={toggleDriver}
-                            onToggleAll={toggleAllDrivers}
-                        />
+                        {!isDriver && (
+                            <MultiSelect
+                                label="Choferes"
+                                options={DRIVERS}
+                                selected={selectedDrivers}
+                                onChange={toggleDriver}
+                                onToggleAll={toggleAllDrivers}
+                            />
+                        )}
                     </div>
                 </div>
 

@@ -36,6 +36,7 @@ const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'Fren
 export default function Tours({ currentUser }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTour, setSelectedTour] = useState(null);
+    const isDriver = currentUser?.role === 'driver';
 
     // Filters State
     const [filterDate, setFilterDate] = useState('today');
@@ -162,10 +163,12 @@ export default function Tours({ currentUser }) {
                         selected={selectedVehicles} onChange={toggleVehicle} onToggleAll={toggleAllVehicles}
                     />
 
-                    <MultiSelect
-                        label="Choferes" options={DRIVERS}
-                        selected={selectedDrivers} onChange={toggleDriver} onToggleAll={toggleAllDrivers}
-                    />
+                    {!isDriver && (
+                        <MultiSelect
+                            label="Choferes" options={DRIVERS}
+                            selected={selectedDrivers} onChange={toggleDriver} onToggleAll={toggleAllDrivers}
+                        />
+                    )}
                 </div>
 
                 {/* Operator Filter Bar */}

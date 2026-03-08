@@ -33,6 +33,7 @@ export default function Calendar({ currentUser }) {
     const [currentMonth, setCurrentMonth] = useState(new Date(2026, 2, 8)); // Marzo 2026 as reference
     const [viewMode, setViewMode] = useState('month'); // 'month', 'week', 'agenda'
     const [searchTerm, setSearchTerm] = useState('');
+    const isDriver = currentUser?.role === 'driver';
 
     const [selectedVehicles, setSelectedVehicles] = useState(VEHICLES);
     const [selectedDrivers, setSelectedDrivers] = useState(DRIVERS);
@@ -133,10 +134,12 @@ export default function Calendar({ currentUser }) {
                                 label="Coches" options={VEHICLES}
                                 selected={selectedVehicles} onChange={toggleVehicle} onToggleAll={toggleAllVehicles}
                             />
-                            <MultiSelect
-                                label="Choferes" options={DRIVERS}
-                                selected={selectedDrivers} onChange={toggleDriver} onToggleAll={toggleAllDrivers}
-                            />
+                            {!isDriver && (
+                                <MultiSelect
+                                    label="Choferes" options={DRIVERS}
+                                    selected={selectedDrivers} onChange={toggleDriver} onToggleAll={toggleAllDrivers}
+                                />
+                            )}
                         </div>
                     </div>
 
