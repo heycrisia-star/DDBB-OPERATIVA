@@ -42,18 +42,11 @@ export default function Login({ onLogin }) {
                 boxShadow: 'var(--shadow-lg)'
             }}>
                 <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                    <div style={{
-                        width: '64px', height: '64px',
-                        backgroundColor: 'var(--brand-light)',
-                        color: 'var(--brand-primary)',
-                        borderRadius: '50%',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        margin: '0 auto 1rem'
-                    }}>
-                        <Lock size={32} />
-                    </div>
-                    <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>Acceso al Sistema</h1>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.5rem' }}>Legacy Tours Spain</p>
+                    <img
+                        src="https://res.cloudinary.com/dk7xpxrvh/image/upload/v1771317526/ultimo_intento_yrsutn.png"
+                        alt="Legacy Tours Spain Logo"
+                        style={{ maxWidth: '200px', margin: '0 auto 1rem', display: 'block' }}
+                    />
                 </div>
 
                 <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
