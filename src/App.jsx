@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
-import { Calendar as CalendarIcon, LayoutDashboard, List, Settings, LogOut } from 'lucide-react';
+import { Calendar as CalendarIcon, LayoutDashboard, List, LogOut } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
 import Tours from './pages/Tours';
 import Calendar from './pages/Calendar';
-import Configuracion from './pages/Configuracion';
 import Login from './components/Login';
 import { useState, useEffect } from 'react';
 
@@ -56,41 +55,50 @@ function App() {
                 <LayoutDashboard size={20} />
                 Operativa
               </NavLink>
-              <NavLink to="/settings" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                <Settings size={20} />
-                Configuración
-              </NavLink>
             </nav>
 
-            <div style={{ marginTop: isMobile ? '0' : 'auto', padding: isMobile ? '0 0 0 0.5rem' : '1rem' }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: isMobile ? '0.5rem' : '0.75rem 1rem',
-                backgroundColor: isMobile ? 'transparent' : 'var(--bg-hover)',
-                borderRadius: 'var(--radius-md)',
-                border: isMobile ? 'none' : '1px solid var(--border-color)'
-              }}>
+            <div style={{ marginTop: isMobile ? '0' : 'auto', padding: isMobile ? '0.5rem' : '1rem' }}>
+              <div
+                onClick={handleLogout}
+                title="Cerrar Sesión"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: isMobile ? '0.25rem' : '0.75rem 1rem',
+                  backgroundColor: isMobile ? 'transparent' : 'var(--bg-hover)',
+                  borderRadius: 'var(--radius-md)',
+                  border: isMobile ? 'none' : '1px solid var(--border-color)',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  userSelect: 'none'
+                }}
+                onMouseOver={(e) => {
+                  if (!isMobile) e.currentTarget.style.backgroundColor = '#fef2f2'; // Very light red
+                }}
+                onMouseOut={(e) => {
+                  if (!isMobile) e.currentTarget.style.backgroundColor = 'var(--bg-hover)';
+                }}
+              >
                 <div style={{
-                  width: isMobile ? '36px' : '32px',
-                  height: isMobile ? '36px' : '32px',
-                  backgroundColor: 'var(--brand-primary)',
+                  width: '32px',
+                  height: '32px',
+                  backgroundColor: '#ef4444',
                   color: '#ffffff',
                   borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  fontWeight: 'bold',
-                  boxShadow: isMobile ? '0 2px 4px rgba(14, 165, 233, 0.3)' : 'none',
-                  cursor: 'pointer'
+                  fontWeight: 800,
+                  boxShadow: '0 2px 4px rgba(239, 68, 68, 0.2)',
+                  fontSize: '0.875rem'
                 }}>
                   {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : '?'}
                 </div>
                 {!isMobile && (
                   <div style={{ flex: 1, overflow: 'hidden' }}>
-                    <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{currentUser?.name || 'Usuario'}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentUser?.role === 'admin' ? 'Admin' : 'Chofer'}</div>
+                    <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#ef4444', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>Cerrar Sesión</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{currentUser?.name}</div>
                   </div>
                 )}
               </div>
@@ -102,7 +110,6 @@ function App() {
               <Route path="/" element={<Calendar currentUser={currentUser} />} />
               <Route path="/tours" element={<Tours currentUser={currentUser} />} />
               <Route path="/dashboard" element={<Dashboard currentUser={currentUser} />} />
-              <Route path="/settings" element={<Configuracion currentUser={currentUser} onLogout={handleLogout} />} />
             </Routes>
           </main>
         </div>
