@@ -66,7 +66,7 @@ export default function Login({ onLogin }) {
                         {error && <p style={{ color: 'var(--status-cancelled)', fontSize: '0.75rem', marginTop: '0.5rem', textAlign: 'center' }}>{error}</p>}
                     </div>
 
-                    <button type="submit" className="button" style={{ height: '48px', fontSize: '1rem', fontWeight: 600, width: '100%', justifyContent: 'center', marginTop: '0.5rem' }}>
+                    <button type="submit" className="btn btn-primary" style={{ height: '48px', fontSize: '1rem', fontWeight: 600, width: '100%', justifyContent: 'center', marginTop: '0.5rem' }}>
                         <LogIn size={20} /> Entrar
                     </button>
                 </form>
