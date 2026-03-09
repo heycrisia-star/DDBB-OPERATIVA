@@ -6,14 +6,14 @@ import MultiSelect from '../components/MultiSelect';
 
 // Utilizamos los mismos datos de prueba (ampliados para abarcar el mes)
 const MOCK_TOURS = [
-    { id: 1, code: 'GYG-93812', date: '2026-03-08', start: '10:00', duration: 2, operator: 'GYG', status: 'confirmado', pax: 4, vehicle: '01-DR', driver: 'Cristian', clientName: 'Familia Smith', phone: '+34 600 123 456', language: 'EN' },
+    { id: 1, code: 'GYG-93812', date: '2026-03-08', start: '10:00', duration: 2, operator: 'GYG', status: 'confirmado', pax: 4, vehicle: '01-DR', driver: 'Cristian', clientName: 'Sarah Smith', phone: '+34 600 123 456', language: 'EN' },
     { id: 2, code: 'FH-81723', date: '2026-03-08', start: '10:30', duration: 3, operator: 'FH', status: 'modificado', pax: 2, vehicle: '02-NR', driver: 'Roger', clientName: 'Juan Pérez', phone: '+34 611 222 333', language: 'ES' },
-    { id: 3, code: 'VIA-PAST', date: '2026-03-01', start: '09:00', duration: 4, operator: 'VIA', status: 'confirmado', pax: 2, vehicle: '01-DR', driver: 'Cristian', clientName: 'Tour Pasado', phone: '+34 000 000 000', language: 'PT' },
+    { id: 3, code: 'VIA-PAST', date: '2026-03-01', start: '09:00', duration: 4, operator: 'VIA', status: 'confirmado', pax: 2, vehicle: '01-DR', driver: 'Cristian', clientName: 'António Pires', phone: '+34 000 000 000', language: 'PT' },
     { id: 4, code: 'IC-8821', date: '2026-03-09', start: '08:00', duration: 4, operator: 'IC', status: 'confirmado', pax: 4, vehicle: '01-DR', driver: 'Marco', clientName: 'Hans Müller', phone: '+49 151 2345 6789', language: 'DE' },
     { id: 5, code: 'GYG-99999', date: '2026-03-09', start: '10:30', duration: 2, operator: 'GYG', status: 'confirmado', pax: 4, vehicle: '02-NR', driver: 'Roger', clientName: 'Sophie Dubois', phone: '+33 6 12 34 56 78', language: 'FR' },
     { id: 6, code: 'VIA-0192', date: '2026-03-10', start: '14:00', duration: 2, operator: 'VIA', status: 'cancelado', pax: 1, vehicle: '', driver: '', clientName: 'Kenji Sato', phone: '+81 90 1234 5678', language: 'EN' },
     { id: 7, code: 'GYG-1111', date: '2026-03-12', start: '09:00', duration: 2, operator: 'GYG', status: 'confirmado', pax: 3, vehicle: '01-DR', driver: 'Cristian', clientName: 'Laura Rossi', phone: '+39 333 444 5566', language: 'IT' },
-    { id: 8, code: 'FH-MOD', date: '2026-03-11', start: '11:00', duration: 2, operator: 'FH', status: 'modificado', pax: 5, vehicle: '02-NR', driver: 'Roger', clientName: 'Modificado Test', phone: '+34 999 888 777', language: 'ES' },
+    { id: 8, code: 'FH-MOD', date: '2026-03-11', start: '11:00', duration: 2, operator: 'FH', status: 'modificado', pax: 5, vehicle: '02-NR', driver: 'Roger', clientName: 'Elena García', phone: '+34 999 888 777', language: 'ES' },
 ];
 
 const OPERATOR_COLORS = {
@@ -295,7 +295,7 @@ export default function Calendar({ currentUser }) {
                                 const statusStyles = {
                                     backgroundColor: isCancelled ? '#fee2e2' : (isModified ? '#fef3c7' : (isPast ? '#f1f5f9' : colors.bg)),
                                     borderLeftColor: isCancelled ? '#ef4444' : (isModified ? '#f59e0b' : (isPast ? '#94a3b8' : colors.text)),
-                                    textDecoration: (isCancelled || isPast) ? 'line-through' : 'none',
+                                    textDecoration: isCancelled ? 'line-through' : 'none',
                                     opacity: isPast ? 0.7 : 1,
                                     color: isCancelled ? '#b91c1c' : (isModified ? '#92400e' : (isPast ? '#64748b' : colors.text))
                                 };
