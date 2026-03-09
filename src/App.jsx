@@ -9,8 +9,14 @@ import { useState, useEffect } from 'react';
 
 function App() {
   const [currentUser, setCurrentUser] = useState(() => {
-    const saved = localStorage.getItem('currentUser');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('currentUser');
+      return saved ? JSON.parse(saved) : null;
+    } catch (e) {
+      console.error("Error parsing user from localStorage:", e);
+      localStorage.removeItem('currentUser');
+      return null;
+    }
   });
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
 
@@ -30,77 +36,77 @@ function App() {
     localStorage.removeItem('currentUser');
   };
 
-  if (!currentUser) {
-    return <Login onLogin={handleLogin} />;
-  }
   return (
     <BrowserRouter>
-      <div className="app-layout">
-        <aside className="sidebar">
-          {/* Logo removido según instrucciones */}
-          <nav className="sidebar-nav">
-            <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              <CalendarIcon size={20} />
-              Calendario
-            </NavLink>
-            <NavLink to="/tours" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              <List size={20} />
-              Gestión
-            </NavLink>
-            <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              <LayoutDashboard size={20} />
-              Operativa
-            </NavLink>
-            <NavLink to="/settings" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-              <Settings size={20} />
-              Configuración
-            </NavLink>
-          </nav>
+      {!currentUser ? (
+        <Login onLogin={handleLogin} />
+      ) : (
+        <div className="app-layout">
+          <aside className="sidebar">
+            <nav className="sidebar-nav">
+              <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                <CalendarIcon size={20} />
+                Calendario
+              </NavLink>
+              <NavLink to="/tours" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                <List size={20} />
+                Gestión
+              </NavLink>
+              <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                <LayoutDashboard size={20} />
+                Operativa
+              </NavLink>
+              <NavLink to="/settings" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                <Settings size={20} />
+                Configuración
+              </NavLink>
+            </nav>
 
-          <div style={{ marginTop: isMobile ? '0' : 'auto', padding: isMobile ? '0 0 0 0.5rem' : '1rem' }}>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              padding: isMobile ? '0.5rem' : '0.75rem 1rem',
-              backgroundColor: isMobile ? 'transparent' : 'var(--bg-hover)',
-              borderRadius: 'var(--radius-md)',
-              border: isMobile ? 'none' : '1px solid var(--border-color)'
-            }}>
+            <div style={{ marginTop: isMobile ? '0' : 'auto', padding: isMobile ? '0 0 0 0.5rem' : '1rem' }}>
               <div style={{
-                width: isMobile ? '36px' : '32px',
-                height: isMobile ? '36px' : '32px',
-                backgroundColor: 'var(--brand-primary)',
-                color: '#ffffff',
-                borderRadius: '50%',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 'bold',
-                boxShadow: isMobile ? '0 2px 4px rgba(14, 165, 233, 0.3)' : 'none',
-                cursor: 'pointer'
+                gap: '0.75rem',
+                padding: isMobile ? '0.5rem' : '0.75rem 1rem',
+                backgroundColor: isMobile ? 'transparent' : 'var(--bg-hover)',
+                borderRadius: 'var(--radius-md)',
+                border: isMobile ? 'none' : '1px solid var(--border-color)'
               }}>
-                {currentUser.name.charAt(0)}
-              </div>
-              {!isMobile && (
-                <div style={{ flex: 1, overflow: 'hidden' }}>
-                  <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{currentUser.name}</div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentUser.role === 'admin' ? 'Admin' : 'Chofer'}</div>
+                <div style={{
+                  width: isMobile ? '36px' : '32px',
+                  height: isMobile ? '36px' : '32px',
+                  backgroundColor: 'var(--brand-primary)',
+                  color: '#ffffff',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 'bold',
+                  boxShadow: isMobile ? '0 2px 4px rgba(14, 165, 233, 0.3)' : 'none',
+                  cursor: 'pointer'
+                }}>
+                  {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : '?'}
                 </div>
-              )}
+                {!isMobile && (
+                  <div style={{ flex: 1, overflow: 'hidden' }}>
+                    <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{currentUser.name}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentUser.role === 'admin' ? 'Admin' : 'Chofer'}</div>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </aside>
+          </aside>
 
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Calendar currentUser={currentUser} />} />
-            <Route path="/tours" element={<Tours currentUser={currentUser} />} />
-            <Route path="/dashboard" element={<Dashboard currentUser={currentUser} />} />
-            <Route path="/settings" element={<Configuracion currentUser={currentUser} onLogout={handleLogout} />} />
-          </Routes>
-        </main>
-      </div>
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<Calendar currentUser={currentUser} />} />
+              <Route path="/tours" element={<Tours currentUser={currentUser} />} />
+              <Route path="/dashboard" element={<Dashboard currentUser={currentUser} />} />
+              <Route path="/settings" element={<Configuracion currentUser={currentUser} onLogout={handleLogout} />} />
+            </Routes>
+          </main>
+        </div>
+      )}
     </BrowserRouter>
   );
 }

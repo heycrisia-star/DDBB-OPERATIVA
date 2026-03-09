@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, Edit2, Download, Plus, ChevronDown, Check } from 'lucide-react';
+import { Search, Filter, Edit2, Download, Plus, ChevronDown, Check, X } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import MultiSelect from '../components/MultiSelect';
 
@@ -313,7 +313,7 @@ export default function Tours({ currentUser }) {
                             </div>
                             <div>
                                 <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Estado</p>
-                                <span className={`badge badge - ${selectedTour.status} `} style={{ marginTop: '0.25rem' }}>{selectedTour.status}</span>
+                                <span className={`badge badge-${selectedTour.status}`} style={{ marginTop: '0.25rem' }}>{selectedTour.status}</span>
                             </div>
                             <div>
                                 <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Fecha y Hora</p>
