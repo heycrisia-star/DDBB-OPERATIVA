@@ -2,24 +2,35 @@ import React, { useState } from 'react';
 import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart } from 'lucide-react';
 import MultiSelect from '../components/MultiSelect';
 
-const StatCard = ({ title, value, subtitle, icon: Icon, trend }) => (
-    <div className="card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-            <div>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.25rem' }}>{title}</p>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>{value}</h3>
+const StatCard = ({ title, value, icon: Icon, color = 'var(--brand-primary)', trend, isMobile }) => (
+    <div className="card" style={{
+        padding: isMobile ? '1rem' : '1.25rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: isMobile ? '0.25rem' : '0.5rem',
+        minHeight: isMobile ? '90px' : 'auto',
+        justifyContent: 'center'
+    }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile ? '0.25rem' : '0.5rem' }}>
+            <div style={{ padding: isMobile ? '0.35rem' : '0.5rem', backgroundColor: 'var(--brand-light)', color: 'var(--brand-primary)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon size={isMobile ? 18 : 20} />
             </div>
-            <div style={{ padding: '0.5rem', backgroundColor: 'var(--brand-light)', color: 'var(--brand-primary)', borderRadius: 'var(--radius-md)' }}>
-                <Icon size={20} />
-            </div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem' }}>
             {trend !== undefined && (
-                <span style={{ color: trend > 0 ? 'var(--status-confirmed)' : 'var(--status-cancelled)', fontWeight: 600 }}>
-                    {trend > 0 ? '+' : ''}{trend}%
-                </span>
+                <div style={{
+                    fontSize: '0.7rem',
+                    fontWeight: 700,
+                    color: trend > 0 ? 'var(--status-confirmed)' : 'var(--status-cancelled)',
+                    backgroundColor: trend > 0 ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                    padding: '0.15rem 0.4rem',
+                    borderRadius: '4px'
+                }}>
+                    {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
+                </div>
             )}
-            <span style={{ color: 'var(--text-tertiary)' }}>{subtitle}</span>
+        </div>
+        <div>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.025em', margin: 0 }}>{title}</p>
+            <h3 style={{ fontSize: isMobile ? '1.1rem' : '1.5rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>{value}</h3>
         </div>
     </div>
 );
@@ -52,7 +63,14 @@ const ProgressBar = ({ label, value, max, color, count, extraLabel, striped }) =
 
 export default function Dashboard({ currentUser }) {
     const [timeRange, setTimeRange] = useState('today'); // 'today', 'weekly', 'monthly', 'year', 'cumulative'
+    const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
     const isDriver = currentUser?.role === 'driver';
+
+    React.useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Time Range Options aligned globally
     const TIME_FILTERS = [
@@ -152,49 +170,73 @@ export default function Dashboard({ currentUser }) {
 
     return (
         <div className="animate-fade-in">
-            <div className="page-header" style={{ flexWrap: 'wrap', gap: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap', justifyContent: 'space-between', width: '100%' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-                        <div>
-                            <h1 className="page-title">KPIs</h1>
+            <div className="page-header" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '1.5rem', marginBottom: '2rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h1 className="page-title" style={{ margin: 0, fontSize: isMobile ? '1.5rem' : '1.875rem' }}>KPIs</h1>
+
+                    {isMobile && (
+                        <select
+                            value={timeRange}
+                            onChange={(e) => setTimeRange(e.target.value)}
+                            style={{
+                                padding: '0.5rem 2rem 0.5rem 1rem',
+                                borderRadius: 'var(--radius-md)',
+                                border: '1px solid var(--border-color)',
+                                backgroundColor: 'var(--bg-card)',
+                                color: 'var(--text-primary)',
+                                fontWeight: 600,
+                                fontSize: '0.875rem',
+                                appearance: 'none',
+                                backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundPosition: 'right 0.5rem center',
+                                backgroundSize: '1em'
+                            }}
+                        >
+                            {TIME_FILTERS.map(range => (
+                                <option key={range.id} value={range.id}>{range.label}</option>
+                            ))}
+                        </select>
+                    )}
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'stretch' : 'center', gap: '1.5rem' }}>
+                    <div style={{ display: 'flex', gap: isMobile ? '1rem' : '2.5rem', padding: isMobile ? '1rem' : '0 1.5rem 0 0', borderRight: isMobile ? 'none' : '1px solid var(--border-color)', backgroundColor: isMobile ? 'var(--bg-hover)' : 'transparent', borderRadius: isMobile ? 'var(--radius-md)' : '0', justifyContent: isMobile ? 'space-around' : 'flex-start' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>{timeRange === 'year' ? 'Acum. Año' : 'Venta Mes'}</div>
+                            <div style={{ fontSize: isMobile ? '1.25rem' : '1.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>{isDriver ? '4,100' : '12,400'}€</div>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>{timeRange === 'year' ? 'Forecast Año' : 'Forecast'}</div>
+                            <div style={{ fontSize: isMobile ? '1.25rem' : '1.5rem', fontWeight: 800, color: 'var(--brand-primary)' }}>{isDriver ? '5,500' : '14,500'}€</div>
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                        <div style={{ display: 'flex', gap: '1.5rem', paddingRight: '1.5rem', borderRight: '1px solid var(--border-color)' }}>
-                            <div>
-                                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>{timeRange === 'year' ? 'Acum. Hasta Hoy' : 'Venta Mes'}</div>
-                                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>{isDriver ? '4,100' : '12,400'}</div>
-                            </div>
-                            <div>
-                                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>{timeRange === 'year' ? 'Forecast Año' : 'Forecast'}</div>
-                                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--brand-primary)' }}>{isDriver ? '5,500' : '14,500'}</div>
-                            </div>
-                        </div>
-
+                    {!isMobile && (
                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                             {TIME_FILTERS.map(range => (
                                 <button
                                     key={range.id}
                                     onClick={() => setTimeRange(range.id)}
                                     style={{
-                                        padding: '0.5rem 1rem',
+                                        padding: '0.5rem 1.25rem',
                                         border: '1px solid',
                                         borderColor: timeRange === range.id ? 'var(--brand-primary)' : 'var(--border-color)',
                                         background: timeRange === range.id ? 'var(--brand-primary)' : 'var(--bg-card)',
                                         color: timeRange === range.id ? '#ffffff' : 'var(--text-secondary)',
-                                        fontWeight: 500,
+                                        fontWeight: 600,
                                         fontSize: '0.875rem',
                                         borderRadius: '999px',
                                         cursor: 'pointer',
-                                        transition: 'all 0.2s ease'
+                                        transition: 'all 0.2s ease',
+                                        boxShadow: timeRange === range.id ? '0 4px 6px -1px rgba(14, 165, 233, 0.2)' : 'none'
                                     }}
                                 >
                                     {range.label}
                                 </button>
                             ))}
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
 
@@ -208,6 +250,7 @@ export default function Dashboard({ currentUser }) {
                             selected={selectedVehicles}
                             onChange={toggleVehicle}
                             onToggleAll={toggleAllVehicles}
+                            isMobile={isMobile}
                         />
 
                         {!isDriver && (
@@ -217,77 +260,86 @@ export default function Dashboard({ currentUser }) {
                                 selected={selectedDrivers}
                                 onChange={toggleDriver}
                                 onToggleAll={toggleAllDrivers}
+                                isMobile={isMobile}
                             />
                         )}
                     </div>
                 </div>
 
-                <div style={{ padding: '0.75rem 1rem', backgroundColor: 'var(--bg-hover)', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', borderBottomLeftRadius: 'inherit', borderBottomRightRadius: 'inherit' }}>
-                    <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Operadores:</span>
+                <div style={{ padding: isMobile ? '0.5rem 0.75rem' : '0.75rem 1rem', backgroundColor: 'var(--bg-hover)', display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: isMobile ? 'nowrap' : 'wrap', borderBottomLeftRadius: 'inherit', borderBottomRightRadius: 'inherit', overflowX: isMobile ? 'auto' : 'visible' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginRight: '0.25rem', whiteSpace: 'nowrap' }}>Ops:</span>
                     <button
-                        style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)', background: selectedOperators.length === OPERATORS.length ? 'var(--brand-primary)' : 'var(--bg-card)', color: selectedOperators.length === OPERATORS.length ? '#fff' : 'var(--text-primary)', cursor: 'pointer' }}
+                        style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: selectedOperators.length === OPERATORS.length ? 'var(--brand-primary)' : 'var(--bg-card)', color: selectedOperators.length === OPERATORS.length ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 700, whiteSpace: 'nowrap' }}
                         onClick={toggleAllOperators}
                     >
                         Todos
                     </button>
-                    {OPERATORS.map(op => {
-                        const colors = OPERATOR_COLORS[op] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
-                        const isSelected = selectedOperators.includes(op);
-                        return (
-                            <button
-                                key={op}
-                                onClick={() => toggleOperator(op)}
-                                style={{
-                                    fontSize: '0.75rem',
-                                    padding: '0.2rem 0.5rem',
-                                    borderRadius: '4px',
-                                    fontWeight: 600,
-                                    border: `1px solid ${isSelected ? colors.border : 'var(--border-color)'}`,
-                                    background: isSelected ? colors.bg : 'var(--bg-card)',
-                                    color: isSelected ? colors.text : 'var(--text-tertiary)',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s ease',
-                                    opacity: isSelected ? 1 : 0.6
-                                }}
-                            >
-                                {op}
-                            </button>
-                        );
-                    })}
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'nowrap' }}>
+                        {OPERATORS.map(op => {
+                            const colors = OPERATOR_COLORS[op] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
+                            const isSelected = selectedOperators.includes(op);
+                            return (
+                                <button
+                                    key={op}
+                                    onClick={() => toggleOperator(op)}
+                                    style={{
+                                        fontSize: '0.75rem',
+                                        padding: '0.35rem 0.75rem',
+                                        borderRadius: '6px',
+                                        fontWeight: 800,
+                                        border: `1px solid ${isSelected ? colors.border : 'var(--border-color)'}`,
+                                        background: isSelected ? colors.bg : 'var(--bg-card)',
+                                        color: isSelected ? colors.text : 'var(--text-tertiary)',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease',
+                                        opacity: isSelected ? 1 : 0.6,
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    {op}
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
 
             {/* Primary KPIs */}
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                gap: '1.5rem',
+                gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(180px, 1fr))',
+                gap: isMobile ? '0.75rem' : '1.5rem',
                 marginBottom: '2rem'
             }}>
                 <StatCard
                     title="Venta Total"
                     value={kpis.sales}
                     icon={TrendingUp}
+                    isMobile={isMobile}
                 />
                 <StatCard
                     title="Horas"
                     value={kpis.hours}
                     icon={Clock}
+                    isMobile={isMobile}
                 />
                 <StatCard
                     title="Tours"
                     value={kpis.tours}
                     icon={CalendarIcon}
+                    isMobile={isMobile}
                 />
                 <StatCard
                     title="Ticket Medio"
                     value={kpis.ticket}
                     icon={ShoppingBag}
+                    isMobile={isMobile}
                 />
                 <StatCard
                     title="Cancelaciones"
                     value={`${kpis.cancelRate}%`}
                     icon={AlertCircle}
+                    isMobile={isMobile}
                 />
             </div>
 

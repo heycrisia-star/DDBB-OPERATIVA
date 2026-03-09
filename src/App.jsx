@@ -12,6 +12,13 @@ function App() {
     const saved = localStorage.getItem('currentUser');
     return saved ? JSON.parse(saved) : null;
   });
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleLogin = (user) => {
     setCurrentUser(user);
@@ -50,15 +57,37 @@ function App() {
             </NavLink>
           </nav>
 
-          <div style={{ marginTop: 'auto', padding: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)' }}>
-              <div style={{ width: '32px', height: '32px', backgroundColor: 'var(--brand-light)', color: 'var(--brand-primary)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+          <div style={{ marginTop: isMobile ? '0' : 'auto', padding: isMobile ? '0 0 0 0.5rem' : '1rem' }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              padding: isMobile ? '0.5rem' : '0.75rem 1rem',
+              backgroundColor: isMobile ? 'transparent' : 'var(--bg-hover)',
+              borderRadius: 'var(--radius-md)',
+              border: isMobile ? 'none' : '1px solid var(--border-color)'
+            }}>
+              <div style={{
+                width: isMobile ? '36px' : '32px',
+                height: isMobile ? '36px' : '32px',
+                backgroundColor: 'var(--brand-primary)',
+                color: '#ffffff',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 'bold',
+                boxShadow: isMobile ? '0 2px 4px rgba(14, 165, 233, 0.3)' : 'none',
+                cursor: 'pointer'
+              }}>
                 {currentUser.name.charAt(0)}
               </div>
-              <div style={{ flex: 1, overflow: 'hidden' }}>
-                <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{currentUser.name}</div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentUser.role === 'admin' ? 'Admin' : 'Chofer'}</div>
-              </div>
+              {!isMobile && (
+                <div style={{ flex: 1, overflow: 'hidden' }}>
+                  <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{currentUser.name}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentUser.role === 'admin' ? 'Admin' : 'Chofer'}</div>
+                </div>
+              )}
             </div>
           </div>
         </aside>
