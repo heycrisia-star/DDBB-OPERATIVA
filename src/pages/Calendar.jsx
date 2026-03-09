@@ -156,7 +156,7 @@ export default function Calendar({ currentUser }) {
                     </div>
 
                     <div style={{ padding: '0.75rem 1rem', backgroundColor: 'var(--bg-hover)', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', borderBottomLeftRadius: 'inherit', borderBottomRightRadius: 'inherit' }}>
-                        <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Operadores:</span>
+                        <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-secondary)' }}>Ops:</span>
                         <button
                             style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid var(--border-color)', background: selectedOperators.length === OPERATORS.length ? 'var(--brand-primary)' : 'var(--bg-card)', color: selectedOperators.length === OPERATORS.length ? '#fff' : 'var(--text-primary)', cursor: 'pointer' }}
                             onClick={toggleAllOperators}
