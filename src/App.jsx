@@ -89,8 +89,8 @@ function App() {
                 </div>
                 {!isMobile && (
                   <div style={{ flex: 1, overflow: 'hidden' }}>
-                    <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{currentUser.name}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentUser.role === 'admin' ? 'Admin' : 'Chofer'}</div>
+                    <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{currentUser?.name || 'Usuario'}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{currentUser?.role === 'admin' ? 'Admin' : 'Chofer'}</div>
                   </div>
                 )}
               </div>

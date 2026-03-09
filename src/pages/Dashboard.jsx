@@ -66,7 +66,7 @@ export default function Dashboard({ currentUser }) {
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
     const isDriver = currentUser?.role === 'driver';
 
-    React.useEffect(() => {
+    useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -124,7 +124,7 @@ export default function Dashboard({ currentUser }) {
     };
 
     // Mock Data based on the selected timeRange
-    const kpis = isDriver ? {
+    const kpis = (isDriver ? {
         today: { sales: '150', hours: 2, tours: 1, ticket: '150', cancelRate: 0 },
         weekly: { sales: '1,050', hours: 14, tours: 6, ticket: '175', cancelRate: 0 },
         monthly: { sales: '4,100', hours: 55, tours: 24, ticket: '170', cancelRate: 5 },
@@ -134,7 +134,7 @@ export default function Dashboard({ currentUser }) {
         weekly: { sales: '3,150', hours: 42, tours: 18, ticket: '175', cancelRate: 8 },
         monthly: { sales: '12,400', hours: 165, tours: 72, ticket: '172', cancelRate: 12 },
         year: { sales: '45,800', hours: 620, tours: 280, ticket: '163', cancelRate: 10 }
-    }[timeRange];
+    }[timeRange]) || { sales: '0', hours: 0, tours: 0, ticket: '0', cancelRate: 0 };
 
     const vehicleHours = { '01-DR': 95, '02-NR': 70 };
     const maxVehicle = 100;
@@ -374,7 +374,11 @@ export default function Dashboard({ currentUser }) {
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                             {Object.entries(driverStats)
-                                .sort((a, b) => parseInt(b[1].sales.replace(/,/g, '')) - parseInt(a[1].sales.replace(/,/g, '')))
+                                .sort((a, b) => {
+                                    const salesA = parseInt((a[1].sales || '0').replace(/[,.]/g, '')) || 0;
+                                    const salesB = parseInt((b[1].sales || '0').replace(/[,.]/g, '')) || 0;
+                                    return salesB - salesA;
+                                })
                                 .map(([name, stats]) => (
                                     <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)' }}>
                                         <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{name}</span>
