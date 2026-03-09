@@ -1,9 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 
-export default function MultiSelect({ options, selected, onChange, onToggleAll, label }) {
+export default function MultiSelect({ options, selected, onChange, onToggleAll, label, isMobile: propIsMobile }) {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const [isMobile, setIsMobile] = useState(propIsMobile !== undefined ? propIsMobile : (typeof window !== 'undefined' ? window.innerWidth < 768 : false));
+
+    useEffect(() => {
+        if (propIsMobile !== undefined) {
+            setIsMobile(propIsMobile);
+        }
+    }, [propIsMobile]);
 
     // Close dropdown on outside click
     useEffect(() => {
@@ -19,7 +26,7 @@ export default function MultiSelect({ options, selected, onChange, onToggleAll, 
     const allSelected = selected.length === options.length;
 
     return (
-        <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block' }}>
+        <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block', width: isMobile ? '100%' : 'auto' }}>
             <button
                 className="input"
                 style={{
@@ -28,7 +35,7 @@ export default function MultiSelect({ options, selected, onChange, onToggleAll, 
                     justifyContent: 'space-between',
                     gap: '0.5rem',
                     padding: '0.4rem 1rem',
-                    width: isMobile ? '100%' : 'auto',
+                    width: '100%',
                     minWidth: isMobile ? '120px' : '160px',
                     cursor: 'pointer',
                     background: 'var(--bg-card)',

@@ -17,10 +17,10 @@ export default function Configuracion({ currentUser, onLogout }) {
                         <User size={40} color="var(--brand-primary)" />
                     </div>
                     <div>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>{currentUser.name}</h2>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: currentUser.role === 'admin' ? '#f0fdf4' : '#f0f9ff', color: currentUser.role === 'admin' ? '#166534' : '#0369a1', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 600, marginTop: '0.5rem', border: `1px solid ${currentUser.role === 'admin' ? '#bbf7d0' : '#bae6fd'}` }}>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)' }}>{currentUser?.name || 'Usuario'}</h2>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', backgroundColor: currentUser?.role === 'admin' ? '#f0fdf4' : '#f0f9ff', color: currentUser?.role === 'admin' ? '#166534' : '#0369a1', padding: '0.25rem 0.75rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 600, marginTop: '0.5rem', border: `1px solid ${currentUser?.role === 'admin' ? '#bbf7d0' : '#bae6fd'}` }}>
                             <Shield size={16} />
-                            {currentUser.role === 'admin' ? 'Administrador del Sistema' : 'Chofer Asignado'}
+                            {currentUser?.role === 'admin' ? 'Administrador del Sistema' : 'Chofer Asignado'}
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@ export default function Configuracion({ currentUser, onLogout }) {
                         <h3 style={{ fontSize: '1.125rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '1rem' }}>Permisos Activos</h3>
                         <div style={{ padding: '1.5rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)' }}>
                             <ul style={{ color: 'var(--text-secondary)', fontSize: '0.925rem', margin: 0, paddingLeft: '1.25rem', listStyleType: 'disc', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                                {currentUser.role === 'admin' ? (
+                                {currentUser?.role === 'admin' ? (
                                     <>
                                         <li><strong>Acceso total:</strong> Visualización de todos los tours y calendarios.</li>
                                         <li><strong>Métricas:</strong> Visualización de facturación y KPIs globales.</li>
@@ -52,20 +52,36 @@ export default function Configuracion({ currentUser, onLogout }) {
                             className="btn"
                             onClick={onLogout}
                             style={{
-                                backgroundColor: '#ef4444',
-                                color: 'white',
-                                border: 'none',
+                                backgroundColor: 'var(--bg-card)',
+                                color: '#ef4444',
+                                border: '2px solid #fee2e2',
                                 width: '100%',
                                 justifyContent: 'center',
-                                padding: '0.875rem',
+                                padding: '1rem',
                                 fontSize: '1rem',
-                                fontWeight: 600,
-                                boxShadow: '0 4px 6px -1px rgba(239, 68, 68, 0.2), 0 2px 4px -1px rgba(239, 68, 68, 0.1)'
+                                fontWeight: 700,
+                                borderRadius: 'var(--radius-lg)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                transition: 'all 0.2s ease',
+                                cursor: 'pointer'
                             }}
-                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#dc2626'}
-                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#ef4444'}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.backgroundColor = '#fef2f2';
+                                e.currentTarget.style.borderColor = '#fecaca';
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = 'var(--shadow-md)';
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.backgroundColor = 'var(--bg-card)';
+                                e.currentTarget.style.borderColor = '#fee2e2';
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = 'none';
+                            }}
                         >
-                            <LogOut size={20} /> Cerrar Sesión Segura
+                            <LogOut size={20} />
+                            <span>Cerrar Sesión</span>
                         </button>
                     </div>
                 </div>
