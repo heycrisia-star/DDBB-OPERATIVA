@@ -279,33 +279,17 @@ export default function Calendar({ currentUser }) {
 
                         <div style={{
                             display: 'flex',
-                            flexDirection: isMobile ? 'row' : 'column',
-                            flexWrap: isMobile ? 'wrap' : 'nowrap',
+                            flexDirection: 'column',
                             gap: isMobile ? '2px' : '0.25rem',
-                            overflowY: isMobile ? 'hidden' : 'auto',
+                            overflowY: isMobile ? 'visible' : 'auto',
                             flex: 1,
-                            justifyContent: isMobile ? 'center' : 'flex-start'
+                            justifyContent: 'flex-start'
                         }}>
                             {dayTours.map(tour => {
                                 const colors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
                                 const isCancelled = tour.status === 'cancelado';
                                 const isModified = tour.status === 'modificado';
                                 const isPast = new Date(tour.date) < new Date().setHours(0, 0, 0, 0);
-
-                                if (isMobile) {
-                                    return (
-                                        <div
-                                            key={tour.id}
-                                            style={{
-                                                width: '8px',
-                                                height: '8px',
-                                                borderRadius: '50%',
-                                                backgroundColor: isCancelled ? '#ef4444' : (isModified ? '#f59e0b' : colors.text),
-                                                opacity: isPast ? 0.4 : 1
-                                            }}
-                                        />
-                                    );
-                                }
 
                                 // Estilos dinámicos por estado
                                 const statusStyles = {
@@ -320,11 +304,11 @@ export default function Calendar({ currentUser }) {
                                     <div
                                         key={tour.id}
                                         style={{
-                                            padding: '0.25rem 0.4rem',
+                                            padding: isMobile ? '0.15rem 0.25rem' : '0.25rem 0.4rem',
                                             borderRadius: 'var(--radius-sm)',
                                             backgroundColor: statusStyles.backgroundColor,
-                                            borderLeft: `3px solid ${statusStyles.borderLeftColor}`,
-                                            fontSize: '0.7rem',
+                                            borderLeft: `${isMobile ? '2px' : '3px'} solid ${statusStyles.borderLeftColor}`,
+                                            fontSize: isMobile ? '0.6rem' : '0.7rem',
                                             cursor: 'pointer',
                                             opacity: statusStyles.opacity,
                                             textDecoration: statusStyles.textDecoration,
@@ -340,9 +324,9 @@ export default function Calendar({ currentUser }) {
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 800 }}>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
                                                 {tour.start}
-                                                <span style={{ fontSize: '0.6rem', opacity: 0.7, fontWeight: 500 }}>{tour.duration}h</span>
+                                                {!isMobile && <span style={{ fontSize: '0.6rem', opacity: 0.7, fontWeight: 500 }}>{tour.duration}h</span>}
                                             </span>
-                                            <span style={{ fontSize: '0.6rem' }}>{tour.operator}</span>
+                                            <span style={{ fontSize: isMobile ? '0.5rem' : '0.6rem' }}>{tour.operator}</span>
                                         </div>
 
                                         <div style={{
@@ -351,7 +335,7 @@ export default function Calendar({ currentUser }) {
                                             whiteSpace: 'nowrap',
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
-                                            fontSize: '0.75rem',
+                                            fontSize: isMobile ? '0.65rem' : '0.75rem',
                                             lineHeight: '1.1'
                                         }}>
                                             {tour.clientName}
@@ -361,11 +345,11 @@ export default function Calendar({ currentUser }) {
                                             display: 'flex',
                                             alignItems: 'center',
                                             justifyContent: 'space-between',
-                                            fontSize: '0.65rem',
+                                            fontSize: isMobile ? '0.55rem' : '0.65rem',
                                             marginTop: '0.1rem'
                                         }}>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.15rem', color: isCancelled ? 'inherit' : 'var(--text-secondary)' }}>
-                                                <Globe size={10} /> {tour.language}
+                                                <Globe size={isMobile ? 8 : 10} /> {tour.language}
                                             </span>
                                             {tour.driver && (
                                                 <span style={{
