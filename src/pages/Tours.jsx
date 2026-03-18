@@ -3,18 +3,12 @@ import { Search, Filter, Edit2, Download, Plus, ChevronDown, Check, X } from 'lu
 import { format, parseISO } from 'date-fns';
 import MultiSelect from '../components/MultiSelect';
 
-const MOCK_TOURS = [
-    { id: 1, code: 'GYG-93812', date: '2026-03-08', start: '10:00', duration: 2, operator: 'GYG', status: 'confirmado', pax: 4, language: 'English', vehicle: '01-DR', driver: 'Cristian', price: 150, notes: '', conflict: false },
-    { id: 2, code: 'FH-81723', date: '2026-03-08', start: '10:30', duration: 3, operator: 'FH', status: 'modificado', pax: 2, language: 'Spanish', vehicle: '02-NR', driver: 'Roger', price: 210, notes: 'Cliente solicitó sillita de bebé', conflict: false },
-    { id: 3, code: 'VIA-0192', date: '2026-03-08', start: '14:00', duration: 2, operator: 'VIA', status: 'cancelado', pax: 1, language: 'English', vehicle: '', driver: '', price: 85, notes: '', conflict: false },
-    { id: 4, code: 'IC-8821', date: '2026-03-08', start: '08:00', duration: 4, operator: 'IC', status: 'realizado', pax: 4, language: 'German', vehicle: '01-DR', driver: 'Marco', price: 320, notes: 'Tour de crucero temprano', conflict: false },
-    { id: 5, code: 'GYG-99999', date: '2026-03-08', start: '10:30', duration: 2, operator: 'GYG', status: 'confirmado', pax: 4, language: 'French', vehicle: '01-DR', driver: 'Marco', price: 180, notes: 'Se solapa con GYG-93812', conflict: true },
-];
+import { MOCK_TOURS } from '../data/mockTours';
+
 
 const VEHICLES = ['01-DR', '02-NR'];
 const DRIVERS = ['Cristian', 'Roger', 'Marco'];
 const OPERATORS = ['GYG', 'FH', 'VIA', 'IC'];
-
 const TIME_FILTERS = [
     { id: 'today', label: 'Hoy' },
     { id: 'weekly', label: 'Semanal' },
@@ -273,7 +267,7 @@ export default function Tours({ currentUser }) {
                                             </span>
                                         </td>
                                         <td>{tour.pax}</td>
-                                        <td style={{ fontWeight: 500 }}>{tour.price}</td>
+                                        <td style={{ fontWeight: 500 }}>{tour.netPrice ? `€${tour.netPrice}` : '-'}</td>
                                         <td>{tour.vehicle ? <span style={{ color: getVehicleColor(tour.vehicle), fontWeight: 700 }}>{tour.vehicle}</span> : <span style={{ color: 'var(--text-tertiary)', fontStyle: 'italic' }}>Sin</span>}</td>
                                         <td>{tour.driver ? <span style={{ color: getDriverColor(tour.driver), fontWeight: 700 }}>{tour.driver}</span> : <span style={{ color: 'var(--text-tertiary)', fontStyle: 'italic' }}>Sin</span>}</td>
                                         <td style={{ textAlign: 'right' }}>
