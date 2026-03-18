@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search, Filter, Edit2, Download, Plus, ChevronDown, Check, X } from 'lucide-react';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import MultiSelect from '../components/MultiSelect';
 
 import { MOCK_TOURS } from '../data/mockTours';
@@ -106,6 +106,22 @@ export default function Tours({ currentUser }) {
         return true;
     });
 
+    const setDateRangeShortcut = (type) => {
+        const today = new Date();
+        if (type === 'today') {
+            const str = format(today, 'yyyy-MM-dd');
+            setStartDate(str); setEndDate(str);
+        } else if (type === 'week') {
+            setStartDate(format(startOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
+            setEndDate(format(endOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
+        } else if (type === 'month') {
+            setStartDate(format(startOfMonth(today), 'yyyy-MM-dd'));
+            setEndDate(format(endOfMonth(today), 'yyyy-MM-dd'));
+        } else if (type === 'all') {
+            setStartDate(''); setEndDate('');
+        }
+    };
+
     const getOperatorClass = (operator) => {
         switch (operator) {
             case 'GYG': return 'op-gyg';
@@ -154,7 +170,13 @@ export default function Tours({ currentUser }) {
                         />
                     </div>
 
-                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '0.25rem', marginRight: '0.5rem' }}>
+                            <button onClick={() => setDateRangeShortcut('today')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Hoy</button>
+                            <button onClick={() => setDateRangeShortcut('week')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Semana</button>
+                            <button onClick={() => setDateRangeShortcut('month')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Mes</button>
+                            <button onClick={() => setDateRangeShortcut('all')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Todo</button>
+                        </div>
                         <input
                             type="date"
                             value={startDate}

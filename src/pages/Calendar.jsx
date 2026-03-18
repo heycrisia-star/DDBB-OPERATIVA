@@ -26,6 +26,8 @@ export default function Calendar({ currentUser }) {
     const [currentMonth, setCurrentMonth] = useState(new Date(2026, 2, 8)); // Marzo 2026 as reference
     const [viewMode, setViewMode] = useState('agenda'); // 'month', 'week', 'agenda'
     const [searchTerm, setSearchTerm] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
     const isDriver = currentUser?.role === 'driver';
 
@@ -38,6 +40,23 @@ export default function Calendar({ currentUser }) {
     const [selectedVehicles, setSelectedVehicles] = useState(VEHICLES);
     const [selectedDrivers, setSelectedDrivers] = useState(DRIVERS);
     const [selectedOperators, setSelectedOperators] = useState(OPERATORS);
+
+    const setDateRangeShortcut = (type) => {
+        const today = new Date();
+        setViewMode('agenda');
+        if (type === 'today') {
+            const str = format(today, 'yyyy-MM-dd');
+            setStartDate(str); setEndDate(str);
+        } else if (type === 'week') {
+            setStartDate(format(startOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
+            setEndDate(format(endOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
+        } else if (type === 'month') {
+            setStartDate(format(startOfMonth(today), 'yyyy-MM-dd'));
+            setEndDate(format(endOfMonth(today), 'yyyy-MM-dd'));
+        } else if (type === 'all') {
+            setStartDate(''); setEndDate('');
+        }
+    };
 
     const toggleVehicle = (v) => {
         if (selectedVehicles.includes(v)) {
@@ -133,8 +152,23 @@ export default function Calendar({ currentUser }) {
                 </div>
 
                 <div className="card" style={{ marginBottom: '2rem', padding: 0 }}>
-                    <div style={{ padding: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', justifyContent: isMobile ? 'center' : 'flex-end' }}>
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <div style={{ padding: '1rem', borderBottom: '1px solid var(--border-color)', display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center', justifyContent: isMobile ? 'center' : 'space-between' }}>
+
+                        {viewMode === 'agenda' && (
+                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                <div style={{ display: 'flex', gap: '0.25rem', marginRight: '0.5rem' }}>
+                                    <button onClick={() => setDateRangeShortcut('today')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Hoy</button>
+                                    <button onClick={() => setDateRangeShortcut('week')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Semana</button>
+                                    <button onClick={() => setDateRangeShortcut('month')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Mes</button>
+                                    <button onClick={() => setDateRangeShortcut('all')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Todo</button>
+                                </div>
+                                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} style={{ padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: '0.875rem' }} />
+                                <span style={{ color: 'var(--text-secondary)' }}>-</span>
+                                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} style={{ padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: '0.875rem' }} />
+                            </div>
+                        )}
+
+                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end', flex: 1 }}>
                             <MultiSelect
                                 label="Coches" options={VEHICLES}
                                 selected={selectedVehicles} onChange={toggleVehicle} onToggleAll={toggleAllVehicles}
@@ -381,6 +415,10 @@ export default function Calendar({ currentUser }) {
                 if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
                 if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
                 if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
+
+                if (startDate && t.date < startDate) return false;
+                if (endDate && t.date > endDate) return false;
+
                 return true;
             })
             .sort((a, b) => new Date(`${a.date}T${a.start}`) - new Date(`${b.date}T${b.start}`));

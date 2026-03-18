@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart } from 'lucide-react';
+import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import MultiSelect from '../components/MultiSelect';
 import { MOCK_TOURS } from '../data/mockTours';
 
@@ -135,8 +136,24 @@ export default function Dashboard({ currentUser }) {
         return true;
     });
 
-    const totalSales = filteredTours.reduce((sum, t) => sum + (t.netPrice || 0), 0);
-    const totalHours = filteredTours.reduce((sum, t) => sum + (t.duration || 0), 0);
+    const setDateRangeShortcut = (type) => {
+        const today = new Date();
+        if (type === 'today') {
+            const str = format(today, 'yyyy-MM-dd');
+            setStartDate(str); setEndDate(str);
+        } else if (type === 'week') {
+            setStartDate(format(startOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
+            setEndDate(format(endOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
+        } else if (type === 'month') {
+            setStartDate(format(startOfMonth(today), 'yyyy-MM-dd'));
+            setEndDate(format(endOfMonth(today), 'yyyy-MM-dd'));
+        } else if (type === 'all') {
+            setStartDate(''); setEndDate('');
+        }
+    };
+
+    const totalSales = filteredTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
+    const totalHours = filteredTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
     const totalTours = filteredTours.length;
     const avgTicket = totalTours > 0 ? Math.round(totalSales / totalTours) : 0;
     const cancelledCount = filteredTours.filter(t => t.status.toLowerCase() === 'cancelado').length;
@@ -153,15 +170,36 @@ export default function Dashboard({ currentUser }) {
     // Recalculate dynamic driver & vehicle stats
     const driverStatsMap = {};
     const vehicleHoursMap = {};
+
+    // For Pax, Duration and Operators Mix
+    const paxStatsMap = { 1: 0, 2: 0, 3: 0, 4: 0, '5+': 0 };
+    const durationStatsMap = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0 };
+
     filteredTours.forEach(t => {
         if (!driverStatsMap[t.driver]) driverStatsMap[t.driver] = { hours: 0, sales: 0 };
-        driverStatsMap[t.driver].hours += t.duration || 0;
-        driverStatsMap[t.driver].sales += t.netPrice || 0;
+        driverStatsMap[t.driver].hours += parseFloat(t.duration) || 0;
+        driverStatsMap[t.driver].sales += parseFloat(t.netPrice) || 0;
 
         if (t.vehicle) {
             if (!vehicleHoursMap[t.vehicle]) vehicleHoursMap[t.vehicle] = 0;
-            vehicleHoursMap[t.vehicle] += t.duration || 0;
+            vehicleHoursMap[t.vehicle] += parseFloat(t.duration) || 0;
         }
+
+        // Pax
+        const p = parseInt(t.pax) || 0;
+        if (p === 1) paxStatsMap[1]++;
+        else if (p === 2) paxStatsMap[2]++;
+        else if (p === 3) paxStatsMap[3]++;
+        else if (p === 4) paxStatsMap[4]++;
+        else if (p >= 5) paxStatsMap['5+']++;
+
+        // Duration
+        const dStr = String(t.duration);
+        if (durationStatsMap[dStr] !== undefined) durationStatsMap[dStr]++;
+
+        // Operator
+        if (operatorStatsMap[t.operator] !== undefined) operatorStatsMap[t.operator]++;
     });
 
     const driverStats = isDriver ? {
@@ -188,33 +226,43 @@ export default function Dashboard({ currentUser }) {
     const maxDriverHours = Math.max(1, ...Object.values(driverStats).map(d => d.hours));
     const maxVehicle = Math.max(1, ...Object.values(vehicleHours));
 
+    const getPerc = (count) => totalTours > 0 ? Math.round((count / totalTours) * 100) : 0;
+
     const paxMix = {
-        pax1: { perc: 10, count: 7 },
-        pax2: { perc: 55, count: 40 },
-        pax3: { perc: 15, count: 11 },
-        pax4: { perc: 20, count: 14 }
+        pax1: { perc: getPerc(paxStatsMap[1]), count: paxStatsMap[1] },
+        pax2: { perc: getPerc(paxStatsMap[2]), count: paxStatsMap[2] },
+        pax3: { perc: getPerc(paxStatsMap[3]), count: paxStatsMap[3] },
+        pax4: { perc: getPerc(paxStatsMap[4]), count: paxStatsMap[4] },
+        pax5: { perc: getPerc(paxStatsMap['5+']), count: paxStatsMap['5+'] }
     };
 
     const tourDuration = {
-        '1': { perc: 20, count: 14 },
-        '2': { perc: 60, count: 43 },
-        '3': { perc: 20, count: 15 }
+        '1': { perc: getPerc(durationStatsMap[1]), count: durationStatsMap[1] },
+        '2': { perc: getPerc(durationStatsMap[2]), count: durationStatsMap[2] },
+        '3': { perc: getPerc(durationStatsMap[3]), count: durationStatsMap[3] },
+        '4': { perc: getPerc(durationStatsMap[4]), count: durationStatsMap[4] },
     };
 
     const operatorStats = {
-        'GYG': { perc: 45, count: 32 },
-        'FH': { perc: 35, count: 25 },
-        'VIA': { perc: 15, count: 11 },
-        'IC': { perc: 5, count: 4 }
-    }
+        'GYG': { perc: getPerc(operatorStatsMap['GYG']), count: operatorStatsMap['GYG'] },
+        'FH': { perc: getPerc(operatorStatsMap['FH']), count: operatorStatsMap['FH'] },
+        'VIA': { perc: getPerc(operatorStatsMap['VIA']), count: operatorStatsMap['VIA'] },
+        'IC': { perc: getPerc(operatorStatsMap['IC']), count: operatorStatsMap['IC'] }
+    };
 
     return (
         <div className="animate-fade-in">
             <div className="page-header" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '1.5rem', marginBottom: '2rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <h1 className="page-title" style={{ margin: 0, fontSize: isMobile ? '1.5rem' : '1.875rem' }}>KPIs</h1>
 
                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem', marginRight: '0.5rem' }}>
+                            <button onClick={() => setDateRangeShortcut('today')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Hoy</button>
+                            <button onClick={() => setDateRangeShortcut('week')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Semana</button>
+                            <button onClick={() => setDateRangeShortcut('month')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Mes</button>
+                            <button onClick={() => setDateRangeShortcut('all')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Todo</button>
+                        </div>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <label style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.2rem' }}>Desde</label>
                             <input
