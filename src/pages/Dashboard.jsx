@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart } from 'lucide-react';
 import MultiSelect from '../components/MultiSelect';
+import { MOCK_TOURS } from '../data/mockTours';
 
 const StatCard = ({ title, value, icon: Icon, color = 'var(--brand-primary)', trend, isMobile }) => (
     <div className="card" style={{
@@ -62,7 +63,8 @@ const ProgressBar = ({ label, value, max, color, count, extraLabel, striped }) =
 }
 
 export default function Dashboard({ currentUser }) {
-    const [timeRange, setTimeRange] = useState('today'); // 'today', 'weekly', 'monthly', 'year', 'cumulative'
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
     const isDriver = currentUser?.role === 'driver';
 
@@ -71,14 +73,6 @@ export default function Dashboard({ currentUser }) {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-
-    // Time Range Options aligned globally
-    const TIME_FILTERS = [
-        { id: 'today', label: 'Hoy' },
-        { id: 'weekly', label: 'Semanal' },
-        { id: 'monthly', label: 'Mensual' },
-        { id: 'year', label: 'Año' }
-    ];
 
     const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Roger': '#0d9488', 'Marco': '#be123c' };
     const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
@@ -97,7 +91,9 @@ export default function Dashboard({ currentUser }) {
     const [selectedVehicles, setSelectedVehicles] = useState(VEHICLES);
 
     const toggleOperator = (op) => {
-        if (selectedOperators.includes(op)) {
+        if (selectedOperators.length === OPERATORS.length) {
+            setSelectedOperators([op]);
+        } else if (selectedOperators.includes(op)) {
             setSelectedOperators(selectedOperators.filter(o => o !== op));
         } else setSelectedOperators([...selectedOperators, op]);
     };
@@ -106,7 +102,9 @@ export default function Dashboard({ currentUser }) {
     };
 
     const toggleDriver = (d) => {
-        if (selectedDrivers.includes(d)) {
+        if (selectedDrivers.length === DRIVERS.length) {
+            setSelectedDrivers([d]);
+        } else if (selectedDrivers.includes(d)) {
             setSelectedDrivers(selectedDrivers.filter(x => x !== d));
         } else setSelectedDrivers([...selectedDrivers, d]);
     };
@@ -115,7 +113,9 @@ export default function Dashboard({ currentUser }) {
     };
 
     const toggleVehicle = (v) => {
-        if (selectedVehicles.includes(v)) {
+        if (selectedVehicles.length === VEHICLES.length) {
+            setSelectedVehicles([v]);
+        } else if (selectedVehicles.includes(v)) {
             setSelectedVehicles(selectedVehicles.filter(x => x !== v));
         } else setSelectedVehicles([...selectedVehicles, v]);
     };
@@ -123,30 +123,70 @@ export default function Dashboard({ currentUser }) {
         setSelectedVehicles(selectedVehicles.length === VEHICLES.length ? [] : VEHICLES);
     };
 
-    // Mock Data based on the selected timeRange
-    const kpis = (isDriver ? {
-        today: { sales: '150', hours: 2, tours: 1, ticket: '150', cancelRate: 0 },
-        weekly: { sales: '1,050', hours: 14, tours: 6, ticket: '175', cancelRate: 0 },
-        monthly: { sales: '4,100', hours: 55, tours: 24, ticket: '170', cancelRate: 5 },
-        year: { sales: '15,200', hours: 206, tours: 93, ticket: '163', cancelRate: 8 }
-    }[timeRange] : {
-        today: { sales: '450', hours: 6, tours: 3, ticket: '150', cancelRate: 5 },
-        weekly: { sales: '3,150', hours: 42, tours: 18, ticket: '175', cancelRate: 8 },
-        monthly: { sales: '12,400', hours: 165, tours: 72, ticket: '172', cancelRate: 12 },
-        year: { sales: '45,800', hours: 620, tours: 280, ticket: '163', cancelRate: 10 }
-    }[timeRange]) || { sales: '0', hours: 0, tours: 0, ticket: '0', cancelRate: 0 };
+    const filteredTours = MOCK_TOURS.filter(t => {
+        if (isDriver && t.driver !== currentUser.name) return false;
+        if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
+        if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
+        if (selectedOperators.length !== OPERATORS.length && !selectedOperators.includes(t.operator)) return false;
 
-    const vehicleHours = { '01-DR': 95, '02-NR': 70 };
-    const maxVehicle = 100;
+        if (startDate && t.date < startDate) return false;
+        if (endDate && t.date > endDate) return false;
+
+        return true;
+    });
+
+    const totalSales = filteredTours.reduce((sum, t) => sum + (t.netPrice || 0), 0);
+    const totalHours = filteredTours.reduce((sum, t) => sum + (t.duration || 0), 0);
+    const totalTours = filteredTours.length;
+    const avgTicket = totalTours > 0 ? Math.round(totalSales / totalTours) : 0;
+    const cancelledCount = filteredTours.filter(t => t.status.toLowerCase() === 'cancelado').length;
+    const cancelRate = totalTours > 0 ? Math.round((cancelledCount / totalTours) * 100) : 0;
+
+    const kpis = {
+        sales: totalSales.toLocaleString('es-ES'),
+        hours: totalHours,
+        tours: totalTours,
+        ticket: avgTicket.toLocaleString('es-ES'),
+        cancelRate: cancelRate
+    };
+
+    // Recalculate dynamic driver & vehicle stats
+    const driverStatsMap = {};
+    const vehicleHoursMap = {};
+    filteredTours.forEach(t => {
+        if (!driverStatsMap[t.driver]) driverStatsMap[t.driver] = { hours: 0, sales: 0 };
+        driverStatsMap[t.driver].hours += t.duration || 0;
+        driverStatsMap[t.driver].sales += t.netPrice || 0;
+
+        if (t.vehicle) {
+            if (!vehicleHoursMap[t.vehicle]) vehicleHoursMap[t.vehicle] = 0;
+            vehicleHoursMap[t.vehicle] += t.duration || 0;
+        }
+    });
 
     const driverStats = isDriver ? {
-        [currentUser.name]: { hours: currentUser.name === 'Roger' ? 50 : 40, sales: currentUser.name === 'Roger' ? '3,200' : '2,600' }
-    } : {
-        'Cristian': { hours: 75, sales: '4,500' },
-        'Roger': { hours: 50, sales: '3,200' },
-        'Marco': { hours: 40, sales: '2,600' }
-    };
-    const maxDriverHours = 80;
+        [currentUser.name]: driverStatsMap[currentUser.name] || { hours: 0, sales: 0 }
+    } : (() => {
+        const stats = {};
+        DRIVERS.forEach(d => {
+            stats[d] = {
+                hours: driverStatsMap[d]?.hours || 0,
+                sales: (driverStatsMap[d]?.sales || 0).toLocaleString('es-ES')
+            };
+        });
+        return stats;
+    })();
+
+    const vehicleHours = (() => {
+        const vStats = {};
+        VEHICLES.forEach(v => {
+            vStats[v] = vehicleHoursMap[v] || 0;
+        });
+        return vStats;
+    })();
+
+    const maxDriverHours = Math.max(1, ...Object.values(driverStats).map(d => d.hours));
+    const maxVehicle = Math.max(1, ...Object.values(vehicleHours));
 
     const paxMix = {
         pax1: { perc: 10, count: 7 },
@@ -174,69 +214,42 @@ export default function Dashboard({ currentUser }) {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <h1 className="page-title" style={{ margin: 0, fontSize: isMobile ? '1.5rem' : '1.875rem' }}>KPIs</h1>
 
-                    {isMobile && (
-                        <select
-                            value={timeRange}
-                            onChange={(e) => setTimeRange(e.target.value)}
-                            style={{
-                                padding: '0.5rem 2rem 0.5rem 1rem',
-                                borderRadius: 'var(--radius-md)',
-                                border: '1px solid var(--border-color)',
-                                backgroundColor: 'var(--bg-card)',
-                                color: 'var(--text-primary)',
-                                fontWeight: 600,
-                                fontSize: '0.875rem',
-                                appearance: 'none',
-                                backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'currentColor\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
-                                backgroundRepeat: 'no-repeat',
-                                backgroundPosition: 'right 0.5rem center',
-                                backgroundSize: '1em'
-                            }}
-                        >
-                            {TIME_FILTERS.map(range => (
-                                <option key={range.id} value={range.id}>{range.label}</option>
-                            ))}
-                        </select>
-                    )}
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'stretch' : 'center', gap: '1.5rem' }}>
-                    <div style={{ display: 'flex', gap: isMobile ? '1rem' : '2.5rem', padding: isMobile ? '1rem' : '0 1.5rem 0 0', borderRight: isMobile ? 'none' : '1px solid var(--border-color)', backgroundColor: isMobile ? 'var(--bg-hover)' : 'transparent', borderRadius: isMobile ? 'var(--radius-md)' : '0', justifyContent: isMobile ? 'space-around' : 'flex-start' }}>
+                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>{timeRange === 'year' ? 'Acum. Año' : 'Venta Mes'}</div>
-                            <div style={{ fontSize: isMobile ? '1.25rem' : '1.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>{isDriver ? '4,100' : '12,400'}€</div>
+                            <label style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.2rem' }}>Desde</label>
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                style={{
+                                    padding: '0.5rem',
+                                    borderRadius: 'var(--radius-md)',
+                                    border: '1px solid var(--border-color)',
+                                    backgroundColor: 'var(--bg-card)',
+                                    color: 'var(--text-primary)',
+                                    fontWeight: 600,
+                                    fontSize: '0.875rem'
+                                }}
+                            />
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>{timeRange === 'year' ? 'Forecast Año' : 'Forecast'}</div>
-                            <div style={{ fontSize: isMobile ? '1.25rem' : '1.5rem', fontWeight: 800, color: 'var(--brand-primary)' }}>{isDriver ? '5,500' : '14,500'}€</div>
+                            <label style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.2rem' }}>Hasta</label>
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                style={{
+                                    padding: '0.5rem',
+                                    borderRadius: 'var(--radius-md)',
+                                    border: '1px solid var(--border-color)',
+                                    backgroundColor: 'var(--bg-card)',
+                                    color: 'var(--text-primary)',
+                                    fontWeight: 600,
+                                    fontSize: '0.875rem'
+                                }}
+                            />
                         </div>
                     </div>
-
-                    {!isMobile && (
-                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                            {TIME_FILTERS.map(range => (
-                                <button
-                                    key={range.id}
-                                    onClick={() => setTimeRange(range.id)}
-                                    style={{
-                                        padding: '0.5rem 1.25rem',
-                                        border: '1px solid',
-                                        borderColor: timeRange === range.id ? 'var(--brand-primary)' : 'var(--border-color)',
-                                        background: timeRange === range.id ? 'var(--brand-primary)' : 'var(--bg-card)',
-                                        color: timeRange === range.id ? '#ffffff' : 'var(--text-secondary)',
-                                        fontWeight: 600,
-                                        fontSize: '0.875rem',
-                                        borderRadius: '999px',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s ease',
-                                        boxShadow: timeRange === range.id ? '0 4px 6px -1px rgba(14, 165, 233, 0.2)' : 'none'
-                                    }}
-                                >
-                                    {range.label}
-                                </button>
-                            ))}
-                        </div>
-                    )}
                 </div>
             </div>
 

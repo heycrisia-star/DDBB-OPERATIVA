@@ -33,7 +33,8 @@ export default function Tours({ currentUser }) {
     const isDriver = currentUser?.role === 'driver';
 
     // Filters State
-    const [filterDate, setFilterDate] = useState('today');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [selectedVehicles, setSelectedVehicles] = useState(VEHICLES);
     const [selectedDrivers, setSelectedDrivers] = useState(DRIVERS);
 
@@ -41,7 +42,9 @@ export default function Tours({ currentUser }) {
     const [selectedOperators, setSelectedOperators] = useState(OPERATORS);
 
     const toggleVehicle = (v) => {
-        if (selectedVehicles.includes(v)) {
+        if (selectedVehicles.length === VEHICLES.length) {
+            setSelectedVehicles([v]);
+        } else if (selectedVehicles.includes(v)) {
             setSelectedVehicles(selectedVehicles.filter(x => x !== v));
         } else setSelectedVehicles([...selectedVehicles, v]);
     };
@@ -50,7 +53,9 @@ export default function Tours({ currentUser }) {
     };
 
     const toggleDriver = (d) => {
-        if (selectedDrivers.includes(d)) {
+        if (selectedDrivers.length === DRIVERS.length) {
+            setSelectedDrivers([d]);
+        } else if (selectedDrivers.includes(d)) {
             setSelectedDrivers(selectedDrivers.filter(x => x !== d));
         } else setSelectedDrivers([...selectedDrivers, d]);
     };
@@ -77,19 +82,15 @@ export default function Tours({ currentUser }) {
     };
 
     const toggleOperator = (op) => {
-        if (selectedOperators.includes(op)) {
+        if (selectedOperators.length === OPERATORS.length) {
+            setSelectedOperators([op]);
+        } else if (selectedOperators.includes(op)) {
             setSelectedOperators(selectedOperators.filter(o => o !== op));
-        } else {
-            setSelectedOperators([...selectedOperators, op]);
-        }
+        } else setSelectedOperators([...selectedOperators, op]);
     };
 
     const toggleAllOperators = () => {
-        if (selectedOperators.length === OPERATORS.length) {
-            setSelectedOperators([]);
-        } else {
-            setSelectedOperators(OPERATORS);
-        }
+        setSelectedOperators(selectedOperators.length === OPERATORS.length ? [] : OPERATORS);
     }
 
     const filteredTours = MOCK_TOURS.filter(t => {
@@ -97,8 +98,11 @@ export default function Tours({ currentUser }) {
         if (!t.code.toLowerCase().includes(searchTerm.toLowerCase())) return false;
         if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
         if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
-        if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
-        // Date filter logic would go here depending on t.date compared to today.
+        if (selectedOperators.length !== OPERATORS.length && !selectedOperators.includes(t.operator)) return false;
+
+        if (startDate && t.date < startDate) return false;
+        if (endDate && t.date > endDate) return false;
+
         return true;
     });
 
@@ -150,11 +154,23 @@ export default function Tours({ currentUser }) {
                         />
                     </div>
 
-                    <select className="input" style={{ width: 'auto' }} value={filterDate} onChange={(e) => setFilterDate(e.target.value)}>
-                        {TIME_FILTERS.map(tf => (
-                            <option key={tf.id} value={tf.id}>{tf.label}</option>
-                        ))}
-                    </select>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                        <input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className="input"
+                            style={{ padding: '0.5rem', width: 'auto' }}
+                        />
+                        <span style={{ color: 'var(--text-secondary)' }}>-</span>
+                        <input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className="input"
+                            style={{ padding: '0.5rem', width: 'auto' }}
+                        />
+                    </div>
 
                     <MultiSelect
                         label="Coches" options={VEHICLES}
