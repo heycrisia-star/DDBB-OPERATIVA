@@ -28,6 +28,7 @@ export default function Calendar({ currentUser }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [activeShortcut, setActiveShortcut] = useState('');
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
     const isDriver = currentUser?.role === 'driver';
 
@@ -43,6 +44,7 @@ export default function Calendar({ currentUser }) {
 
     const setDateRangeShortcut = (type) => {
         const today = new Date();
+        setActiveShortcut(type);
         setViewMode('agenda');
         if (type === 'today') {
             const str = format(today, 'yyyy-MM-dd');
@@ -157,10 +159,10 @@ export default function Calendar({ currentUser }) {
                         {viewMode === 'agenda' && (
                             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                 <div style={{ display: 'flex', gap: '0.25rem', marginRight: '0.5rem' }}>
-                                    <button onClick={() => setDateRangeShortcut('today')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Hoy</button>
-                                    <button onClick={() => setDateRangeShortcut('week')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Semana</button>
-                                    <button onClick={() => setDateRangeShortcut('month')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Mes</button>
-                                    <button onClick={() => setDateRangeShortcut('all')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-card)', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Todo</button>
+                                    <button onClick={() => setDateRangeShortcut('today')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'today' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'today' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Hoy</button>
+                                    <button onClick={() => setDateRangeShortcut('week')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'week' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'week' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Semana</button>
+                                    <button onClick={() => setDateRangeShortcut('month')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'month' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'month' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Mes</button>
+                                    <button onClick={() => setDateRangeShortcut('all')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'all' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'all' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Todo</button>
                                 </div>
                                 <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} style={{ padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: '0.875rem' }} />
                                 <span style={{ color: 'var(--text-secondary)' }}>-</span>
