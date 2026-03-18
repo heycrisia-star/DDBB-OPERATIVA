@@ -181,6 +181,7 @@ export default function Dashboard({ currentUser }) {
         3: { total: 0, pax4: 0, paxLess4: 0 }
     };
     const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0 };
+    const languageStatsMap = {};
 
     filteredTours.forEach(t => {
         if (!driverStatsMap[t.driver]) driverStatsMap[t.driver] = { hours: 0, sales: 0 };
