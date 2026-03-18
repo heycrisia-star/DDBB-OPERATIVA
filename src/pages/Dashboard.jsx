@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart, Globe } from 'lucide-react';
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import MultiSelect from '../components/MultiSelect';
 import { MOCK_TOURS } from '../data/mockTours';
@@ -37,7 +37,7 @@ const StatCard = ({ title, value, icon: Icon, color = 'var(--brand-primary)', tr
     </div>
 );
 
-const ProgressBar = ({ label, value, max, color, count, extraLabel, striped }) => {
+const ProgressBar = ({ label, value, max, color, count, extraLabel, striped, marginBottom = '1.25rem' }) => {
     const percentage = max > 0 ? Math.round((value / max) * 100) : 0;
 
     // Pattern for better visual distinction
@@ -47,7 +47,7 @@ const ProgressBar = ({ label, value, max, color, count, extraLabel, striped }) =
     } : {};
 
     return (
-        <div style={{ marginBottom: '1.25rem' }}>
+        <div style={{ marginBottom }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.875rem' }}>
                 <span style={{ fontWeight: 600 }}>{label}</span>
                 <span style={{ color: 'var(--text-secondary)' }}>
@@ -175,7 +175,11 @@ export default function Dashboard({ currentUser }) {
 
     // For Pax, Duration and Operators Mix
     const paxStatsMap = { 1: 0, 2: 0, 3: 0, 4: 0, '5+': 0 };
-    const durationStatsMap = { 1: 0, 2: 0, 3: 0 };
+    const durationStatsMap = {
+        1: { total: 0, pax4: 0, paxLess4: 0 },
+        2: { total: 0, pax4: 0, paxLess4: 0 },
+        3: { total: 0, pax4: 0, paxLess4: 0 }
+    };
     const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0 };
 
     filteredTours.forEach(t => {
@@ -198,10 +202,21 @@ export default function Dashboard({ currentUser }) {
 
         // Duration
         const dStr = String(t.duration);
-        if (durationStatsMap[dStr] !== undefined) durationStatsMap[dStr]++;
+        if (durationStatsMap[dStr]) {
+            durationStatsMap[dStr].total++;
+            if (p >= 4) durationStatsMap[dStr].pax4++;
+            else durationStatsMap[dStr].paxLess4++;
+        }
 
         // Operator
         if (operatorStatsMap[t.operator] !== undefined) operatorStatsMap[t.operator]++;
+
+        // Language
+        if (t.language) {
+            const lang = t.language.toUpperCase();
+            if (!languageStatsMap[lang]) languageStatsMap[lang] = 0;
+            languageStatsMap[lang]++;
+        }
     });
 
     const driverStats = isDriver ? {
@@ -239,9 +254,30 @@ export default function Dashboard({ currentUser }) {
     };
 
     const tourDuration = {
-        '1': { perc: getPerc(durationStatsMap[1]), count: durationStatsMap[1] },
-        '2': { perc: getPerc(durationStatsMap[2]), count: durationStatsMap[2] },
-        '3': { perc: getPerc(durationStatsMap[3]), count: durationStatsMap[3] },
+        '1': {
+            perc: getPerc(durationStatsMap[1].total),
+            count: durationStatsMap[1].total,
+            pax4Count: durationStatsMap[1].pax4,
+            paxLess4Count: durationStatsMap[1].paxLess4,
+            pax4Perc: durationStatsMap[1].total > 0 ? Math.round((durationStatsMap[1].pax4 / durationStatsMap[1].total) * 100) : 0,
+            paxLess4Perc: durationStatsMap[1].total > 0 ? Math.round((durationStatsMap[1].paxLess4 / durationStatsMap[1].total) * 100) : 0
+        },
+        '2': {
+            perc: getPerc(durationStatsMap[2].total),
+            count: durationStatsMap[2].total,
+            pax4Count: durationStatsMap[2].pax4,
+            paxLess4Count: durationStatsMap[2].paxLess4,
+            pax4Perc: durationStatsMap[2].total > 0 ? Math.round((durationStatsMap[2].pax4 / durationStatsMap[2].total) * 100) : 0,
+            paxLess4Perc: durationStatsMap[2].total > 0 ? Math.round((durationStatsMap[2].paxLess4 / durationStatsMap[2].total) * 100) : 0
+        },
+        '3': {
+            perc: getPerc(durationStatsMap[3].total),
+            count: durationStatsMap[3].total,
+            pax4Count: durationStatsMap[3].pax4,
+            paxLess4Count: durationStatsMap[3].paxLess4,
+            pax4Perc: durationStatsMap[3].total > 0 ? Math.round((durationStatsMap[3].pax4 / durationStatsMap[3].total) * 100) : 0,
+            paxLess4Perc: durationStatsMap[3].total > 0 ? Math.round((durationStatsMap[3].paxLess4 / durationStatsMap[3].total) * 100) : 0
+        },
     };
 
     const operatorStats = {
@@ -250,6 +286,21 @@ export default function Dashboard({ currentUser }) {
         'VIA': { perc: getPerc(operatorStatsMap['VIA']), count: operatorStatsMap['VIA'] },
         'IC': { perc: getPerc(operatorStatsMap['IC']), count: operatorStatsMap['IC'] }
     };
+
+    const getLangLabel = (code) => {
+        const map = { 'EN': 'USA / UK', 'ES': 'España / Latam', 'FR': 'Francia', 'DE': 'Alemania', 'IT': 'Italia', 'NL': 'Países Bajos', 'PT': 'Portugal / Brasil' };
+        return map[code] || code;
+    };
+
+    const topLanguages = Object.entries(languageStatsMap)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3)
+        .map(([code, count]) => ({
+            code,
+            label: getLangLabel(code),
+            count: count,
+            perc: getPerc(count)
+        }));
 
     return (
         <div className="animate-fade-in">
@@ -488,8 +539,30 @@ export default function Dashboard({ currentUser }) {
                     {Object.entries(tourDuration)
                         .sort((a, b) => b[1].count - a[1].count)
                         .map(([dur, stats]) => (
-                            <ProgressBar key={dur} label={`Duración: ${dur} hrs`} value={stats.perc} max={100} color="#0ea5e9" count={`${stats.count} tours`} />
+                            <div key={dur} style={{ marginBottom: '1.25rem' }}>
+                                <ProgressBar label={`Duración: ${dur} hrs`} value={stats.perc} max={100} color="#0ea5e9" count={`${stats.count} tours`} marginBottom="0.5rem" />
+                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)', padding: '0 0.25rem' }}>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                        <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#94a3b8' }} />
+                                        &lt;4 Pax: <strong>{stats.paxLess4Perc}%</strong> ({stats.paxLess4Count})
+                                    </span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                        <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#0ea5e9' }} />
+                                        4+ Pax: <strong>{stats.pax4Perc}%</strong> ({stats.pax4Count})
+                                    </span>
+                                </div>
+                            </div>
                         ))}
+
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, margin: '2rem 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Globe size={18} color="var(--brand-primary)" /> Top 3 Mercados
+                    </h3>
+                    {topLanguages.map((lang, idx) => {
+                        const colors = ['#f59e0b', '#10b981', '#6366f1'];
+                        return (
+                            <ProgressBar key={lang.code} label={`${idx + 1}. ${lang.label} (${lang.code})`} value={lang.perc} max={100} color={colors[idx] || '#cbd5e1'} count={`${lang.count} tours`} />
+                        );
+                    })}
                 </div>
 
             </div>
