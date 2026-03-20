@@ -862,5 +862,41 @@ export const MOCK_TOURS = [
     "country": "United States",
     "netPrice": 135.42,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
+  },
+  {
+    "id": 49,
+    "code": "GYGG45YNRNVV",
+    "date": "2026-03-20",
+    "start": "17:00",
+    "duration": 1,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 3,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Robin Belcher Howard",
+    "phone": "+12293100378",
+    "language": "EN",
+    "country": "United States",
+    "netPrice": 84.67,
+    "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
+  },
+  {
+    "id": 50,
+    "code": "GYGWZAZ2Z9H8",
+    "date": "2026-03-22",
+    "start": "13:00",
+    "duration": 1,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Eloise Appelle",
+    "phone": "+33651422388",
+    "language": "FR",
+    "country": "France",
+    "netPrice": 66.75,
+    "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   }
 ];
