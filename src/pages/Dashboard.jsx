@@ -476,8 +476,7 @@ export default function Dashboard({ currentUser }) {
                         {OPERATORS.map(op => {
                             const colors = OPERATOR_COLORS[op] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
                             const isSelected = selectedOperators.includes(op);
-                            const opActiveCount = filteredTours.filter(t => t.operator === op && t.status.toLowerCase() !== 'cancelado').length;
-                            const opCancelCount = filteredTours.filter(t => t.operator === op && t.status.toLowerCase() === 'cancelado').length;
+                            const opCount = filteredTours.filter(t => t.operator === op).length;
                             return (
                                 <button
                                     key={op}
@@ -500,14 +499,13 @@ export default function Dashboard({ currentUser }) {
                                     }}
                                 >
                                     {op}
-                                    {opActiveCount > 0 && (
-                                        <span style={{ fontSize: '0.65rem', fontWeight: 900, backgroundColor: isSelected ? 'rgba(0,0,0,0.15)' : 'var(--bg-hover)', padding: '0.1rem 0.35rem', borderRadius: '4px', lineHeight: 1.4 }}>
-                                            {opActiveCount}
-                                        </span>
-                                    )}
-                                    {opCancelCount > 0 && (
-                                        <span style={{ fontSize: '0.6rem', fontWeight: 700, color: 'rgba(239,68,68,0.85)', backgroundColor: 'rgba(239,68,68,0.1)', padding: '0.1rem 0.3rem', borderRadius: '4px', lineHeight: 1.4 }}>
-                                            ✕{opCancelCount}
+                                    {opCount > 0 && (
+                                        <span style={{
+                                            fontSize: '0.65rem', fontWeight: 900,
+                                            backgroundColor: isSelected ? 'rgba(0,0,0,0.15)' : 'var(--bg-hover)',
+                                            padding: '0.1rem 0.35rem', borderRadius: '4px', lineHeight: 1.4
+                                        }}>
+                                            {opCount}
                                         </span>
                                     )}
                                 </button>
@@ -536,48 +534,84 @@ export default function Dashboard({ currentUser }) {
                     icon={Clock}
                     isMobile={isMobile}
                 />
-                <div className="card" style={{
-                    padding: isMobile ? '1rem' : '1.25rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: isMobile ? '0.25rem' : '0.5rem',
-                    minHeight: isMobile ? '90px' : 'auto',
-                    justifyContent: 'center'
-                }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile ? '0.25rem' : '0.5rem' }}>
-                        <div style={{ padding: isMobile ? '0.35rem' : '0.5rem', backgroundColor: 'var(--brand-light)', color: 'var(--brand-primary)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <CalendarIcon size={isMobile ? 18 : 20} />
-                        </div>
-                        <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
-                            {kpis.pipelineCount > 0 && (
-                                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#0ea5e9', backgroundColor: 'rgba(14,165,233,0.12)', padding: '0.2rem 0.45rem', borderRadius: '5px', whiteSpace: 'nowrap' }}>
-                                    🔵 {kpis.pipelineCount} tubería
-                                </span>
-                            )}
-                            {kpis.cancelledCount > 0 && (
-                                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--status-cancelled)', backgroundColor: 'rgba(239,68,68,0.1)', padding: '0.2rem 0.45rem', borderRadius: '5px', whiteSpace: 'nowrap' }}>
-                                    ✕ {kpis.cancelledCount} ({kpis.cancelRate}%)
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                    <div>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.025em', margin: 0 }}>Tours</p>
-                        <h3 style={{ fontSize: isMobile ? '1.1rem' : '1.5rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>{kpis.tours}</h3>
-                    </div>
-                </div>
+                <StatCard
+                    title="Tours"
+                    value={kpis.tours}
+                    icon={CalendarIcon}
+                    isMobile={isMobile}
+                />
                 <StatCard
                     title="Ticket Medio"
                     value={kpis.ticket}
                     icon={ShoppingBag}
                     isMobile={isMobile}
                 />
-                <StatCard
-                    title="Cancelaciones"
-                    value={`${kpis.cancelRate}%`}
-                    icon={AlertCircle}
-                    isMobile={isMobile}
-                />
+            </div>
+
+            {/* Pipeline + Cancelaciones — sub-KPI strip */}
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+                gap: isMobile ? '0.75rem' : '1.5rem',
+                marginBottom: '2rem'
+            }}>
+                {/* En Tubería */}
+                <div className="card" style={{
+                    padding: '1.25rem 1.5rem',
+                    background: 'linear-gradient(135deg, rgba(14,165,233,0.08) 0%, rgba(56,189,248,0.04) 100%)',
+                    borderLeft: '3px solid #0ea5e9',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1.25rem'
+                }}>
+                    <div style={{ width: '2.75rem', height: '2.75rem', borderRadius: '50%', background: 'rgba(14,165,233,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#0ea5e9' }}>En Tubería</p>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                            <h3 style={{ margin: 0, fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)', lineHeight: 1.1 }}>{kpis.pipelineCount}</h3>
+                            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>reservas futuras confirmadas</span>
+                        </div>
+                    </div>
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 600 }}>del total</p>
+                        <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#0ea5e9' }}>
+                            {kpis.tours > 0 ? Math.round((kpis.pipelineCount / kpis.tours) * 100) : 0}%
+                        </p>
+                    </div>
+                </div>
+
+                {/* Cancelaciones */}
+                <div className="card" style={{
+                    padding: '1.25rem 1.5rem',
+                    background: 'linear-gradient(135deg, rgba(239,68,68,0.06) 0%, rgba(248,113,113,0.02) 100%)',
+                    borderLeft: '3px solid var(--status-cancelled)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '1.25rem'
+                }}>
+                    <div style={{ width: '2.75rem', height: '2.75rem', borderRadius: '50%', background: 'rgba(239,68,68,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <AlertCircle size={18} color="var(--status-cancelled)" />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--status-cancelled)' }}>Cancelaciones</p>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
+                            <h3 style={{ margin: 0, fontSize: '2rem', fontWeight: 900, color: 'var(--text-primary)', lineHeight: 1.1 }}>{kpis.cancelledCount}</h3>
+                            <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 600 }}>reservas canceladas</span>
+                        </div>
+                        {/* Mini barra de ratio */}
+                        <div style={{ marginTop: '0.5rem', height: '4px', borderRadius: '9999px', background: 'var(--bg-hover)', overflow: 'hidden' }}>
+                            <div style={{ height: '100%', width: `${kpis.cancelRate}%`, borderRadius: '9999px', background: 'var(--status-cancelled)', transition: 'width 0.6s ease' }} />
+                        </div>
+                    </div>
+                    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                        <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 600 }}>tasa</p>
+                        <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: 'var(--status-cancelled)' }}>{kpis.cancelRate}%</p>
+                    </div>
+                </div>
             </div>
 
             <div style={{ columnCount: isMobile ? 1 : 2, columnGap: '1.5rem', paddingBottom: '2rem' }}>
