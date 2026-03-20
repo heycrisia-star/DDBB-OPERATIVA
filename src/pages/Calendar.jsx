@@ -132,6 +132,12 @@ export default function Calendar({ currentUser }) {
                             >
                                 Agenda
                             </button>
+                            <button
+                                onClick={() => setViewMode('ultimas')}
+                                style={{ flex: isMobile ? 1 : 'none', padding: isMobile ? '0.4rem 0.5rem' : '0.5rem 1rem', border: 'none', background: viewMode === 'ultimas' ? 'var(--brand-light)' : 'transparent', color: viewMode === 'ultimas' ? 'var(--brand-primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? '0.8rem' : '0.875rem', borderLeft: '1px solid var(--border-color)' }}
+                            >
+                                Últimas
+                            </button>
                         </div>
 
                         {/* Search */}
@@ -437,6 +443,75 @@ export default function Calendar({ currentUser }) {
         return <div style={{ borderTop: '1px solid var(--border-color)', borderLeft: '1px solid var(--border-color)', borderRadius: '0 0 var(--radius-lg) var(--radius-lg)', overflow: 'hidden' }}>{rows}</div>;
     };
 
+    // ─── renderUltimas ────────────────────────────────────────────────
+    const renderUltimas = () => {
+        const last7Days = addDays(new Date(), -7);
+        const todayStr = format(new Date(), 'yyyy-MM-dd');
+        const sevenDaysAgoStr = format(last7Days, 'yyyy-MM-dd');
+
+        const recentTours = [...MOCK_TOURS]
+            .filter(t => t.date >= sevenDaysAgoStr && t.date <= todayStr)
+            .sort((a, b) => new Date(`${b.date}T${b.start}`) - new Date(`${a.date}T${a.start}`));
+
+        const statusColor = {
+            confirmado: { bg: '#dcfce7', text: '#15803d' },
+            cancelado: { bg: '#fee2e2', text: '#b91c1c' },
+            modificado: { bg: '#fef3c7', text: '#92400e' }
+        };
+
+        return (
+            <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+                <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-card)' }}>
+                    <div>
+                        <h3 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>Reservas última semana</h3>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Desde {format(last7Days, 'dd MMM', { locale: es })} hasta hoy · {recentTours.length} reservada{recentTours.length !== 1 ? 's' : ''}</p>
+                    </div>
+                    <div style={{ textAlign: 'right' }}>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', fontWeight: 500, display: 'block' }}>Auto-actualizado 5:00 AM</span>
+                    </div>
+                </div>
+
+                {recentTours.length === 0 ? (
+                    <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-tertiary)' }}>No hay movimientos en los últimos 7 días.</div>
+                ) : (
+                    <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
+                            <thead>
+                                <tr style={{ backgroundColor: 'var(--bg-hover)' }}>
+                                    {['CÓDIGO', 'OPERADOR', 'FECHA', 'HORA', 'ESTADO', 'PAX', 'VEHÍCULO', 'CHOFER'].map(h => (
+                                        <th key={h} style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--border-color)' }}>{h}</th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {recentTours.map((tour, i) => {
+                                    const sc = statusColor[tour.status?.toLowerCase()] || { bg: 'var(--bg-hover)', text: 'var(--text-secondary)' };
+                                    const opColors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', text: '#475569' };
+                                    return (
+                                        <tr key={tour.id} style={{ borderBottom: '1px solid var(--border-color)', backgroundColor: i % 2 === 0 ? 'var(--bg-card)' : 'rgba(0,0,0,0.01)', transition: 'background 0.2s' }}>
+                                            <td style={{ padding: '0.75rem 1rem', fontWeight: 700, color: 'var(--brand-primary)', fontFamily: 'monospace' }}>{tour.code}</td>
+                                            <td style={{ padding: '0.75rem 1rem' }}>
+                                                <span style={{ backgroundColor: opColors.bg, color: opColors.text, fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.4rem', borderRadius: '4px' }}>{tour.operator}</span>
+                                            </td>
+                                            <td style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>{format(parseISO(tour.date), 'dd/MM/yy')}</td>
+                                            <td style={{ padding: '0.75rem 1rem', fontWeight: 700 }}>{tour.start}</td>
+                                            <td style={{ padding: '0.75rem 1rem' }}>
+                                                <span style={{ backgroundColor: sc.bg, color: sc.text, fontSize: '0.65rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>{tour.status.toUpperCase()}</span>
+                                            </td>
+                                            <td style={{ padding: '0.75rem 1rem', color: 'var(--text-secondary)' }}>{tour.pax} pax</td>
+                                            <td style={{ padding: '0.75rem 1rem', color: VEHICLE_COLORS[tour.vehicle] || 'var(--text-secondary)', fontWeight: 700 }}>{tour.vehicle}</td>
+                                            <td style={{ padding: '0.75rem 1rem', color: DRIVER_COLORS[tour.driver] || 'var(--text-secondary)', fontWeight: 700 }}>{tour.driver}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+            </div>
+        );
+    };
+
     const renderAgenda = () => {
         // Simple list view for agenda mode (better for mobile)
         const sortedTours = [...MOCK_TOURS]
@@ -531,8 +606,10 @@ export default function Calendar({ currentUser }) {
                         {renderCells()}
                     </div>
                 </div>
-            ) : (
+            ) : viewMode === 'agenda' ? (
                 renderAgenda()
+            ) : (
+                renderUltimas()
             )}
         </div>
     );
