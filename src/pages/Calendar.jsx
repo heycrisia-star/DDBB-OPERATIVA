@@ -496,7 +496,11 @@ export default function Calendar({ currentUser }) {
                                             <td style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>{format(parseISO(tour.date), 'dd/MM/yy')}</td>
                                             <td style={{ padding: '0.75rem 1rem', fontWeight: 700 }}>{tour.start}</td>
                                             <td style={{ padding: '0.75rem 1rem' }}>
-                                                <span style={{ backgroundColor: sc.bg, color: sc.text, fontSize: '0.65rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>{tour.status.toUpperCase()}</span>
+                                                {tour.status.toLowerCase() === 'confirmado' && tour.date < today ? (
+                                                    <span style={{ backgroundColor: 'rgba(5,150,105,0.15)', color: '#065f46', fontSize: '0.65rem', fontWeight: 800, padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid rgba(5,150,105,0.3)' }}>✓ REALIZADO</span>
+                                                ) : (
+                                                    <span style={{ backgroundColor: sc.bg, color: sc.text, fontSize: '0.65rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>{tour.status.toUpperCase()}</span>
+                                                )}
                                             </td>
                                             <td style={{ padding: '0.75rem 1rem', color: 'var(--text-secondary)' }}>{tour.pax} pax</td>
                                             <td style={{ padding: '0.75rem 1rem', color: VEHICLE_COLORS[tour.vehicle] || 'var(--text-secondary)', fontWeight: 700 }}>{tour.vehicle}</td>
@@ -563,9 +567,17 @@ export default function Calendar({ currentUser }) {
                                     </div>
                                     <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
                                         {isPast && (
-                                            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#059669', backgroundColor: 'rgba(5,150,105,0.1)', padding: '0.15rem 0.45rem', borderRadius: '4px' }}>✓ Realizado</span>
+                                            <span style={{
+                                                fontSize: '0.65rem',
+                                                fontWeight: 800,
+                                                color: '#065f46',
+                                                backgroundColor: 'rgba(5,150,105,0.15)',
+                                                padding: '0.15rem 0.45rem',
+                                                borderRadius: '4px',
+                                                border: '1px solid rgba(5,150,105,0.3)'
+                                            }}>✓ Realizado</span>
                                         )}
-                                        <span className={`badge badge-${tour.status}`} style={{ fontSize: isMobile ? '0.65rem' : '0.75rem' }}>{tour.status}</span>
+                                        <span className={`badge badge-${tour.status.toLowerCase()}`} style={{ fontSize: isMobile ? '0.65rem' : '0.75rem' }}>{tour.status}</span>
                                     </div>
                                 </div>
 

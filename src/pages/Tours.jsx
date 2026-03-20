@@ -31,6 +31,7 @@ export default function Tours({ currentUser }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTour, setSelectedTour] = useState(null);
     const isDriver = currentUser?.role === 'driver';
+    const today = format(new Date(), 'yyyy-MM-dd');
 
     // Filters State
     const [startDate, setStartDate] = useState('');
@@ -174,10 +175,10 @@ export default function Tours({ currentUser }) {
 
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         <div style={{ display: 'flex', gap: '0.25rem', marginRight: '0.5rem' }}>
-                            <button onClick={() => setDateRangeShortcut('today')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'today' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'today' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Hoy</button>
-                            <button onClick={() => setDateRangeShortcut('week')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'week' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'week' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Semana</button>
-                            <button onClick={() => setDateRangeShortcut('month')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'month' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'month' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Mes</button>
-                            <button onClick={() => setDateRangeShortcut('all')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'all' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'all' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Todo</button>
+                            <button onClick={() => setDateRangeShortcut('today')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: activeShortcut === 'today' ? '1px solid var(--brand-primary)' : '1px solid var(--border-color)', background: activeShortcut === 'today' ? '#1e3a8a' : 'var(--bg-card)', color: activeShortcut === 'today' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 700, boxShadow: activeShortcut === 'today' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none' }}>Hoy</button>
+                            <button onClick={() => setDateRangeShortcut('week')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: activeShortcut === 'week' ? '1px solid var(--brand-primary)' : '1px solid var(--border-color)', background: activeShortcut === 'week' ? '#1e3a8a' : 'var(--bg-card)', color: activeShortcut === 'week' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 700, boxShadow: activeShortcut === 'week' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none' }}>Semanal</button>
+                            <button onClick={() => setDateRangeShortcut('month')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: activeShortcut === 'month' ? '1px solid var(--brand-primary)' : '1px solid var(--border-color)', background: activeShortcut === 'month' ? '#1e3a8a' : 'var(--bg-card)', color: activeShortcut === 'month' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 700, boxShadow: activeShortcut === 'month' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none' }}>Mensual</button>
+                            <button onClick={() => setDateRangeShortcut('all')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: activeShortcut === 'all' ? '1px solid var(--brand-primary)' : '1px solid var(--border-color)', background: activeShortcut === 'all' ? '#1e3a8a' : 'var(--bg-card)', color: activeShortcut === 'all' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 700, boxShadow: activeShortcut === 'all' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none' }}>Todo</button>
                         </div>
                         <input
                             type="date"
@@ -266,12 +267,14 @@ export default function Tours({ currentUser }) {
                         <tbody>
                             {filteredTours.map(tour => {
                                 const operatorColors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
-                                const isCancelled = tour.status === 'cancelado';
+                                const isCancelled = tour.status.toLowerCase() === 'cancelado';
+                                const isPast = tour.date < today && tour.status.toLowerCase() === 'confirmado';
                                 return (
                                     <tr key={tour.id} style={{
                                         textDecoration: isCancelled ? 'line-through' : 'none',
-                                        opacity: isCancelled ? 0.6 : 1,
-                                        backgroundColor: isCancelled ? 'var(--bg-hover)' : 'inherit'
+                                        opacity: isCancelled ? 0.6 : (isPast ? 0.7 : 1),
+                                        backgroundColor: isCancelled ? 'var(--bg-hover)' : (isPast ? 'var(--bg-hover)' : 'inherit'),
+                                        transition: 'all 0.2s ease'
                                     }}>
                                         <td style={{ fontWeight: 500 }}>{tour.code}</td>
                                         <td>
@@ -302,8 +305,19 @@ export default function Tours({ currentUser }) {
                                         </td>
                                         <td>{tour.duration}</td>
                                         <td>
-                                            <span className={`badge badge-${tour.status.toLowerCase()}`}>
-                                                {tour.status}
+                                            <span
+                                                className={`badge ${isPast ? '' : `badge-${tour.status.toLowerCase()}`}`}
+                                                style={isPast ? {
+                                                    backgroundColor: 'rgba(5,150,105,0.1)',
+                                                    color: '#059669',
+                                                    fontSize: '0.7rem',
+                                                    padding: '0.15rem 0.45rem',
+                                                    borderRadius: '4px',
+                                                    fontWeight: 700,
+                                                    border: '1px solid rgba(5,150,105,0.2)'
+                                                } : {}}
+                                            >
+                                                {isPast ? '✓ Realizado' : tour.status}
                                             </span>
                                         </td>
                                         <td>{tour.pax}</td>
