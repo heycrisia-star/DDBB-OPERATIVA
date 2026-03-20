@@ -353,7 +353,12 @@ export default function Calendar({ currentUser }) {
                                                 {tour.start}
                                                 {!isMobile && <span style={{ fontSize: '0.6rem', opacity: 0.7, fontWeight: 500 }}>{tour.duration}h</span>}
                                             </span>
-                                            <span style={{ fontSize: isMobile ? '0.5rem' : '0.6rem' }}>{tour.operator}</span>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.15rem' }}>
+                                                <span style={{ fontSize: isMobile ? '0.55rem' : '0.65rem', letterSpacing: '-0.5px', opacity: 0.85 }}>
+                                                    {'👤'.repeat(Math.min(parseInt(tour.pax) || 1, 4))}
+                                                </span>
+                                                <span style={{ fontSize: isMobile ? '0.5rem' : '0.6rem', marginLeft: '0.2rem' }}>{tour.operator}</span>
+                                            </span>
                                         </div>
 
                                         <div style={{
