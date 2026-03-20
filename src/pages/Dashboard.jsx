@@ -190,7 +190,9 @@ export default function Dashboard({ currentUser }) {
         }
     };
 
-    const totalSales = filteredTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
+    const totalSales = filteredTours
+        .filter(t => t.status.toLowerCase() !== 'cancelado')
+        .reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
     const totalHours = filteredTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
     const totalTours = filteredTours.length;
     const avgTicket = totalTours > 0 ? Math.round(totalSales / totalTours) : 0;
@@ -395,10 +397,50 @@ export default function Dashboard({ currentUser }) {
 
                     <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
                         <div style={{ display: 'flex', gap: '0.5rem', marginRight: '0.5rem' }}>
-                            <button onClick={() => setDateRangeShortcut('today')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'today' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'today' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Hoy</button>
-                            <button onClick={() => setDateRangeShortcut('week')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'week' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'week' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Semana</button>
-                            <button onClick={() => setDateRangeShortcut('month')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'month' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'month' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Mes</button>
-                            <button onClick={() => setDateRangeShortcut('all')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'all' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'all' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Todo</button>
+                            <button
+                                onClick={() => setDateRangeShortcut('today')}
+                                style={{
+                                    fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px',
+                                    border: '1px solid',
+                                    borderColor: activeShortcut === 'today' ? '#1e3a8a' : 'var(--border-color)',
+                                    background: activeShortcut === 'today' ? '#1e40af' : 'var(--bg-card)',
+                                    color: activeShortcut === 'today' ? '#fff' : 'var(--text-primary)',
+                                    cursor: 'pointer', fontWeight: 700,
+                                    boxShadow: activeShortcut === 'today' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
+                                }}>Hoy</button>
+                            <button
+                                onClick={() => setDateRangeShortcut('week')}
+                                style={{
+                                    fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px',
+                                    border: '1px solid',
+                                    borderColor: activeShortcut === 'week' ? '#1e3a8a' : 'var(--border-color)',
+                                    background: activeShortcut === 'week' ? '#1e40af' : 'var(--bg-card)',
+                                    color: activeShortcut === 'week' ? '#fff' : 'var(--text-primary)',
+                                    cursor: 'pointer', fontWeight: 700,
+                                    boxShadow: activeShortcut === 'week' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
+                                }}>Semana</button>
+                            <button
+                                onClick={() => setDateRangeShortcut('month')}
+                                style={{
+                                    fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px',
+                                    border: '1px solid',
+                                    borderColor: activeShortcut === 'month' ? '#1e3a8a' : 'var(--border-color)',
+                                    background: activeShortcut === 'month' ? '#1e40af' : 'var(--bg-card)',
+                                    color: activeShortcut === 'month' ? '#fff' : 'var(--text-primary)',
+                                    cursor: 'pointer', fontWeight: 700,
+                                    boxShadow: activeShortcut === 'month' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
+                                }}>Mes</button>
+                            <button
+                                onClick={() => setDateRangeShortcut('all')}
+                                style={{
+                                    fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px',
+                                    border: '1px solid',
+                                    borderColor: activeShortcut === 'all' ? '#1e3a8a' : 'var(--border-color)',
+                                    background: activeShortcut === 'all' ? '#1e40af' : 'var(--bg-card)',
+                                    color: activeShortcut === 'all' ? '#fff' : 'var(--text-primary)',
+                                    cursor: 'pointer', fontWeight: 700,
+                                    boxShadow: activeShortcut === 'all' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
+                                }}>Todo</button>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                             <label style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.2rem' }}>Desde</label>

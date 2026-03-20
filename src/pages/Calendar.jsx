@@ -450,8 +450,8 @@ export default function Calendar({ currentUser }) {
         const sevenDaysAgoStr = format(last7Days, 'yyyy-MM-dd');
 
         const recentTours = [...MOCK_TOURS]
-            .filter(t => t.date >= sevenDaysAgoStr && t.date <= todayStr)
-            .sort((a, b) => new Date(`${b.date}T${b.start}`) - new Date(`${a.date}T${a.start}`));
+            .filter(t => t.bookingDate >= sevenDaysAgoStr && t.bookingDate <= todayStr)
+            .sort((a, b) => new Date(`${b.bookingDate}T00:00:00`) - new Date(`${a.bookingDate}T00:00:00`));
 
         const statusColor = {
             confirmado: { bg: '#dcfce7', text: '#15803d' },
@@ -478,7 +478,7 @@ export default function Calendar({ currentUser }) {
                         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.8rem' }}>
                             <thead>
                                 <tr style={{ backgroundColor: 'var(--bg-hover)' }}>
-                                    {['CÓDIGO', 'OPERADOR', 'FECHA', 'HORA', 'ESTADO', 'PAX', 'VEHÍCULO', 'CHOFER'].map(h => (
+                                    {['CÓDIGO', 'OPERADOR', 'F. RESERVA', 'F. TOUR', 'HORA', 'ESTADO', 'PAX', 'VEHÍCULO', 'CHOFER'].map(h => (
                                         <th key={h} style={{ padding: '0.75rem 1rem', textAlign: 'left', fontWeight: 700, color: 'var(--text-secondary)', fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em', borderBottom: '1px solid var(--border-color)' }}>{h}</th>
                                     ))}
                                 </tr>
@@ -493,7 +493,8 @@ export default function Calendar({ currentUser }) {
                                             <td style={{ padding: '0.75rem 1rem' }}>
                                                 <span style={{ backgroundColor: opColors.bg, color: opColors.text, fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.4rem', borderRadius: '4px' }}>{tour.operator}</span>
                                             </td>
-                                            <td style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>{format(parseISO(tour.date), 'dd/MM/yy')}</td>
+                                            <td style={{ padding: '0.75rem 1rem', fontWeight: 600, color: 'var(--text-secondary)' }}>{tour.bookingDate ? format(parseISO(tour.bookingDate), 'dd/MM/yy') : '--'}</td>
+                                            <td style={{ padding: '0.75rem 1rem', fontWeight: 700 }}>{format(parseISO(tour.date), 'dd/MM/yy')}</td>
                                             <td style={{ padding: '0.75rem 1rem', fontWeight: 700 }}>{tour.start}</td>
                                             <td style={{ padding: '0.75rem 1rem' }}>
                                                 {tour.status.toLowerCase() === 'confirmado' && tour.date < today ? (
