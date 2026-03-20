@@ -13,7 +13,8 @@ export const MOCK_TOURS = [
     "clientName": "Nicole Gajowski",
     "phone": "",
     "language": "DE",
-    "netPrice": "59.33",
+    "country": "Germany",
+    "netPrice": 59.33,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -30,7 +31,8 @@ export const MOCK_TOURS = [
     "clientName": "Kevin Lomberget",
     "phone": "",
     "language": "FR",
-    "netPrice": "75.27",
+    "country": "France",
+    "netPrice": 75.27,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -47,7 +49,8 @@ export const MOCK_TOURS = [
     "clientName": "Swati Jha",
     "phone": "",
     "language": "EN",
-    "netPrice": "95.43",
+    "country": "Sweden",
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -64,7 +67,8 @@ export const MOCK_TOURS = [
     "clientName": "Michaela Schuett",
     "phone": "",
     "language": "DE",
-    "netPrice": "140.63",
+    "country": "Germany",
+    "netPrice": 140.63,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -81,7 +85,8 @@ export const MOCK_TOURS = [
     "clientName": "lisa Antoni",
     "phone": "",
     "language": "DE",
-    "netPrice": "75.26",
+    "country": "Germany",
+    "netPrice": 75.26,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -98,7 +103,8 @@ export const MOCK_TOURS = [
     "clientName": "Madalina Tudor",
     "phone": "",
     "language": "EN",
-    "netPrice": "59.33",
+    "country": "Romania",
+    "netPrice": 59.33,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -115,7 +121,8 @@ export const MOCK_TOURS = [
     "clientName": "Desmond Tillman",
     "phone": "",
     "language": "EN",
-    "netPrice": "95.43",
+    "country": "United States",
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -132,7 +139,8 @@ export const MOCK_TOURS = [
     "clientName": "Maroua Hir",
     "phone": "",
     "language": "FR",
-    "netPrice": "59.33",
+    "country": "France",
+    "netPrice": 59.33,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -149,7 +157,8 @@ export const MOCK_TOURS = [
     "clientName": "Alegria Tombo",
     "phone": "",
     "language": "FR",
-    "netPrice": "59.33",
+    "country": "Belgium",
+    "netPrice": 59.33,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -166,7 +175,8 @@ export const MOCK_TOURS = [
     "clientName": "CAMU Karine",
     "phone": "",
     "language": "FR",
-    "netPrice": "59.33",
+    "country": "France",
+    "netPrice": 59.33,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -183,7 +193,8 @@ export const MOCK_TOURS = [
     "clientName": "Martina Ignacia Alarcón arteaga",
     "phone": "",
     "language": "ES",
-    "netPrice": "95.42",
+    "country": "Chile",
+    "netPrice": 95.42,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -200,7 +211,8 @@ export const MOCK_TOURS = [
     "clientName": "Kathy Cantet",
     "phone": "",
     "language": "FR",
-    "netPrice": "59.33",
+    "country": "France",
+    "netPrice": 59.33,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -217,7 +229,8 @@ export const MOCK_TOURS = [
     "clientName": "Andrea Deffke",
     "phone": "",
     "language": "DE",
-    "netPrice": "140.63",
+    "country": "Switzerland",
+    "netPrice": 140.63,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -234,7 +247,8 @@ export const MOCK_TOURS = [
     "clientName": "Steven Bay",
     "phone": "",
     "language": "EN",
-    "netPrice": "95.43",
+    "country": "United States",
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -251,7 +265,8 @@ export const MOCK_TOURS = [
     "clientName": "Nicole Pellegrino",
     "phone": "",
     "language": "IT",
-    "netPrice": "59.33",
+    "country": "Italy",
+    "netPrice": 59.33,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -268,7 +283,8 @@ export const MOCK_TOURS = [
     "clientName": "Ludmila Ginsberg",
     "phone": "19542002165.0",
     "language": "EN",
-    "netPrice": "95.43",
+    "country": "United States",
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -285,7 +301,8 @@ export const MOCK_TOURS = [
     "clientName": "YUMI JIKKO",
     "phone": "819073467504.0",
     "language": "EN",
-    "netPrice": "95.43",
+    "country": "Japan",
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -302,7 +319,8 @@ export const MOCK_TOURS = [
     "clientName": "Lindsay Wallin",
     "phone": "6172857740.0",
     "language": "EN",
-    "netPrice": "95.43",
+    "country": "United States",
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -319,7 +337,8 @@ export const MOCK_TOURS = [
     "clientName": "Sonja Mangelmann",
     "phone": "4917684185161.0",
     "language": "DE",
-    "netPrice": "95.43",
+    "country": "Germany",
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -336,7 +355,8 @@ export const MOCK_TOURS = [
     "clientName": "Lars Törnblad",
     "phone": "46709505077.0",
     "language": "EN",
-    "netPrice": "173.81",
+    "country": "Sweden",
+    "netPrice": 173.81,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -353,7 +373,8 @@ export const MOCK_TOURS = [
     "clientName": "Joshua Vargas",
     "phone": "13058773682.0",
     "language": "EN",
-    "netPrice": "59.33",
+    "country": "United States",
+    "netPrice": 59.33,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -370,7 +391,8 @@ export const MOCK_TOURS = [
     "clientName": "Jayet Claude",
     "phone": "33608823400.0",
     "language": "FR",
-    "netPrice": "75.27",
+    "country": "France",
+    "netPrice": 75.27,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -387,7 +409,8 @@ export const MOCK_TOURS = [
     "clientName": "Carlos Eduardo Oliveira da Silva",
     "phone": "5571988378140.0",
     "language": "PT",
-    "netPrice": "59.33",
+    "country": "Brazil",
+    "netPrice": 59.33,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -404,24 +427,8 @@ export const MOCK_TOURS = [
     "clientName": "Karin Habets",
     "phone": "491706071397.0",
     "language": "EN",
-    "netPrice": "84.66",
-    "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
-  },
-  {
-    "id": 49,
-    "code": "GYGG45YNRNVV",
-    "date": "2026-03-20",
-    "start": "17:00",
-    "duration": 1,
-    "operator": "GYG",
-    "status": "confirmado",
-    "pax": 3,
-    "vehicle": "02-NR",
-    "driver": "Cristian",
-    "clientName": "Robin Belcher Howard",
-    "phone": "+12293100378",
-    "language": "EN",
-    "netPrice": "84.67",
+    "country": "Germany",
+    "netPrice": 84.66,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -438,7 +445,8 @@ export const MOCK_TOURS = [
     "clientName": "Sonja Karsh",
     "phone": "14183892995.0",
     "language": "EN",
-    "netPrice": "195.53",
+    "country": "Canada",
+    "netPrice": 195.53,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -455,24 +463,8 @@ export const MOCK_TOURS = [
     "clientName": "Jane Andrea Erasmus",
     "phone": "447921894433.0",
     "language": "EN",
-    "netPrice": "84.67",
-    "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
-  },
-  {
-    "id": 48,
-    "code": "GYGWZAZ2Z9H8",
-    "date": "2026-03-22",
-    "start": "13:00",
-    "duration": 1,
-    "operator": "GYG",
-    "status": "confirmado",
-    "pax": 2,
-    "vehicle": "01-DR",
-    "driver": "Cristian",
-    "clientName": "Eloise Appelle",
-    "phone": "+33651422388",
-    "language": "FR",
-    "netPrice": "66.75",
+    "country": "United Kingdom",
+    "netPrice": 84.67,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -489,7 +481,8 @@ export const MOCK_TOURS = [
     "clientName": "Hélène Lalonde",
     "phone": "15145090696.0",
     "language": "FR",
-    "netPrice": "84.66",
+    "country": "Canada",
+    "netPrice": 84.66,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -506,7 +499,8 @@ export const MOCK_TOURS = [
     "clientName": "RUYA KOSKUN",
     "phone": "905357695142.0",
     "language": "EN",
-    "netPrice": "107.37",
+    "country": "Turkey",
+    "netPrice": 107.37,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -523,7 +517,8 @@ export const MOCK_TOURS = [
     "clientName": "Hendrik Strauf",
     "phone": "491799075772.0",
     "language": "DE",
-    "netPrice": "135.42",
+    "country": "Germany",
+    "netPrice": 135.42,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -540,7 +535,8 @@ export const MOCK_TOURS = [
     "clientName": "Tina Nippe",
     "phone": "4915752558978.0",
     "language": "DE",
-    "netPrice": "135.43",
+    "country": "Germany",
+    "netPrice": 135.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -557,7 +553,8 @@ export const MOCK_TOURS = [
     "clientName": "Elisabeth Mertin",
     "phone": "4917681079720.0",
     "language": "DE",
-    "netPrice": "158.21",
+    "country": "Germany",
+    "netPrice": 158.21,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -574,7 +571,8 @@ export const MOCK_TOURS = [
     "clientName": "Shu Liu",
     "phone": "13476076585.0",
     "language": "EN",
-    "netPrice": "107.37",
+    "country": "United States",
+    "netPrice": 107.37,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -591,7 +589,8 @@ export const MOCK_TOURS = [
     "clientName": "Rossi Ilaria",
     "phone": "",
     "language": "IT",
-    "netPrice": "94.07",
+    "country": "Italy",
+    "netPrice": 94.07,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -608,7 +607,8 @@ export const MOCK_TOURS = [
     "clientName": "Danielle Allum",
     "phone": "",
     "language": "EN",
-    "netPrice": "93.60",
+    "country": "United Kingdom",
+    "netPrice": 93.6,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -625,7 +625,8 @@ export const MOCK_TOURS = [
     "clientName": "Miguel Martinez",
     "phone": "",
     "language": "EN",
-    "netPrice": "175.79",
+    "country": "United States",
+    "netPrice": 175.79,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -642,7 +643,8 @@ export const MOCK_TOURS = [
     "clientName": "Eleonora woudenberg",
     "phone": "",
     "language": "NL",
-    "netPrice": "94.08",
+    "country": "Netherlands",
+    "netPrice": 94.08,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -659,7 +661,8 @@ export const MOCK_TOURS = [
     "clientName": "Lily Driskill",
     "phone": "",
     "language": "EN",
-    "netPrice": "150.48",
+    "country": "United States",
+    "netPrice": 150.48,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -676,7 +679,8 @@ export const MOCK_TOURS = [
     "clientName": "Gail Frank",
     "phone": "",
     "language": "EN",
-    "netPrice": "175.79",
+    "country": "United States",
+    "netPrice": 175.79,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -693,7 +697,8 @@ export const MOCK_TOURS = [
     "clientName": "Michael Horne",
     "phone": "",
     "language": "EN",
-    "netPrice": "175.79",
+    "country": "United States",
+    "netPrice": 175.79,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -710,7 +715,8 @@ export const MOCK_TOURS = [
     "clientName": "Francisco Mondaca",
     "phone": "",
     "language": "EN",
-    "netPrice": "94.08",
+    "country": "United States",
+    "netPrice": 94.08,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -727,7 +733,8 @@ export const MOCK_TOURS = [
     "clientName": "Joanie Antonacci",
     "phone": "",
     "language": "EN",
-    "netPrice": "217.29",
+    "country": "United States",
+    "netPrice": 217.29,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -744,7 +751,8 @@ export const MOCK_TOURS = [
     "clientName": "David Thomas",
     "phone": "",
     "language": "EN",
-    "netPrice": "119.30",
+    "country": "United Kingdom",
+    "netPrice": 119.3,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -761,7 +769,8 @@ export const MOCK_TOURS = [
     "clientName": "Vicki Leffler",
     "phone": "",
     "language": "EN",
-    "netPrice": "217.29",
+    "country": "United States",
+    "netPrice": 217.29,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -778,7 +787,8 @@ export const MOCK_TOURS = [
     "clientName": "Laura Wray",
     "phone": "",
     "language": "EN",
-    "netPrice": "162.77",
+    "country": "United States",
+    "netPrice": 162.77,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -795,7 +805,8 @@ export const MOCK_TOURS = [
     "clientName": "Nancy Sagnella",
     "phone": "",
     "language": "EN",
-    "netPrice": "175.79",
+    "country": "United States",
+    "netPrice": 175.79,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -812,7 +823,8 @@ export const MOCK_TOURS = [
     "clientName": "Matthew Hiscoe",
     "phone": "",
     "language": "EN",
-    "netPrice": "94.08",
+    "country": "United Kingdom",
+    "netPrice": 94.08,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -829,7 +841,8 @@ export const MOCK_TOURS = [
     "clientName": "Virginia Trujillo de Cisneros",
     "phone": "",
     "language": "ES",
-    "netPrice": "217.29",
+    "country": "Mexico",
+    "netPrice": 217.29,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   },
   {
@@ -844,9 +857,10 @@ export const MOCK_TOURS = [
     "vehicle": "01-DR",
     "driver": "Cristian",
     "clientName": "Rane Bo Cross",
-    "phone": "+18165290747",
+    "phone": "+1 8165290747",
     "language": "EN",
-    "netPrice": "135.42",
+    "country": "United States",
+    "netPrice": 135.42,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights"
   }
 ];

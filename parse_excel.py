@@ -1,7 +1,7 @@
 import pandas as pd
 import json
 
-df = pd.read_excel('bookings-export (7).xlsx', engine='openpyxl')
+df = pd.read_excel('../bookings-export (7).xlsx', engine='openpyxl')
 
 tours = []
 vehicles = ['01-DR', '02-NR']
@@ -65,6 +65,7 @@ for idx, row in df.iterrows():
         'clientName': name,
         'phone': str(row.get('Phone', '')).replace('nan', ''),
         'language': lang,
+        'country': str(row.get("Traveler's Country", "")).replace('nan', ''),
         'netPrice': net_price,
         'product': str(row['Product'])
     })
