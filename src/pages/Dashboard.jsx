@@ -248,31 +248,45 @@ export default function Dashboard({ currentUser }) {
         // Operator
         if (operatorStatsMap[t.operator] !== undefined) operatorStatsMap[t.operator]++;
 
-        // Country
-        if (t.phone) {
-            const phoneStr = (t.phone || '').trim().replace(/\s/g, '');
-            let country = 'Desconocido';
-            if (phoneStr.startsWith('+1')) country = 'USA / Canadá';
-            else if (phoneStr.startsWith('+34')) country = 'España';
-            else if (phoneStr.startsWith('+33')) country = 'Francia';
-            else if (phoneStr.startsWith('+49')) country = 'Alemania';
-            else if (phoneStr.startsWith('+39')) country = 'Italia';
-            else if (phoneStr.startsWith('+44')) country = 'Reino Unido';
-            else if (phoneStr.startsWith('+31')) country = 'Países Bajos';
-            else if (phoneStr.startsWith('+351')) country = 'Portugal';
-            else if (phoneStr.startsWith('+54')) country = 'Argentina';
-            else if (phoneStr.startsWith('+52')) country = 'México';
-            else if (phoneStr.startsWith('+57')) country = 'Colombia';
-            else if (phoneStr.startsWith('+56')) country = 'Chile';
-            else if (phoneStr.startsWith('+55')) country = 'Brasil';
-            else if (phoneStr.startsWith('+41')) country = 'Suiza';
-            else if (phoneStr.startsWith('+43')) country = 'Austria';
-            else if (phoneStr.length > 5) country = 'Otros';
+        // Country (Phone prefix first, Language as fallback)
+        let country = 'Desconocido';
+        const phoneStr = (t.phone || '').trim().replace(/\D/g, '');
 
-            if (country !== 'Desconocido') {
-                if (!countryStatsMap[country]) countryStatsMap[country] = 0;
-                countryStatsMap[country]++;
-            }
+        if (phoneStr.length > 3) {
+            if (phoneStr.startsWith('1')) country = 'USA / Canadá';
+            else if (phoneStr.startsWith('34')) country = 'España';
+            else if (phoneStr.startsWith('33')) country = 'Francia';
+            else if (phoneStr.startsWith('49')) country = 'Alemania';
+            else if (phoneStr.startsWith('39')) country = 'Italia';
+            else if (phoneStr.startsWith('44')) country = 'Reino Unido';
+            else if (phoneStr.startsWith('31')) country = 'Países Bajos';
+            else if (phoneStr.startsWith('351')) country = 'Portugal';
+            else if (phoneStr.startsWith('54')) country = 'Argentina';
+            else if (phoneStr.startsWith('52')) country = 'México';
+            else if (phoneStr.startsWith('57')) country = 'Colombia';
+            else if (phoneStr.startsWith('56')) country = 'Chile';
+            else if (phoneStr.startsWith('55')) country = 'Brasil';
+            else if (phoneStr.startsWith('41')) country = 'Suiza';
+            else if (phoneStr.startsWith('43')) country = 'Austria';
+            else if (phoneStr.startsWith('61')) country = 'Australia';
+            else if (phoneStr.startsWith('46')) country = 'Suecia';
+            else country = 'Otros';
+        }
+
+        if (country === 'Desconocido' && t.language) {
+            const lang = t.language.toUpperCase();
+            if (lang === 'EN') country = 'USA / Reino Unido';
+            else if (lang === 'DE') country = 'Alemania';
+            else if (lang === 'FR') country = 'Francia';
+            else if (lang === 'ES') country = 'España';
+            else if (lang === 'IT') country = 'Italia';
+            else if (lang === 'NL') country = 'Países Bajos';
+            else if (lang === 'PT') country = 'Portugal';
+        }
+
+        if (country !== 'Desconocido' && country !== 'Otros') {
+            if (!countryStatsMap[country]) countryStatsMap[country] = 0;
+            countryStatsMap[country]++;
         }
     });
 
@@ -507,10 +521,10 @@ export default function Dashboard({ currentUser }) {
                 />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
+            <div style={{ columnCount: isMobile ? 1 : 2, columnGap: '1.5rem', paddingBottom: '2rem' }}>
 
                 {/* Card 1: Vehículos y Choferes */}
-                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <Car size={18} color="var(--brand-primary)" /> Vehículos y Choferes
                     </h3>
@@ -530,7 +544,7 @@ export default function Dashboard({ currentUser }) {
                 </div>
 
                 {/* Card 2: Venta por Chofer */}
-                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <TrendingUp size={18} color="var(--brand-primary)" /> Venta por Conductor
                     </h3>
@@ -551,7 +565,7 @@ export default function Dashboard({ currentUser }) {
                 </div>
 
                 {/* Card 3: Agregadores */}
-                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <PieChart size={18} color="var(--brand-primary)" /> Canales (Agregadores)
                     </h3>
@@ -565,7 +579,7 @@ export default function Dashboard({ currentUser }) {
                 </div>
 
                 {/* Card 4: Top 3 Países */}
-                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <Globe size={18} color="var(--brand-primary)" /> Top 3 Mercados (Países)
                     </h3>
@@ -578,7 +592,7 @@ export default function Dashboard({ currentUser }) {
                 </div>
 
                 {/* Card 5: Duración */}
-                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <Timer size={18} color="var(--brand-primary)" /> Duración de Tours
                     </h3>
@@ -590,7 +604,7 @@ export default function Dashboard({ currentUser }) {
                 </div>
 
                 {/* Card 6: Pax Mix */}
-                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <Users size={18} color="var(--brand-primary)" /> Tamaño de Grupos
                     </h3>
