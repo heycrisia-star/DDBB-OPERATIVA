@@ -253,7 +253,7 @@ export default function Dashboard({ currentUser }) {
         const phoneStr = (t.phone || '').trim().replace(/\D/g, '');
 
         if (phoneStr.length > 3) {
-            if (phoneStr.startsWith('1')) country = 'USA / Canadá';
+            if (phoneStr.startsWith('1')) country = 'Estados Unidos';
             else if (phoneStr.startsWith('34')) country = 'España';
             else if (phoneStr.startsWith('33')) country = 'Francia';
             else if (phoneStr.startsWith('49')) country = 'Alemania';
