@@ -273,15 +273,7 @@ export default function Dashboard({ currentUser }) {
             else country = 'Otros';
         }
 
-        if (country === 'Desconocido' && t.language) {
-            const lang = t.language.toUpperCase();
-            if (lang === 'DE') country = 'Alemania';
-            else if (lang === 'FR') country = 'Francia';
-            else if (lang === 'ES') country = 'España';
-            else if (lang === 'IT') country = 'Italia';
-            else if (lang === 'NL') country = 'Países Bajos';
-            else if (lang === 'PT') country = 'Portugal';
-        }
+
 
         if (country !== 'Desconocido' && country !== 'Otros') {
             if (!countryStatsMap[country]) countryStatsMap[country] = 0;
