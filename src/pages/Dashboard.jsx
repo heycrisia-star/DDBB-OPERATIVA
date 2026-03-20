@@ -63,6 +63,42 @@ const ProgressBar = ({ label, value, max, color, count, extraLabel, striped, mar
     )
 }
 
+const StackedBar = ({ label, segments }) => (
+    <div style={{ marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.875rem' }}>
+            <span style={{ fontWeight: 600 }}>{label}</span>
+        </div>
+        <div style={{ width: '100%', height: '1.5rem', display: 'flex', borderRadius: '8px', overflow: 'hidden' }}>
+            {segments.map((s, i) => (
+                s.value > 0 && (
+                    <div key={i} style={{
+                        width: `${s.value}%`,
+                        backgroundColor: s.color,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '0.75rem',
+                        fontWeight: 'bold'
+                    }}>
+                        {s.value > 10 ? `${s.value}%` : ''}
+                    </div>
+                )
+            ))}
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem', fontSize: '0.75rem', color: 'var(--text-secondary)', justifyContent: 'center', flexWrap: 'wrap' }}>
+            {segments.map((s, i) => (
+                s.count > 0 && (
+                    <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                        <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: s.color, flexShrink: 0 }} />
+                        {s.label} ({s.count})
+                    </span>
+                )
+            ))}
+        </div>
+    </div>
+);
+
 export default function Dashboard({ currentUser }) {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -181,7 +217,7 @@ export default function Dashboard({ currentUser }) {
         3: { total: 0, pax4: 0, paxLess4: 0 }
     };
     const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0 };
-    const languageStatsMap = {};
+    const countryStatsMap = {};
 
     filteredTours.forEach(t => {
         if (!driverStatsMap[t.driver]) driverStatsMap[t.driver] = { hours: 0, sales: 0 };
@@ -212,11 +248,31 @@ export default function Dashboard({ currentUser }) {
         // Operator
         if (operatorStatsMap[t.operator] !== undefined) operatorStatsMap[t.operator]++;
 
-        // Language
-        if (t.language) {
-            const lang = t.language.toUpperCase();
-            if (!languageStatsMap[lang]) languageStatsMap[lang] = 0;
-            languageStatsMap[lang]++;
+        // Country
+        if (t.phone) {
+            const phoneStr = (t.phone || '').trim().replace(/\s/g, '');
+            let country = 'Desconocido';
+            if (phoneStr.startsWith('+1')) country = 'USA / Canadá';
+            else if (phoneStr.startsWith('+34')) country = 'España';
+            else if (phoneStr.startsWith('+33')) country = 'Francia';
+            else if (phoneStr.startsWith('+49')) country = 'Alemania';
+            else if (phoneStr.startsWith('+39')) country = 'Italia';
+            else if (phoneStr.startsWith('+44')) country = 'Reino Unido';
+            else if (phoneStr.startsWith('+31')) country = 'Países Bajos';
+            else if (phoneStr.startsWith('+351')) country = 'Portugal';
+            else if (phoneStr.startsWith('+54')) country = 'Argentina';
+            else if (phoneStr.startsWith('+52')) country = 'México';
+            else if (phoneStr.startsWith('+57')) country = 'Colombia';
+            else if (phoneStr.startsWith('+56')) country = 'Chile';
+            else if (phoneStr.startsWith('+55')) country = 'Brasil';
+            else if (phoneStr.startsWith('+41')) country = 'Suiza';
+            else if (phoneStr.startsWith('+43')) country = 'Austria';
+            else if (phoneStr.length > 5) country = 'Otros';
+
+            if (country !== 'Desconocido') {
+                if (!countryStatsMap[country]) countryStatsMap[country] = 0;
+                countryStatsMap[country]++;
+            }
         }
     });
 
@@ -288,17 +344,11 @@ export default function Dashboard({ currentUser }) {
         'IC': { perc: getPerc(operatorStatsMap['IC']), count: operatorStatsMap['IC'] }
     };
 
-    const getLangLabel = (code) => {
-        const map = { 'EN': 'USA / UK', 'ES': 'España / Latam', 'FR': 'Francia', 'DE': 'Alemania', 'IT': 'Italia', 'NL': 'Países Bajos', 'PT': 'Portugal / Brasil' };
-        return map[code] || code;
-    };
-
-    const topLanguages = Object.entries(languageStatsMap)
+    const topCountries = Object.entries(countryStatsMap)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 3)
-        .map(([code, count]) => ({
-            code,
-            label: getLangLabel(code),
+        .map(([country, count]) => ({
+            label: country,
             count: count,
             perc: getPerc(count)
         }));
@@ -457,112 +507,117 @@ export default function Dashboard({ currentUser }) {
                 />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '1.5rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem', alignItems: 'start' }}>
 
-                {/* Vehículos y Choferes */}
-                <div className="card" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
-                    <div>
-                        <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Clock size={18} color="var(--brand-primary)" /> Vehículos
-                        </h3>
-                        {Object.entries(vehicleHours)
-                            .sort((a, b) => b[1] - a[1])
-                            .map(([name, hours]) => (
-                                <ProgressBar key={name} label={name} value={hours} max={maxVehicle} color={VEHICLE_COLORS[name]} count={`${hours}h`} />
-                            ))}
+                {/* Card 1: Vehículos y Choferes */}
+                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Car size={18} color="var(--brand-primary)" /> Vehículos y Choferes
+                    </h3>
+                    <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Flota</h4>
+                    {Object.entries(vehicleHours)
+                        .sort((a, b) => b[1] - a[1])
+                        .map(([name, hours]) => (
+                            <ProgressBar key={name} label={name} value={hours} max={maxVehicle} color={VEHICLE_COLORS[name]} count={`${hours}h`} />
+                        ))}
 
-                        <h3 style={{ fontSize: '1.125rem', fontWeight: 600, margin: '2rem 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Clock size={18} color="var(--brand-primary)" /> Choferes
-                        </h3>
+                    <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', margin: '1.5rem 0 1rem 0', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Personal</h4>
+                    {Object.entries(driverStats)
+                        .sort((a, b) => b[1].hours - a[1].hours)
+                        .map(([name, stats]) => (
+                            <ProgressBar key={name} label={name} value={stats.hours} max={maxDriverHours} color={DRIVER_COLORS[name]} count={`${stats.hours}h`} striped />
+                        ))}
+                </div>
+
+                {/* Card 2: Venta por Chofer */}
+                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <TrendingUp size={18} color="var(--brand-primary)" /> Venta por Conductor
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         {Object.entries(driverStats)
-                            .sort((a, b) => b[1].hours - a[1].hours)
+                            .sort((a, b) => {
+                                const salesA = parseInt((a[1].sales || '0').replace(/[,.]/g, '')) || 0;
+                                const salesB = parseInt((b[1].sales || '0').replace(/[,.]/g, '')) || 0;
+                                return salesB - salesA;
+                            })
                             .map(([name, stats]) => (
-                                <ProgressBar key={name} label={name} value={stats.hours} max={maxDriverHours} color={DRIVER_COLORS[name]} count={`${stats.hours}h`} striped />
+                                <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)' }}>
+                                    <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{name}</span>
+                                    <span style={{ fontWeight: 800, color: 'var(--brand-primary)', fontSize: '1.125rem' }}>{stats.sales} €</span>
+                                </div>
                             ))}
-                    </div>
-
-                    <div>
-                        <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            💰 Venta
-                        </h3>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            {Object.entries(driverStats)
-                                .sort((a, b) => {
-                                    const salesA = parseInt((a[1].sales || '0').replace(/[,.]/g, '')) || 0;
-                                    const salesB = parseInt((b[1].sales || '0').replace(/[,.]/g, '')) || 0;
-                                    return salesB - salesA;
-                                })
-                                .map(([name, stats]) => (
-                                    <div key={name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)' }}>
-                                        <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>{name}</span>
-                                        <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{stats.sales}</span>
-                                    </div>
-                                ))}
-                        </div>
                     </div>
                 </div>
 
-                {/* Mix Operativo y Agregadores */}
-                <div className="card">
+                {/* Card 3: Agregadores */}
+                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <PieChart size={18} color="var(--brand-primary)" /> Agregadores
+                        <PieChart size={18} color="var(--brand-primary)" /> Canales (Agregadores)
                     </h3>
                     {Object.entries(operatorStats)
                         .sort((a, b) => b[1].count - a[1].count)
                         .map(([op, stats]) => {
-                            const labels = { 'GYG': 'GetYourGuide (GYG)', 'FH': 'FareHarbor (FH)', 'VIA': 'Viator (VIA)', 'IC': 'Intercruises (IC)' };
+                            const labels = { 'GYG': 'GetYourGuide', 'FH': 'FareHarbor', 'VIA': 'Viator', 'IC': 'Intercruises' };
                             const colors = { 'GYG': '#c2410c', 'FH': '#4338ca', 'VIA': '#15803d', 'IC': '#7e22ce' };
                             return <ProgressBar key={op} label={labels[op]} value={stats.perc} max={100} color={colors[op]} count={`${stats.count} tours`} />;
                         })}
+                </div>
 
-                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, margin: '2rem 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Users size={18} color="var(--brand-primary)" /> Pax
+                {/* Card 4: Top 3 Países */}
+                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Globe size={18} color="var(--brand-primary)" /> Top 3 Mercados (Países)
                     </h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', marginBottom: '1.5rem' }}>
+                    {topCountries.map((country, idx) => {
+                        const colors = ['#f59e0b', '#10b981', '#6366f1', '#ec4899', '#8b5cf6'];
+                        return (
+                            <ProgressBar key={country.label} label={`${idx + 1}. ${country.label}`} value={country.perc} max={100} color={colors[idx] || '#cbd5e1'} count={`${country.count} tours`} />
+                        );
+                    })}
+                </div>
+
+                {/* Card 5: Duración */}
+                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Timer size={18} color="var(--brand-primary)" /> Duración de Tours
+                    </h3>
+                    {Object.entries(tourDuration)
+                        .sort((a, b) => b[1].count - a[1].count)
+                        .map(([dur, stats]) => (
+                            <ProgressBar key={dur} label={`Tours de ${dur} hrs`} value={stats.perc} max={100} color="#0ea5e9" count={`${stats.count} tours`} />
+                        ))}
+                </div>
+
+                {/* Card 6: Pax Mix */}
+                <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Users size={18} color="var(--brand-primary)" /> Tamaño de Grupos
+                    </h3>
+
+                    <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Distribución General</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', marginBottom: '2rem' }}>
                         {[
                             { l: '1 Pax', v: paxMix.pax1 },
                             { l: '2 Pax', v: paxMix.pax2 },
                             { l: '3 Pax', v: paxMix.pax3 },
                             { l: '4 Pax', v: paxMix.pax4 },
                         ].sort((a, b) => b.v.count - a.v.count).map(item => (
-                            <div key={item.l} style={{ padding: '0.75rem 0.5rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-                                <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--brand-primary)' }}>{item.l}</div>
-                                <div style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--text-primary)' }}>{item.v.perc}%</div>
-                                <div style={{ fontSize: '0.75rem', color: 'var(--text-tertiary)' }}>{item.v.count} tours</div>
+                            <div key={item.l} style={{ padding: '0.5rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)', textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '0.15rem', border: '1px solid var(--border-color)' }}>
+                                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--brand-primary)' }}>{item.l}</div>
+                                <div style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-primary)' }}>{item.v.perc}%</div>
                             </div>
                         ))}
                     </div>
 
-                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Timer size={18} color="var(--brand-primary)" /> Duración
-                    </h3>
-                    {Object.entries(tourDuration)
-                        .sort((a, b) => b[1].count - a[1].count)
-                        .map(([dur, stats]) => (
-                            <div key={dur} style={{ marginBottom: '1.25rem' }}>
-                                <ProgressBar label={`Duración: ${dur} hrs`} value={stats.perc} max={100} color="#0ea5e9" count={`${stats.count} tours`} marginBottom="0.5rem" />
-                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-secondary)', padding: '0 0.25rem' }}>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                        <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#94a3b8' }} />
-                                        &lt;4 Pax: <strong>{stats.paxLess4Perc}%</strong> ({stats.paxLess4Count})
-                                    </span>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                                        <div style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: '#0ea5e9' }} />
-                                        4+ Pax: <strong>{stats.pax4Perc}%</strong> ({stats.pax4Count})
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-
-                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, margin: '2rem 0 1.5rem 0', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Globe size={18} color="var(--brand-primary)" /> Top 3 Mercados
-                    </h3>
-                    {topLanguages.map((lang, idx) => {
-                        const colors = ['#f59e0b', '#10b981', '#6366f1'];
-                        return (
-                            <ProgressBar key={lang.code} label={`${idx + 1}. ${lang.label} (${lang.code})`} value={lang.perc} max={100} color={colors[idx] || '#cbd5e1'} count={`${lang.count} tours`} />
-                        );
+                    <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Mix por Duración</h4>
+                    {Object.entries(tourDuration).map(([dur, stats]) => {
+                        if (stats.count === 0) return null;
+                        const segments = [
+                            { label: '<4 Pax', value: stats.paxLess4Perc, count: stats.paxLess4Count, color: '#0ea5e9' },
+                            { label: '4+ Pax', value: stats.pax4Perc, count: stats.pax4Count, color: '#f59e0b' }
+                        ];
+                        return <StackedBar key={dur} label={`Tours de ${dur} hrs`} segments={segments} />;
                     })}
                 </div>
 
