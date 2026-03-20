@@ -347,15 +347,16 @@ export default function Calendar({ currentUser }) {
                                 const colors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
                                 const isCancelled = tour.status === 'cancelado';
                                 const isModified = tour.status === 'modificado';
-                                const isPast = new Date(tour.date) < new Date().setHours(0, 0, 0, 0);
+                                // Unificar lógica de pasado: día anterior o hoy después de hora inicio
+                                const isPast = tour.date < today || (tour.date === today && tour.start <= currentTime);
 
                                 // Estilos dinámicos por estado
                                 const statusStyles = {
-                                    backgroundColor: isCancelled ? '#fee2e2' : (isModified ? '#fef3c7' : (isPast ? '#f1f5f9' : colors.bg)),
-                                    borderLeftColor: isCancelled ? '#ef4444' : (isModified ? '#f59e0b' : (isPast ? '#94a3b8' : colors.text)),
+                                    backgroundColor: isCancelled ? '#f1f5f9' : (isModified ? '#fef3c7' : (isPast ? '#f1f5f9' : colors.bg)),
+                                    borderLeftColor: isCancelled ? '#94a3b8' : (isModified ? '#f59e0b' : (isPast ? '#94a3b8' : colors.text)),
                                     textDecoration: isCancelled ? 'line-through' : 'none',
-                                    opacity: isPast ? 0.7 : 1,
-                                    color: isCancelled ? '#b91c1c' : (isModified ? '#92400e' : (isPast ? '#64748b' : colors.text))
+                                    opacity: (isPast || isCancelled) ? 0.6 : 1, // Reducir opacidad para ambos
+                                    color: (isCancelled || isPast) ? '#64748b' : (isModified ? '#92400e' : colors.text)
                                 };
 
                                 return (
@@ -411,16 +412,16 @@ export default function Calendar({ currentUser }) {
                                             fontSize: isMobile ? '0.55rem' : '0.65rem',
                                             marginTop: '0.1rem'
                                         }}>
-                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.15rem', color: isCancelled ? 'inherit' : 'var(--text-secondary)' }}>
+                                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.15rem', color: (isCancelled || isPast) ? '#64748b' : 'var(--text-secondary)' }}>
                                                 <Globe size={isMobile ? 8 : 10} /> {tour.language}
-                                                {isPast && !isCancelled && <span style={{ color: '#059669', fontWeight: 800, fontSize: '0.6rem' }}>✓</span>}
+                                                {isPast && !isCancelled && <span style={{ color: '#059669', fontWeight: 800, fontSize: '0.65rem', marginLeft: '0.2rem' }}>✓</span>}
                                             </span>
                                             {tour.driver && (
                                                 <span style={{
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     gap: '0.15rem',
-                                                    color: isCancelled ? 'inherit' : (DRIVER_COLORS[tour.driver] || 'var(--text-secondary)'),
+                                                    color: (isCancelled || isPast) ? '#64748b' : (DRIVER_COLORS[tour.driver] || 'var(--text-secondary)'),
                                                     fontWeight: 700
                                                 }}>
                                                     {tour.driver}
