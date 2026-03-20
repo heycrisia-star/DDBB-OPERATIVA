@@ -23,12 +23,16 @@ const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };
 
 export default function Calendar({ currentUser }) {
-    const [currentMonth, setCurrentMonth] = useState(new Date(2026, 2, 8)); // Marzo 2026 as reference
-    const [viewMode, setViewMode] = useState('agenda'); // 'month', 'week', 'agenda'
+    const today = format(new Date(), 'yyyy-MM-dd');
+    const thisWeekStart = format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+    const thisWeekEnd = format(endOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+
+    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [viewMode, setViewMode] = useState('agenda');
     const [searchTerm, setSearchTerm] = useState('');
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [activeShortcut, setActiveShortcut] = useState('');
+    const [startDate, setStartDate] = useState(thisWeekStart);
+    const [endDate, setEndDate] = useState(thisWeekEnd);
+    const [activeShortcut, setActiveShortcut] = useState('week');
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
     const isDriver = currentUser?.role === 'driver';
 
@@ -159,10 +163,29 @@ export default function Calendar({ currentUser }) {
                         {viewMode === 'agenda' && (
                             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
                                 <div style={{ display: 'flex', gap: '0.25rem', marginRight: '0.5rem' }}>
-                                    <button onClick={() => setDateRangeShortcut('today')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'today' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'today' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Hoy</button>
-                                    <button onClick={() => setDateRangeShortcut('week')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'week' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'week' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Semana</button>
-                                    <button onClick={() => setDateRangeShortcut('month')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'month' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'month' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Mes</button>
-                                    <button onClick={() => setDateRangeShortcut('all')} style={{ fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px', border: '1px solid var(--border-color)', background: activeShortcut === 'all' ? 'var(--primary-color)' : 'var(--bg-card)', color: activeShortcut === 'all' ? '#fff' : 'var(--text-primary)', cursor: 'pointer', fontWeight: 600 }}>Todo</button>
+                                    {[['today', 'Hoy'], ['week', 'Semana'], ['month', 'Mes'], ['all', 'Todo']].map(([key, label]) => {
+                                        const isActive = activeShortcut === key;
+                                        return (
+                                            <button
+                                                key={key}
+                                                onClick={() => setDateRangeShortcut(key)}
+                                                style={{
+                                                    fontSize: '0.75rem',
+                                                    padding: '0.35rem 0.7rem',
+                                                    borderRadius: '6px',
+                                                    border: isActive ? '1px solid var(--brand-primary)' : '1px solid var(--border-color)',
+                                                    background: isActive ? 'var(--brand-primary)' : 'var(--bg-card)',
+                                                    color: isActive ? '#ffffff' : 'var(--text-secondary)',
+                                                    cursor: 'pointer',
+                                                    fontWeight: isActive ? 700 : 600,
+                                                    boxShadow: isActive ? '0 2px 6px rgba(59,130,246,0.35)' : 'none',
+                                                    transition: 'all 0.15s ease'
+                                                }}
+                                            >
+                                                {label}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                                 <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} style={{ padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: '0.875rem' }} />
                                 <span style={{ color: 'var(--text-secondary)' }}>-</span>
@@ -382,6 +405,7 @@ export default function Calendar({ currentUser }) {
                                         }}>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.15rem', color: isCancelled ? 'inherit' : 'var(--text-secondary)' }}>
                                                 <Globe size={isMobile ? 8 : 10} /> {tour.language}
+                                                {isPast && !isCancelled && <span style={{ color: '#059669', fontWeight: 800, fontSize: '0.6rem' }}>✓</span>}
                                             </span>
                                             {tour.driver && (
                                                 <span style={{
@@ -436,8 +460,19 @@ export default function Calendar({ currentUser }) {
 
                 {sortedTours.map(tour => {
                     const colors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
+                    const isPast = tour.date < today && tour.status.toLowerCase() === 'confirmado';
+                    const isCancelledAgenda = tour.status.toLowerCase() === 'cancelado';
                     return (
-                        <div key={tour.id} style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'center', gap: isMobile ? '0.75rem' : '1rem', padding: isMobile ? '0.85rem' : '1rem', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-md)', backgroundColor: 'var(--bg-card)', position: 'relative' }}>
+                        <div key={tour.id} style={{
+                            display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+                            alignItems: isMobile ? 'stretch' : 'center', gap: isMobile ? '0.75rem' : '1rem',
+                            padding: isMobile ? '0.85rem' : '1rem',
+                            border: `1px solid ${isPast ? 'var(--border-color)' : 'var(--border-color)'}`,
+                            borderRadius: 'var(--radius-md)',
+                            backgroundColor: isPast ? 'var(--bg-hover)' : 'var(--bg-card)',
+                            opacity: isPast ? 0.7 : 1,
+                            position: 'relative'
+                        }}>
                             <div style={{ display: 'flex', flexDirection: isMobile ? 'row' : 'column', alignItems: 'center', justifyContent: isMobile ? 'flex-start' : 'center', width: isMobile ? 'auto' : '60px', minHeight: isMobile ? 'auto' : '60px', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-md)', padding: isMobile ? '0.5rem 0.75rem' : '0', gap: isMobile ? '0.5rem' : '0' }}>
                                 <span style={{ fontSize: isMobile ? '0.85rem' : '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>{format(parseISO(tour.date), isMobile ? 'EEEE' : 'MMM', { locale: es })}</span>
                                 <span style={{ fontSize: isMobile ? '1.125rem' : '1.5rem', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1 }}>{format(parseISO(tour.date), 'dd')}</span>
@@ -447,11 +482,16 @@ export default function Calendar({ currentUser }) {
                             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'space-between' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                        <span style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: isMobile ? '1rem' : '1.125rem' }}>{tour.start}</span>
+                                        <span style={{ fontWeight: 700, color: isPast ? 'var(--text-secondary)' : 'var(--text-primary)', fontSize: isMobile ? '1rem' : '1.125rem' }}>{tour.start}</span>
                                         <span className={`badge`} style={{ backgroundColor: colors.bg, color: colors.text, fontSize: '0.65rem', padding: '0.15rem 0.4rem' }}>{tour.operator}</span>
                                         {!isMobile && <span style={{ color: 'var(--text-tertiary)', fontSize: '0.75rem' }}>{tour.code}</span>}
                                     </div>
-                                    <span className={`badge badge-${tour.status}`} style={{ fontSize: isMobile ? '0.65rem' : '0.75rem' }}>{tour.status}</span>
+                                    <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                                        {isPast && (
+                                            <span style={{ fontSize: '0.65rem', fontWeight: 700, color: '#059669', backgroundColor: 'rgba(5,150,105,0.1)', padding: '0.15rem 0.45rem', borderRadius: '4px' }}>✓ Realizado</span>
+                                        )}
+                                        <span className={`badge badge-${tour.status}`} style={{ fontSize: isMobile ? '0.65rem' : '0.75rem' }}>{tour.status}</span>
+                                    </div>
                                 </div>
 
                                 <div style={{ color: 'var(--brand-primary)', fontWeight: 700, fontSize: isMobile ? '1.1rem' : '1.25rem' }}>{tour.clientName}</div>
