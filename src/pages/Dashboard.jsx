@@ -196,13 +196,17 @@ export default function Dashboard({ currentUser }) {
     const avgTicket = totalTours > 0 ? Math.round(totalSales / totalTours) : 0;
     const cancelledCount = filteredTours.filter(t => t.status.toLowerCase() === 'cancelado').length;
     const cancelRate = totalTours > 0 ? Math.round((cancelledCount / totalTours) * 100) : 0;
+    const today = format(new Date(), 'yyyy-MM-dd');
+    const pipelineCount = filteredTours.filter(t => t.status.toLowerCase() === 'confirmado' && t.date >= today).length;
 
     const kpis = {
         sales: totalSales.toLocaleString('es-ES'),
         hours: totalHours,
         tours: totalTours,
         ticket: avgTicket.toLocaleString('es-ES'),
-        cancelRate: cancelRate
+        cancelRate: cancelRate,
+        cancelledCount: cancelledCount,
+        pipelineCount: pipelineCount
     };
 
     // Recalculate dynamic driver & vehicle stats
@@ -472,6 +476,8 @@ export default function Dashboard({ currentUser }) {
                         {OPERATORS.map(op => {
                             const colors = OPERATOR_COLORS[op] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
                             const isSelected = selectedOperators.includes(op);
+                            const opActiveCount = filteredTours.filter(t => t.operator === op && t.status.toLowerCase() !== 'cancelado').length;
+                            const opCancelCount = filteredTours.filter(t => t.operator === op && t.status.toLowerCase() === 'cancelado').length;
                             return (
                                 <button
                                     key={op}
@@ -487,10 +493,23 @@ export default function Dashboard({ currentUser }) {
                                         cursor: 'pointer',
                                         transition: 'all 0.2s ease',
                                         opacity: isSelected ? 1 : 0.6,
-                                        whiteSpace: 'nowrap'
+                                        whiteSpace: 'nowrap',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.35rem'
                                     }}
                                 >
                                     {op}
+                                    {opActiveCount > 0 && (
+                                        <span style={{ fontSize: '0.65rem', fontWeight: 900, backgroundColor: isSelected ? 'rgba(0,0,0,0.15)' : 'var(--bg-hover)', padding: '0.1rem 0.35rem', borderRadius: '4px', lineHeight: 1.4 }}>
+                                            {opActiveCount}
+                                        </span>
+                                    )}
+                                    {opCancelCount > 0 && (
+                                        <span style={{ fontSize: '0.6rem', fontWeight: 700, color: 'rgba(239,68,68,0.85)', backgroundColor: 'rgba(239,68,68,0.1)', padding: '0.1rem 0.3rem', borderRadius: '4px', lineHeight: 1.4 }}>
+                                            ✕{opCancelCount}
+                                        </span>
+                                    )}
                                 </button>
                             );
                         })}
@@ -517,12 +536,36 @@ export default function Dashboard({ currentUser }) {
                     icon={Clock}
                     isMobile={isMobile}
                 />
-                <StatCard
-                    title="Tours"
-                    value={kpis.tours}
-                    icon={CalendarIcon}
-                    isMobile={isMobile}
-                />
+                <div className="card" style={{
+                    padding: isMobile ? '1rem' : '1.25rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: isMobile ? '0.25rem' : '0.5rem',
+                    minHeight: isMobile ? '90px' : 'auto',
+                    justifyContent: 'center'
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: isMobile ? '0.25rem' : '0.5rem' }}>
+                        <div style={{ padding: isMobile ? '0.35rem' : '0.5rem', backgroundColor: 'var(--brand-light)', color: 'var(--brand-primary)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <CalendarIcon size={isMobile ? 18 : 20} />
+                        </div>
+                        <div style={{ display: 'flex', gap: '0.35rem', alignItems: 'center' }}>
+                            {kpis.pipelineCount > 0 && (
+                                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#0ea5e9', backgroundColor: 'rgba(14,165,233,0.12)', padding: '0.2rem 0.45rem', borderRadius: '5px', whiteSpace: 'nowrap' }}>
+                                    🔵 {kpis.pipelineCount} tubería
+                                </span>
+                            )}
+                            {kpis.cancelledCount > 0 && (
+                                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--status-cancelled)', backgroundColor: 'rgba(239,68,68,0.1)', padding: '0.2rem 0.45rem', borderRadius: '5px', whiteSpace: 'nowrap' }}>
+                                    ✕ {kpis.cancelledCount} ({kpis.cancelRate}%)
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                    <div>
+                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.7rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.025em', margin: 0 }}>Tours</p>
+                        <h3 style={{ fontSize: isMobile ? '1.1rem' : '1.5rem', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>{kpis.tours}</h3>
+                    </div>
+                </div>
                 <StatCard
                     title="Ticket Medio"
                     value={kpis.ticket}
