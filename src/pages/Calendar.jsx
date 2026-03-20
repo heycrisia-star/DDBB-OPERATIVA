@@ -23,7 +23,9 @@ const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };
 
 export default function Calendar({ currentUser }) {
-    const today = format(new Date(), 'yyyy-MM-dd');
+    const now = new Date();
+    const today = format(now, 'yyyy-MM-dd');
+    const currentTime = format(now, 'HH:mm');
     const thisWeekStart = format(startOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd');
     const thisWeekEnd = format(endOfWeek(new Date(), { weekStartsOn: 1 }), 'yyyy-MM-dd');
 
@@ -467,7 +469,7 @@ export default function Calendar({ currentUser }) {
                         <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Desde {format(last7Days, 'dd MMM', { locale: es })} hasta hoy · {recentTours.length} reservada{recentTours.length !== 1 ? 's' : ''}</p>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                        <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', fontWeight: 500, display: 'block' }}>Auto-actualizado 5:00 AM</span>
+                        <span style={{ fontSize: '0.7rem', color: 'var(--text-tertiary)', fontWeight: 500, display: 'block' }}>Actualización: 5:00, 11:00, 16:00, 22:00</span>
                     </div>
                 </div>
 
@@ -497,7 +499,7 @@ export default function Calendar({ currentUser }) {
                                             <td style={{ padding: '0.75rem 1rem', fontWeight: 700 }}>{format(parseISO(tour.date), 'dd/MM/yy')}</td>
                                             <td style={{ padding: '0.75rem 1rem', fontWeight: 700 }}>{tour.start}</td>
                                             <td style={{ padding: '0.75rem 1rem' }}>
-                                                {tour.status.toLowerCase() === 'confirmado' && tour.date < today ? (
+                                                {tour.status.toLowerCase() === 'confirmado' && (tour.date < today || (tour.date === today && tour.start <= currentTime)) ? (
                                                     <span style={{ backgroundColor: 'rgba(5,150,105,0.15)', color: '#065f46', fontSize: '0.65rem', fontWeight: 800, padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid rgba(5,150,105,0.3)' }}>✓ REALIZADO</span>
                                                 ) : (
                                                     <span style={{ backgroundColor: sc.bg, color: sc.text, fontSize: '0.65rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>{tour.status.toUpperCase()}</span>
@@ -540,7 +542,7 @@ export default function Calendar({ currentUser }) {
 
                 {sortedTours.map(tour => {
                     const colors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
-                    const isPast = tour.date < today && tour.status.toLowerCase() === 'confirmado';
+                    const isPast = (tour.date < today || (tour.date === today && tour.start <= currentTime)) && tour.status.toLowerCase() === 'confirmado';
                     const isCancelledAgenda = tour.status.toLowerCase() === 'cancelado';
                     return (
                         <div key={tour.id} style={{

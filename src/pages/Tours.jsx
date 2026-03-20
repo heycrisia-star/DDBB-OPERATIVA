@@ -31,7 +31,9 @@ export default function Tours({ currentUser }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTour, setSelectedTour] = useState(null);
     const isDriver = currentUser?.role === 'driver';
-    const today = format(new Date(), 'yyyy-MM-dd');
+    const now = new Date();
+    const today = format(now, 'yyyy-MM-dd');
+    const currentTime = format(now, 'HH:mm');
 
     // Filters State
     const [startDate, setStartDate] = useState('');
@@ -268,7 +270,7 @@ export default function Tours({ currentUser }) {
                             {filteredTours.map(tour => {
                                 const operatorColors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
                                 const isCancelled = tour.status.toLowerCase() === 'cancelado';
-                                const isPast = tour.date < today && tour.status.toLowerCase() === 'confirmado';
+                                const isPast = (tour.date < today || (tour.date === today && tour.start <= currentTime)) && tour.status.toLowerCase() === 'confirmado';
                                 return (
                                     <tr key={tour.id} style={{
                                         textDecoration: isCancelled ? 'line-through' : 'none',
