@@ -275,8 +275,7 @@ export default function Dashboard({ currentUser }) {
 
         if (country === 'Desconocido' && t.language) {
             const lang = t.language.toUpperCase();
-            if (lang === 'EN') country = 'USA / Reino Unido';
-            else if (lang === 'DE') country = 'Alemania';
+            if (lang === 'DE') country = 'Alemania';
             else if (lang === 'FR') country = 'Francia';
             else if (lang === 'ES') country = 'España';
             else if (lang === 'IT') country = 'Italia';
@@ -358,13 +357,16 @@ export default function Dashboard({ currentUser }) {
         'IC': { perc: getPerc(operatorStatsMap['IC']), count: operatorStatsMap['IC'] }
     };
 
+    const totalKnownCountries = Object.values(countryStatsMap).reduce((sum, val) => sum + val, 0);
+    const getCountryPerc = (count) => totalKnownCountries > 0 ? Math.round((count / totalKnownCountries) * 100) : 0;
+
     const topCountries = Object.entries(countryStatsMap)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 3)
         .map(([country, count]) => ({
             label: country,
             count: count,
-            perc: getPerc(count)
+            perc: getCountryPerc(count)
         }));
 
     return (
