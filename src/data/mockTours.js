@@ -1172,7 +1172,7 @@ export const MOCK_TOURS = [
     "phone": "+1 214-384-6982",
     "language": "EN",
     "country": "",
-    "netPrice": 107.25,
+    "netPrice": 143.0,
     "product": "Park City & Beach",
     "id": 62,
     "bookingDate": "2026-03-15"
@@ -1229,9 +1229,28 @@ export const MOCK_TOURS = [
     "phone": "+1 515-321-7510",
     "language": "EN",
     "country": "",
-    "netPrice": 66.75,
+    "netPrice": 89.0,
     "product": "Essential Barcelona",
     "bookingDate": "2026-03-21",
     "id": 65
+  },
+  {
+    "code": "GYGFWWANQ8RV",
+    "date": "2026-06-08",
+    "start": "09:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 4,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Ralph Hale",
+    "phone": "+16784098596",
+    "language": "EN",
+    "country": "",
+    "netPrice": 217.29,
+    "product": "Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
+    "bookingDate": "2026-03-22",
+    "id": 66
   }
 ];
