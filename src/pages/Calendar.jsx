@@ -35,6 +35,7 @@ export default function Calendar({ currentUser }) {
     const [startDate, setStartDate] = useState(thisWeekStart);
     const [endDate, setEndDate] = useState(thisWeekEnd);
     const [activeShortcut, setActiveShortcut] = useState('week');
+    const [statusFilter, setStatusFilter] = useState('all'); // all | confirmado | realizado | cancelado
     const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false);
     const isDriver = currentUser?.role === 'driver';
 
@@ -63,6 +64,14 @@ export default function Calendar({ currentUser }) {
             setEndDate(format(endOfMonth(today), 'yyyy-MM-dd'));
         } else if (type === 'all') {
             setStartDate(''); setEndDate('');
+        }
+    };
+
+    const handleStartDateChange = (val) => {
+        setStartDate(val);
+        setActiveShortcut('');
+        if (!endDate || endDate < val) {
+            try { setEndDate(format(endOfMonth(new Date(val + 'T00:00:00')), 'yyyy-MM-dd')); } catch { setEndDate(val); }
         }
     };
 
@@ -195,7 +204,7 @@ export default function Calendar({ currentUser }) {
                                         );
                                     })}
                                 </div>
-                                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} style={{ padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: '0.875rem' }} />
+                                <input type="date" value={startDate} onChange={(e) => handleStartDateChange(e.target.value)} style={{ padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: '0.875rem' }} />
                                 <span style={{ color: 'var(--text-secondary)' }}>-</span>
                                 <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} style={{ padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: '0.875rem' }} />
                             </div>
@@ -213,6 +222,24 @@ export default function Calendar({ currentUser }) {
                                 />
                             )}
                         </div>
+                    </div>
+
+                    <div style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--border-color)', borderTop: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-secondary)', marginRight: '0.25rem' }}>Estado:</span>
+                        {[
+                            { key: 'all', label: 'Todos', color: 'var(--brand-primary)', bg: 'var(--brand-light)' },
+                            { key: 'confirmado', label: '✔ Confirmado', color: '#15803d', bg: '#dcfce7' },
+                            { key: 'realizado', label: '✓ Realizado', color: '#065f46', bg: 'rgba(5,150,105,0.15)' },
+                            { key: 'cancelado', label: '✕ Cancelado', color: '#b91c1c', bg: '#fee2e2' },
+                        ].map(({ key, label, color, bg }) => (
+                            <button key={key} onClick={() => setStatusFilter(key)} style={{
+                                fontSize: '0.72rem', padding: '0.25rem 0.6rem', borderRadius: '6px', fontWeight: 700,
+                                border: `1px solid ${statusFilter === key ? color : 'var(--border-color)'}`,
+                                background: statusFilter === key ? bg : 'var(--bg-card)',
+                                color: statusFilter === key ? color : 'var(--text-secondary)',
+                                cursor: 'pointer', transition: 'all 0.15s ease'
+                            }}>{label}</button>
+                        ))}
                     </div>
 
                     <div style={{ padding: '0.75rem 1rem', backgroundColor: 'var(--bg-hover)', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap', borderBottomLeftRadius: 'inherit', borderBottomRightRadius: 'inherit' }}>
@@ -292,7 +319,15 @@ export default function Calendar({ currentUser }) {
                 const dayTours = MOCK_TOURS.filter(t => {
                     if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
                     if (t.date !== format(day, 'yyyy-MM-dd')) return false;
-                    if (searchTerm && !t.code.toLowerCase().includes(searchTerm.toLowerCase()) && !t.driver.toLowerCase().includes(searchTerm.toLowerCase()) && !t.clientName?.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+                    if (searchTerm) {
+                        const q = searchTerm.toLowerCase();
+                        if (
+                            !t.code?.toLowerCase().includes(q) &&
+                            !t.driver?.toLowerCase().includes(q) &&
+                            !t.clientName?.toLowerCase().includes(q) &&
+                            !t.phone?.toLowerCase().includes(q)
+                        ) return false;
+                    }
                     if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
                     if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
                     if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
@@ -453,8 +488,11 @@ export default function Calendar({ currentUser }) {
         const sevenDaysAgoStr = format(last7Days, 'yyyy-MM-dd');
 
         const recentTours = [...MOCK_TOURS]
-            .filter(t => t.bookingDate >= sevenDaysAgoStr && t.bookingDate <= todayStr)
-            .sort((a, b) => new Date(`${b.bookingDate}T00:00:00`) - new Date(`${a.bookingDate}T00:00:00`));
+            .filter(t => {
+                const bDate = t.bookingDate || t.date;
+                return bDate >= sevenDaysAgoStr && bDate <= todayStr;
+            })
+            .sort((a, b) => new Date(`${b.bookingDate || b.date}T00:00:00`) - new Date(`${a.bookingDate || a.date}T00:00:00`));
 
         const statusColor = {
             confirmado: { bg: '#dcfce7', text: '#15803d' },
@@ -501,7 +539,7 @@ export default function Calendar({ currentUser }) {
                                             <td style={{ padding: '0.75rem 1rem', fontWeight: 700 }}>{tour.start}</td>
                                             <td style={{ padding: '0.75rem 1rem' }}>
                                                 {tour.status.toLowerCase() === 'confirmado' && (tour.date < today || (tour.date === today && tour.start <= currentTime)) ? (
-                                                    <span style={{ backgroundColor: 'rgba(5,150,105,0.15)', color: '#065f46', fontSize: '0.65rem', fontWeight: 800, padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid rgba(5,150,105,0.3)' }}>✓ REALIZADO</span>
+                                                    <span style={{ backgroundColor: 'rgba(5,150,105,0.15)', color: '#065f46', fontSize: '0.65rem', fontWeight: 800, padding: '0.2rem 0.5rem', borderRadius: '4px', border: '1px solid rgba(5,150,105,0.3)' }}>REALIZADO</span>
                                                 ) : (
                                                     <span style={{ backgroundColor: sc.bg, color: sc.text, fontSize: '0.65rem', fontWeight: 700, padding: '0.2rem 0.5rem', borderRadius: '4px' }}>{tour.status.toUpperCase()}</span>
                                                 )}
@@ -525,13 +563,31 @@ export default function Calendar({ currentUser }) {
         const sortedTours = [...MOCK_TOURS]
             .filter(t => {
                 if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
-                if (searchTerm && !t.code.toLowerCase().includes(searchTerm.toLowerCase()) && !t.driver.toLowerCase().includes(searchTerm.toLowerCase()) && !t.clientName?.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+                if (searchTerm) {
+                    const q = searchTerm.toLowerCase();
+                    if (
+                        !t.code?.toLowerCase().includes(q) &&
+                        !t.driver?.toLowerCase().includes(q) &&
+                        !t.clientName?.toLowerCase().includes(q) &&
+                        !t.phone?.toLowerCase().includes(q)
+                    ) return false;
+                }
                 if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
                 if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
                 if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
 
                 if (startDate && t.date < startDate) return false;
                 if (endDate && t.date > endDate) return false;
+
+                // Filtro de estado
+                if (statusFilter !== 'all') {
+                    const isCancelled = t.status.toLowerCase() === 'cancelado';
+                    const isPastT = (t.date < today || (t.date === today && t.start <= currentTime)) && t.status.toLowerCase() === 'confirmado';
+                    const isConfirmedFuture = t.status.toLowerCase() === 'confirmado' && !isPastT;
+                    if (statusFilter === 'cancelado' && !isCancelled) return false;
+                    if (statusFilter === 'realizado' && !isPastT) return false;
+                    if (statusFilter === 'confirmado' && !isConfirmedFuture) return false;
+                }
 
                 return true;
             })

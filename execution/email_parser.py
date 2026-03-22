@@ -89,12 +89,14 @@ def parse_text(html, plain):
 
 # ── 2. Data extraction helpers ───────────────────────────────────────────────
 
-def clean_price(price_str):
-    """Convert '180,56 €' → 135.42 (after 25% deduction)."""
+def clean_price(price_str, apply_discount=True):
+    """Convert '180,56 €' → 135.42 (after 25% deduction if requested)."""
     price_str = re.sub(r'[€$\s]', '', price_str).replace(',', '.')
     try:
-        gross = float(price_str)
-        return round(gross * 0.75, 2)  # deduct 25% commission
+        price = float(price_str)
+        if apply_discount:
+            return round(price * 0.75, 2)  # deduct 25% commission for GYG
+        return round(price, 2)
     except:
         return 0.0
 
@@ -162,6 +164,16 @@ def parse_gyg_email(msg):
     Returns a dict or None if not parseable.
     """
     subject = msg.get('Subject', '')
+    date_header = msg.get('Date')
+    booking_date = ''
+    if date_header:
+        try:
+            booking_date = email.utils.parsedate_to_datetime(date_header).strftime('%Y-%m-%d')
+        except:
+            booking_date = datetime.now().strftime('%Y-%m-%d')
+    else:
+        booking_date = datetime.now().strftime('%Y-%m-%d')
+
     html, plain = get_text_and_html(msg)
     text = parse_text(html, plain)
 
@@ -227,7 +239,8 @@ def parse_gyg_email(msg):
         'language': language,
         'country': '',  # populated later if needed
         'netPrice': net_price,
-        'product': product
+        'product': product,
+        'bookingDate': booking_date
     }
 
 # ── 4. FareHarbor Parser ─────────────────────────────────────────────────────
@@ -244,6 +257,16 @@ def parse_fh_email(msg):
         p.decode(enc or 'utf-8') if isinstance(p, bytes) else p
         for p, enc in decoded_parts
     )
+
+    date_header = msg.get('Date')
+    booking_date = ''
+    if date_header:
+        try:
+            booking_date = email.utils.parsedate_to_datetime(date_header).strftime('%Y-%m-%d')
+        except:
+            booking_date = datetime.now().strftime('%Y-%m-%d')
+    else:
+        booking_date = datetime.now().strftime('%Y-%m-%d')
 
     html, plain = get_text_and_html(msg)
     text = parse_text(html, plain)
@@ -288,7 +311,7 @@ def parse_fh_email(msg):
 
     # Price (Total reserva)
     price_m = re.search(r'Total\s+reserva\s*\n+([\d,.]+\s*€)', text)
-    net_price = clean_price(price_m.group(1)) if price_m else 0.0
+    net_price = clean_price(price_m.group(1), apply_discount=False) if price_m else 0.0
 
     # Product (tour name - line before the date)
     product_m = re.search(r'Reserva n[.º°]+\s*[\d]+\s*\n+(.+)', text)
@@ -309,7 +332,8 @@ def parse_fh_email(msg):
         'language': 'EN',
         'country': '',
         'netPrice': net_price,
-        'product': product
+        'product': product,
+        'bookingDate': booking_date
     }
 
 # ── 5. Mock file I/O ────────────────────────────────────────────────────────

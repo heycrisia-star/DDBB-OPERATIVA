@@ -30,6 +30,7 @@ const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'Fren
 export default function Tours({ currentUser }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedTour, setSelectedTour] = useState(null);
+    const [statusFilter, setStatusFilter] = useState('all'); // all | confirmado | realizado | cancelado
     const isDriver = currentUser?.role === 'driver';
     const now = new Date();
     const today = format(now, 'yyyy-MM-dd');
@@ -99,13 +100,30 @@ export default function Tours({ currentUser }) {
 
     const filteredTours = MOCK_TOURS.filter(t => {
         if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
-        if (!t.code.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+        // Búsqueda global: código, nombre, teléfono
+        if (searchTerm) {
+            const q = searchTerm.toLowerCase();
+            const matchCode = t.code?.toLowerCase().includes(q);
+            const matchName = t.clientName?.toLowerCase().includes(q);
+            const matchPhone = t.phone?.toLowerCase().includes(q);
+            if (!matchCode && !matchName && !matchPhone) return false;
+        }
         if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
         if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
         if (selectedOperators.length !== OPERATORS.length && !selectedOperators.includes(t.operator)) return false;
 
         if (startDate && t.date < startDate) return false;
         if (endDate && t.date > endDate) return false;
+
+        // Filtro de estado
+        if (statusFilter !== 'all') {
+            const isCancelled = t.status.toLowerCase() === 'cancelado';
+            const isPast = (t.date < today || (t.date === today && t.start <= currentTime)) && t.status.toLowerCase() === 'confirmado';
+            const isConfirmedFuture = t.status.toLowerCase() === 'confirmado' && !isPast;
+            if (statusFilter === 'cancelado' && !isCancelled) return false;
+            if (statusFilter === 'realizado' && !isPast) return false;
+            if (statusFilter === 'confirmado' && !isConfirmedFuture) return false;
+        }
 
         return true;
     });
@@ -124,6 +142,14 @@ export default function Tours({ currentUser }) {
             setEndDate(format(endOfMonth(today), 'yyyy-MM-dd'));
         } else if (type === 'all') {
             setStartDate(''); setEndDate('');
+        }
+    };
+
+    const handleStartDateChange = (val) => {
+        setStartDate(val);
+        setActiveShortcut('');
+        if (!endDate || endDate < val) {
+            try { setEndDate(format(endOfMonth(new Date(val + 'T00:00:00')), 'yyyy-MM-dd')); } catch { setEndDate(val); }
         }
     };
 
@@ -168,7 +194,7 @@ export default function Tours({ currentUser }) {
                         <input
                             type="text"
                             className="input"
-                            placeholder="Buscar por código..."
+                            placeholder="Buscar por código, nombre, teléfono..."
                             style={{ paddingLeft: '2.5rem' }}
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
@@ -185,7 +211,7 @@ export default function Tours({ currentUser }) {
                         <input
                             type="date"
                             value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
+                            onChange={(e) => handleStartDateChange(e.target.value)}
                             className="input"
                             style={{ padding: '0.5rem', width: 'auto' }}
                         />
@@ -210,6 +236,26 @@ export default function Tours({ currentUser }) {
                             selected={selectedDrivers} onChange={toggleDriver} onToggleAll={toggleAllDrivers}
                         />
                     )}
+                </div>
+
+                {/* Status Filter Bar */}
+                <div style={{ padding: '0.6rem 1rem', borderBottom: '1px solid var(--border-color)', backgroundColor: 'var(--bg-hover)', display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)', marginRight: '0.25rem' }}>Estado:</span>
+                    {[
+                        { key: 'all', label: 'Todos', color: 'var(--brand-primary)', bg: 'var(--brand-light)' },
+                        { key: 'confirmado', label: '✔ Confirmado', color: '#15803d', bg: '#dcfce7' },
+                        { key: 'realizado', label: '✓ Realizado', color: '#065f46', bg: 'rgba(5,150,105,0.15)' },
+                        { key: 'cancelado', label: '✕ Cancelado', color: '#b91c1c', bg: '#fee2e2' },
+                    ].map(({ key, label, color, bg }) => (
+                        <button key={key} onClick={() => setStatusFilter(key)} style={{
+                            fontSize: '0.72rem', padding: '0.25rem 0.6rem', borderRadius: '6px', fontWeight: 700,
+                            border: `1px solid ${statusFilter === key ? color : 'var(--border-color)'}`,
+                            background: statusFilter === key ? bg : 'var(--bg-card)',
+                            color: statusFilter === key ? color : 'var(--text-secondary)',
+                            cursor: 'pointer', transition: 'all 0.15s ease'
+                        }}>{label}</button>
+                    ))}
+                    <span style={{ marginLeft: 'auto', fontSize: '0.72rem', color: 'var(--text-tertiary)', fontWeight: 600 }}>{filteredTours.length} resultado{filteredTours.length !== 1 ? 's' : ''}</span>
                 </div>
 
                 {/* Operator Filter Bar */}
@@ -339,90 +385,92 @@ export default function Tours({ currentUser }) {
                 </div>
             </div>
 
-            {selectedTour && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0, left: 0, right: 0, bottom: 0,
-                    backgroundColor: 'rgba(0,0,0,0.5)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    zIndex: 1000,
-                    padding: '1rem'
-                }}>
-                    <div className="card animate-fade-in" style={{ width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto', position: 'relative' }}>
-                        <button onClick={handleCloseModal} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}>
-                            <X size={24} />
-                        </button>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1.5rem', paddingRight: '2rem' }}>Detalle del Tour: {selectedTour.code}</h2>
+            {
+                selectedTour && (
+                    <div style={{
+                        position: 'fixed',
+                        top: 0, left: 0, right: 0, bottom: 0,
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 1000,
+                        padding: '1rem'
+                    }}>
+                        <div className="card animate-fade-in" style={{ width: '100%', maxWidth: '600px', maxHeight: '90vh', overflowY: 'auto', position: 'relative' }}>
+                            <button onClick={handleCloseModal} style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}>
+                                <X size={24} />
+                            </button>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1.5rem', paddingRight: '2rem' }}>Detalle del Tour: {selectedTour.code}</h2>
 
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
-                            <div>
-                                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Operador</p>
-                                <p style={{ fontWeight: 500 }}>{selectedTour.operator}</p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Estado</p>
-                                <span className={`badge badge-${selectedTour.status}`} style={{ marginTop: '0.25rem' }}>{selectedTour.status}</span>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Fecha y Hora</p>
-                                <p>{formatDate(selectedTour.date)} <br /> {selectedTour.start} ({selectedTour.duration})</p>
-                            </div>
-                            <div>
-                                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Detalles</p>
-                                <p>{selectedTour.pax} pax <br /> {LANG_MAP[selectedTour.language] || selectedTour.language} <br /> €{selectedTour.price}</p>
-                            </div>
-                        </div>
-
-                        <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '1.5rem 0' }} />
-
-                        <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem' }}>Asignación Manual</h3>
-
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.5rem' }}>Coche asignado</label>
-                                <select
-                                    className="input"
-                                    value={selectedTour.vehicle || ''}
-                                    onChange={(e) => setSelectedTour({ ...selectedTour, vehicle: e.target.value })}
-                                >
-                                    <option value="">-- Sin asignar --</option>
-                                    {VEHICLES.map(v => <option key={v} value={v}>{v}</option>)}
-                                </select>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                                <div>
+                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Operador</p>
+                                    <p style={{ fontWeight: 500 }}>{selectedTour.operator}</p>
+                                </div>
+                                <div>
+                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Estado</p>
+                                    <span className={`badge badge-${selectedTour.status}`} style={{ marginTop: '0.25rem' }}>{selectedTour.status}</span>
+                                </div>
+                                <div>
+                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Fecha y Hora</p>
+                                    <p>{formatDate(selectedTour.date)} <br /> {selectedTour.start} ({selectedTour.duration})</p>
+                                </div>
+                                <div>
+                                    <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Detalles</p>
+                                    <p>{selectedTour.pax} pax <br /> {LANG_MAP[selectedTour.language] || selectedTour.language} <br /> €{selectedTour.price}</p>
+                                </div>
                             </div>
 
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.5rem' }}>Chofer asignado</label>
-                                <select
-                                    className="input"
-                                    value={selectedTour.driver || ''}
-                                    onChange={(e) => setSelectedTour({ ...selectedTour, driver: e.target.value })}
-                                >
-                                    <option value="">-- Sin asignar --</option>
-                                    {DRIVERS.map(d => <option key={d} value={d}>{d}</option>)}
-                                </select>
-                            </div>
+                            <hr style={{ border: 'none', borderTop: '1px solid var(--border-color)', margin: '1.5rem 0' }} />
 
-                            <div>
-                                <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.5rem' }}>Observaciones (Internas)</label>
-                                <textarea
-                                    className="input"
-                                    rows="3"
-                                    placeholder="Cliente llega tarde, punto de recogida especial..."
-                                    value={selectedTour.notes || ''}
-                                    onChange={(e) => setSelectedTour({ ...selectedTour, notes: e.target.value })}
-                                />
-                            </div>
+                            <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1rem' }}>Asignación Manual</h3>
 
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
-                                <button className="btn" style={{ backgroundColor: 'var(--bg-hover)', color: 'var(--text-primary)' }} onClick={handleCloseModal}>Cancelar</button>
-                                <button className="btn btn-primary" onClick={handleSave}>Guardar Cambios</button>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.5rem' }}>Coche asignado</label>
+                                    <select
+                                        className="input"
+                                        value={selectedTour.vehicle || ''}
+                                        onChange={(e) => setSelectedTour({ ...selectedTour, vehicle: e.target.value })}
+                                    >
+                                        <option value="">-- Sin asignar --</option>
+                                        {VEHICLES.map(v => <option key={v} value={v}>{v}</option>)}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.5rem' }}>Chofer asignado</label>
+                                    <select
+                                        className="input"
+                                        value={selectedTour.driver || ''}
+                                        onChange={(e) => setSelectedTour({ ...selectedTour, driver: e.target.value })}
+                                    >
+                                        <option value="">-- Sin asignar --</option>
+                                        {DRIVERS.map(d => <option key={d} value={d}>{d}</option>)}
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, marginBottom: '0.5rem' }}>Observaciones (Internas)</label>
+                                    <textarea
+                                        className="input"
+                                        rows="3"
+                                        placeholder="Cliente llega tarde, punto de recogida especial..."
+                                        value={selectedTour.notes || ''}
+                                        onChange={(e) => setSelectedTour({ ...selectedTour, notes: e.target.value })}
+                                    />
+                                </div>
+
+                                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem', marginTop: '1rem' }}>
+                                    <button className="btn" style={{ backgroundColor: 'var(--bg-hover)', color: 'var(--text-primary)' }} onClick={handleCloseModal}>Cancelar</button>
+                                    <button className="btn btn-primary" onClick={handleSave}>Guardar Cambios</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 }

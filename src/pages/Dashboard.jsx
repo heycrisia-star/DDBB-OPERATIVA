@@ -190,12 +190,28 @@ export default function Dashboard({ currentUser }) {
         }
     };
 
-    const totalSales = filteredTours
-        .filter(t => t.status.toLowerCase() !== 'cancelado')
-        .reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
-    const totalHours = filteredTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
+    const handleStartDateChange = (val) => {
+        setStartDate(val);
+        setActiveShortcut('');
+        // Si endDate vacío o anterior al nuevo startDate, sincronizar al último día del mes de startDate
+        if (!endDate || endDate < val) {
+            try {
+                const sd = new Date(val + 'T00:00:00');
+                setEndDate(format(endOfMonth(sd), 'yyyy-MM-dd'));
+            } catch { setEndDate(val); }
+        }
+    };
+    const handleEndDateChange = (val) => {
+        setEndDate(val);
+        setActiveShortcut('');
+    };
+
+    const activeTours = filteredTours.filter(t => t.status.toLowerCase() !== 'cancelado');
+    const totalSales = activeTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
+    const totalHours = activeTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
+    const activeToursCount = activeTours.length;
     const totalTours = filteredTours.length;
-    const avgTicket = totalTours > 0 ? Math.round(totalSales / totalTours) : 0;
+    const avgTicket = activeToursCount > 0 ? Math.round(totalSales / activeToursCount) : 0;
     const cancelledCount = filteredTours.filter(t => t.status.toLowerCase() === 'cancelado').length;
     const cancelRate = totalTours > 0 ? Math.round((cancelledCount / totalTours) * 100) : 0;
     const today = format(new Date(), 'yyyy-MM-dd');
@@ -204,7 +220,7 @@ export default function Dashboard({ currentUser }) {
     const kpis = {
         sales: totalSales.toLocaleString('es-ES'),
         hours: totalHours,
-        tours: totalTours,
+        tours: activeToursCount,
         ticket: avgTicket.toLocaleString('es-ES'),
         cancelRate: cancelRate,
         cancelledCount: cancelledCount,
@@ -225,7 +241,7 @@ export default function Dashboard({ currentUser }) {
     const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0 };
     const countryStatsMap = {};
 
-    filteredTours.forEach(t => {
+    activeTours.forEach(t => {
         if (!driverStatsMap[t.driver]) driverStatsMap[t.driver] = { hours: 0, sales: 0 };
         driverStatsMap[t.driver].hours += parseFloat(t.duration) || 0;
         driverStatsMap[t.driver].sales += parseFloat(t.netPrice) || 0;
@@ -310,7 +326,10 @@ export default function Dashboard({ currentUser }) {
     });
 
     const driverStats = isDriver ? {
-        [currentUser.name]: driverStatsMap[currentUser.name] || { hours: 0, sales: 0 }
+        [currentUser.name]: {
+            hours: driverStatsMap[currentUser.name]?.hours || 0,
+            sales: (driverStatsMap[currentUser.name]?.sales || 0).toLocaleString('es-ES')
+        }
     } : (() => {
         const stats = {};
         DRIVERS.forEach(d => {
@@ -392,90 +411,36 @@ export default function Dashboard({ currentUser }) {
     return (
         <div className="animate-fade-in">
             <div className="page-header" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '1.5rem', marginBottom: '2rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: isMobile ? 'stretch' : 'center', flexWrap: 'wrap', gap: '1rem', flexDirection: isMobile ? 'column' : 'row' }}>
                     <h1 className="page-title" style={{ margin: 0, fontSize: isMobile ? '1.5rem' : '1.875rem' }}>KPIs</h1>
 
-                    <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                        <div style={{ display: 'flex', gap: '0.5rem', marginRight: '0.5rem' }}>
-                            <button
-                                onClick={() => setDateRangeShortcut('today')}
-                                style={{
-                                    fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px',
-                                    border: '1px solid',
-                                    borderColor: activeShortcut === 'today' ? '#1e3a8a' : 'var(--border-color)',
-                                    background: activeShortcut === 'today' ? '#1e40af' : 'var(--bg-card)',
-                                    color: activeShortcut === 'today' ? '#fff' : 'var(--text-primary)',
-                                    cursor: 'pointer', fontWeight: 700,
-                                    boxShadow: activeShortcut === 'today' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
-                                }}>Hoy</button>
-                            <button
-                                onClick={() => setDateRangeShortcut('week')}
-                                style={{
-                                    fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px',
-                                    border: '1px solid',
-                                    borderColor: activeShortcut === 'week' ? '#1e3a8a' : 'var(--border-color)',
-                                    background: activeShortcut === 'week' ? '#1e40af' : 'var(--bg-card)',
-                                    color: activeShortcut === 'week' ? '#fff' : 'var(--text-primary)',
-                                    cursor: 'pointer', fontWeight: 700,
-                                    boxShadow: activeShortcut === 'week' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
-                                }}>Semana</button>
-                            <button
-                                onClick={() => setDateRangeShortcut('month')}
-                                style={{
-                                    fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px',
-                                    border: '1px solid',
-                                    borderColor: activeShortcut === 'month' ? '#1e3a8a' : 'var(--border-color)',
-                                    background: activeShortcut === 'month' ? '#1e40af' : 'var(--bg-card)',
-                                    color: activeShortcut === 'month' ? '#fff' : 'var(--text-primary)',
-                                    cursor: 'pointer', fontWeight: 700,
-                                    boxShadow: activeShortcut === 'month' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
-                                }}>Mes</button>
-                            <button
-                                onClick={() => setDateRangeShortcut('all')}
-                                style={{
-                                    fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px',
-                                    border: '1px solid',
-                                    borderColor: activeShortcut === 'all' ? '#1e3a8a' : 'var(--border-color)',
-                                    background: activeShortcut === 'all' ? '#1e40af' : 'var(--bg-card)',
-                                    color: activeShortcut === 'all' ? '#fff' : 'var(--text-primary)',
-                                    cursor: 'pointer', fontWeight: 700,
-                                    boxShadow: activeShortcut === 'all' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
-                                }}>Todo</button>
+                    {/* Date selector — mismo estilo que Gestión */}
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '0.25rem' }}>
+                            {[['today', 'Hoy'], ['week', 'Semana'], ['month', 'Mes'], ['all', 'Todo']].map(([key, label]) => {
+                                const isActive = activeShortcut === key;
+                                return (
+                                    <button key={key} onClick={() => setDateRangeShortcut(key)} style={{
+                                        fontSize: '0.75rem', padding: '0.35rem 0.6rem', borderRadius: '6px',
+                                        border: `1px solid ${isActive ? 'var(--brand-primary)' : 'var(--border-color)'}`,
+                                        background: isActive ? 'var(--brand-primary)' : 'var(--bg-card)',
+                                        color: isActive ? '#fff' : 'var(--text-secondary)',
+                                        cursor: 'pointer', fontWeight: isActive ? 700 : 600,
+                                        boxShadow: isActive ? '0 2px 6px rgba(59,130,246,0.35)' : 'none',
+                                        transition: 'all 0.15s ease'
+                                    }}>{label}</button>
+                                );
+                            })}
                         </div>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.2rem' }}>Desde</label>
-                            <input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                style={{
-                                    padding: '0.5rem',
-                                    borderRadius: 'var(--radius-md)',
-                                    border: '1px solid var(--border-color)',
-                                    backgroundColor: 'var(--bg-card)',
-                                    color: 'var(--text-primary)',
-                                    fontWeight: 600,
-                                    fontSize: '0.875rem'
-                                }}
-                            />
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <label style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)', marginBottom: '0.2rem' }}>Hasta</label>
-                            <input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                style={{
-                                    padding: '0.5rem',
-                                    borderRadius: 'var(--radius-md)',
-                                    border: '1px solid var(--border-color)',
-                                    backgroundColor: 'var(--bg-card)',
-                                    color: 'var(--text-primary)',
-                                    fontWeight: 600,
-                                    fontSize: '0.875rem'
-                                }}
-                            />
-                        </div>
+                        <input type="date" value={startDate}
+                            onChange={(e) => handleStartDateChange(e.target.value)}
+                            style={{ padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: '0.875rem' }}
+                        />
+                        <span style={{ color: 'var(--text-secondary)' }}>-</span>
+                        <input type="date" value={endDate}
+                            onChange={(e) => handleEndDateChange(e.target.value)}
+                            style={{ padding: '0.4rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', fontSize: '0.875rem' }}
+                        />
                     </div>
                 </div>
             </div>
