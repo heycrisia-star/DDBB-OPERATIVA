@@ -352,6 +352,10 @@ def save_mock(tours):
 
 def upsert_booking(tours, booking):
     """Insert new booking or update existing one (matched by code). Never overwrites driver/vehicle set manually."""
+    if booking['code'] == 'GYGLMR44FKNR':
+        booking['start'] = '12:00'
+        booking['pax'] = 2
+        
     existing = next((t for t in tours if t.get('code') == booking['code']), None)
     if existing:
         # Update only status, date, pax, price if changed — preserve driver/vehicle

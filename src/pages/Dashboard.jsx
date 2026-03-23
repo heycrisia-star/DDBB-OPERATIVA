@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart, Globe } from 'lucide-react';
-import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
+import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, differenceInDays, parseISO } from 'date-fns';
 import MultiSelect from '../components/MultiSelect';
 import { MOCK_TOURS } from '../data/mockTours';
 
@@ -241,6 +241,11 @@ export default function Dashboard({ currentUser }) {
     const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0 };
     const countryStatsMap = {};
 
+    const timeSlotStatsMap = {};
+    const leadTimeStatsMap = { 'Mismo día': 0, '1-3 días': 0, '4-7 días': 0, '8-30 días': 0, '+30 días': 0 };
+    let toursWithBooking = 0;
+    let totalLeadDays = 0;
+
     activeTours.forEach(t => {
         if (!driverStatsMap[t.driver]) driverStatsMap[t.driver] = { hours: 0, sales: 0 };
         driverStatsMap[t.driver].hours += parseFloat(t.duration) || 0;
@@ -323,6 +328,24 @@ export default function Dashboard({ currentUser }) {
             if (!countryStatsMap[country]) countryStatsMap[country] = 0;
             countryStatsMap[country]++;
         }
+
+        if (t.start) {
+            const hour = t.start.split(':')[0] + ':00';
+            timeSlotStatsMap[hour] = (timeSlotStatsMap[hour] || 0) + 1;
+        }
+
+        if (t.bookingDate && t.date) {
+            const days = differenceInDays(parseISO(t.date), parseISO(t.bookingDate));
+            if (days >= 0) {
+                toursWithBooking++;
+                totalLeadDays += days;
+                if (days === 0) leadTimeStatsMap['Mismo día']++;
+                else if (days <= 3) leadTimeStatsMap['1-3 días']++;
+                else if (days <= 7) leadTimeStatsMap['4-7 días']++;
+                else if (days <= 30) leadTimeStatsMap['8-30 días']++;
+                else leadTimeStatsMap['+30 días']++;
+            }
+        }
     });
 
     const driverStats = isDriver ? {
@@ -353,6 +376,10 @@ export default function Dashboard({ currentUser }) {
     const maxVehicle = Math.max(1, ...Object.values(vehicleHours));
 
     const getPerc = (count) => totalTours > 0 ? Math.round((count / totalTours) * 100) : 0;
+
+    const maxTimeSlot = Math.max(1, ...Object.values(timeSlotStatsMap));
+    const maxLeadTime = Math.max(1, ...Object.values(leadTimeStatsMap));
+    const avgLeadTime = toursWithBooking > 0 ? Math.round(totalLeadDays / toursWithBooking) : 0;
 
     const paxMix = {
         pax1: { perc: getPerc(paxStatsMap[1]), count: paxStatsMap[1] },
@@ -701,6 +728,36 @@ export default function Dashboard({ currentUser }) {
                         .map(([dur, stats]) => (
                             <ProgressBar key={dur} label={`Tours de ${dur} hrs`} value={stats.perc} max={100} color="#0ea5e9" count={`${stats.count} tours`} />
                         ))}
+                </div>
+
+                {/* Card 4, 5: Analíticas de Booking */}
+                <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <Clock size={18} color="var(--brand-primary)" /> Mapa de Calor (Horarios)
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        {Object.entries(timeSlotStatsMap)
+                            .sort((a, b) => a[0].localeCompare(b[0]))
+                            .map(([hour, count]) => (
+                                <ProgressBar key={hour} label={hour} value={count} max={maxTimeSlot} color="#f59e0b" count={`${count} res`} />
+                            ))}
+                    </div>
+                </div>
+
+                <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <CalendarIcon size={18} color="var(--brand-primary)" /> Antelación de Reservas
+                    </h3>
+                    <div style={{ marginBottom: '1.5rem', padding: '1rem', backgroundColor: 'var(--brand-light)', borderRadius: 'var(--radius-md)', textAlign: 'center' }}>
+                        <div style={{ fontSize: '0.85rem', color: 'var(--brand-primary)', fontWeight: 600, textTransform: 'uppercase', marginBottom: '0.25rem' }}>Promedio Global</div>
+                        <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--brand-primary)' }}>{avgLeadTime} días</div>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        {Object.entries(leadTimeStatsMap)
+                            .map(([range, count]) => (
+                                <ProgressBar key={range} label={range} value={count} max={maxLeadTime} color="#3b82f6" count={`${count} res`} />
+                            ))}
+                    </div>
                 </div>
 
                 {/* Card 6: Pax Mix */}
