@@ -241,7 +241,15 @@ export default function Dashboard({ currentUser }) {
     const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0 };
     const countryStatsMap = {};
 
-    const timeSlotStatsMap = {};
+    const timeSlotStatsMap = {
+        '08-10': 0,
+        '10-12': 0,
+        '12-14': 0,
+        '14-16': 0,
+        '16-18': 0,
+        '18-20': 0,
+        '20-22': 0
+    };
     const leadTimeStatsMap = { 'Mismo día': 0, '1-3 días': 0, '4-7 días': 0, '8-30 días': 0, '+30 días': 0 };
     let toursWithBooking = 0;
     let totalLeadDays = 0;
@@ -330,8 +338,19 @@ export default function Dashboard({ currentUser }) {
         }
 
         if (t.start) {
-            const hour = t.start.split(':')[0] + ':00';
-            timeSlotStatsMap[hour] = (timeSlotStatsMap[hour] || 0) + 1;
+            const h = parseInt(t.start.split(':')[0], 10);
+            let bucket = "";
+            if (h >= 8 && h < 10) bucket = "08-10";
+            else if (h >= 10 && h < 12) bucket = "10-12";
+            else if (h >= 12 && h < 14) bucket = "12-14";
+            else if (h >= 14 && h < 16) bucket = "14-16";
+            else if (h >= 16 && h < 18) bucket = "16-18";
+            else if (h >= 18 && h < 20) bucket = "18-20";
+            else if (h >= 20 && h < 22) bucket = "20-22";
+
+            if (bucket && timeSlotStatsMap[bucket] !== undefined) {
+                timeSlotStatsMap[bucket]++;
+            }
         }
 
         if (t.bookingDate && t.date) {
@@ -732,15 +751,28 @@ export default function Dashboard({ currentUser }) {
 
                 {/* Card 4, 5: Analíticas de Booking */}
                 <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
-                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <Clock size={18} color="var(--brand-primary)" /> Mapa de Calor (Horarios)
                     </h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                        {Object.entries(timeSlotStatsMap)
-                            .sort((a, b) => a[0].localeCompare(b[0]))
-                            .map(([hour, count]) => (
-                                <ProgressBar key={hour} label={hour} value={count} max={maxTimeSlot} color="#f59e0b" count={`${count} res`} />
-                            ))}
+                    <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '160px', marginTop: '1rem', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)', gap: '0.25rem' }}>
+                        {Object.entries(timeSlotStatsMap).map(([bucket, count]) => {
+                            const heightPerc = maxTimeSlot > 0 ? (count / maxTimeSlot) * 100 : 0;
+                            const alpha = maxTimeSlot > 0 ? 0.2 + 0.8 * (count / maxTimeSlot) : 0.2;
+                            return (
+                                <div key={bucket} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, gap: '0.35rem', height: '100%', justifyContent: 'flex-end' }}>
+                                    <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>{count > 0 ? count : ''}</div>
+                                    <div style={{
+                                        width: '100%',
+                                        maxWidth: '40px',
+                                        height: `${Math.max(heightPerc, count > 0 ? 5 : 0)}%`,
+                                        backgroundColor: `rgba(245, 158, 11, ${alpha})`,
+                                        borderRadius: '4px 4px 0 0',
+                                        transition: 'all 0.3s ease'
+                                    }} />
+                                    <div style={{ fontSize: '0.65rem', fontWeight: 500, color: 'var(--text-secondary)' }}>{bucket}</div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
 
