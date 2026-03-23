@@ -1271,5 +1271,24 @@ export const MOCK_TOURS = [
     "product": "",
     "bookingDate": "2026-03-23",
     "id": 67
+  },
+  {
+    "code": "FH339842767",
+    "date": "2026-03-24",
+    "start": "13:00",
+    "duration": 2,
+    "operator": "FH",
+    "status": "confirmado",
+    "pax": 4,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Hector Torres",
+    "phone": "+1 956-536-7426",
+    "language": "EN",
+    "country": "",
+    "netPrice": 143.0,
+    "product": "Park City & Beach",
+    "bookingDate": "2026-03-23",
+    "id": 68
   }
 ];
