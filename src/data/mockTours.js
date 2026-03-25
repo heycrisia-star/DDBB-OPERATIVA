@@ -1290,5 +1290,24 @@ export const MOCK_TOURS = [
     "product": "Park City & Beach",
     "bookingDate": "2026-03-23",
     "id": 68
+  },
+  {
+    "code": "GYG9966VHZKX",
+    "date": "2026-04-14",
+    "start": "09:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Mary Reffuveille",
+    "phone": "+33676006744",
+    "language": "FR",
+    "country": "",
+    "netPrice": 66.75,
+    "product": "Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
+    "bookingDate": "2026-03-25",
+    "id": 69
   }
 ];
