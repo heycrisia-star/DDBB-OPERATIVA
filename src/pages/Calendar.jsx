@@ -488,11 +488,8 @@ export default function Calendar({ currentUser }) {
         const sevenDaysAgoStr = format(last7Days, 'yyyy-MM-dd');
 
         const recentTours = [...MOCK_TOURS]
-            .filter(t => {
-                const bDate = t.bookingDate || t.date;
-                return bDate >= sevenDaysAgoStr && bDate <= todayStr;
-            })
-            .sort((a, b) => new Date(`${b.bookingDate || b.date}T00:00:00`) - new Date(`${a.bookingDate || a.date}T00:00:00`));
+            .sort((a, b) => (b.id || 0) - (a.id || 0))
+            .slice(0, 15);
 
         const statusColor = {
             confirmado: { bg: '#dcfce7', text: '#15803d' },
