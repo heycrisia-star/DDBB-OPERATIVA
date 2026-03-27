@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart, Globe } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart, Globe, CalendarMinus } from 'lucide-react';
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, differenceInDays, parseISO } from 'date-fns';
 import MultiSelect from '../components/MultiSelect';
 import { MOCK_TOURS } from '../data/mockTours';
@@ -216,6 +216,19 @@ export default function Dashboard({ currentUser }) {
     const cancelRate = totalTours > 0 ? Math.round((cancelledCount / totalTours) * 100) : 0;
     const today = format(new Date(), 'yyyy-MM-dd');
     const pipelineCount = filteredTours.filter(t => t.status.toLowerCase() === 'confirmado' && t.date >= today).length;
+
+    let emptyDays = 0;
+    if (startDate && endDate) {
+        const uniqueTourDates = new Set(activeTours.map(t => t.date));
+        const totalDaysInRange = Math.max(0, differenceInDays(parseISO(endDate), parseISO(startDate))) + 1;
+        emptyDays = Math.max(0, totalDaysInRange - uniqueTourDates.size);
+    } else if (activeTours.length > 0) {
+        const uniqueTourDates = new Set(activeTours.map(t => t.date));
+        const minDateStr = activeTours.reduce((min, p) => p.date < min ? p.date : min, activeTours[0].date);
+        const maxDateStr = activeTours.reduce((max, p) => p.date > max ? p.date : max, activeTours[0].date);
+        const totalDaysInRange = Math.max(0, differenceInDays(parseISO(maxDateStr), parseISO(minDateStr))) + 1;
+        emptyDays = Math.max(0, totalDaysInRange - uniqueTourDates.size);
+    }
 
     const kpis = {
         sales: totalSales.toLocaleString('es-ES'),
@@ -597,6 +610,12 @@ export default function Dashboard({ currentUser }) {
                     title="Ticket Medio"
                     value={kpis.ticket}
                     icon={ShoppingBag}
+                    isMobile={isMobile}
+                />
+                <StatCard
+                    title="Días Libres"
+                    value={emptyDays}
+                    icon={CalendarMinus}
                     isMobile={isMobile}
                 />
             </div>
