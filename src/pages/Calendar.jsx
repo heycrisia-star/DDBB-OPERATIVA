@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Search, Filter, Calendar as CalendarIcon, Clock, Users, UserCircle, Phone, Globe } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, Filter, Calendar as CalendarIcon, Clock, Users, UserCircle, Phone, Globe, Ship } from 'lucide-react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addDays, parseISO, isToday } from 'date-fns';
 import { es } from 'date-fns/locale';
 import MultiSelect from '../components/MultiSelect';
 
 import { MOCK_TOURS } from '../data/mockTours';
+import { MOCK_CRUISES } from '../data/mockCruises';
 
 
 const OPERATOR_COLORS = {
@@ -353,7 +354,13 @@ export default function Calendar({ currentUser }) {
                             if (isMobile) setViewMode('agenda');
                         }}
                     >
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.25rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
+                            {MOCK_CRUISES[format(day, 'yyyy-MM-dd')] > 0 ? (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#0369a1', fontSize: '0.65rem', fontWeight: 800, backgroundColor: '#e0f2fe', padding: '2px 5px', borderRadius: '4px' }} title={`${MOCK_CRUISES[format(day, 'yyyy-MM-dd')]} cruceros hoy`}>
+                                    <Ship size={12} strokeWidth={2.5} />
+                                    <span>x{MOCK_CRUISES[format(day, 'yyyy-MM-dd')]}</span>
+                                </div>
+                            ) : <div />}
                             <span style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -489,7 +496,7 @@ export default function Calendar({ currentUser }) {
 
         const recentTours = [...MOCK_TOURS]
             .sort((a, b) => (b.id || 0) - (a.id || 0))
-            .slice(0, 15);
+            .slice(0, 10);
 
         const statusColor = {
             confirmado: { bg: '#dcfce7', text: '#15803d' },
