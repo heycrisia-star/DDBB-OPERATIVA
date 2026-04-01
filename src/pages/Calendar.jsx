@@ -385,7 +385,7 @@ export default function Calendar({ currentUser }) {
                             flex: 1,
                             justifyContent: 'flex-start'
                         }}>
-                            {dayTours.map(tour => {
+                            {dayTours.sort((a, b) => a.start.localeCompare(b.start)).map(tour => {
                                 const colors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
                                 const isCancelled = tour.status === 'cancelado';
                                 const isModified = tour.status === 'modificado';
