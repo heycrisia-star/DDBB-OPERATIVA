@@ -354,6 +354,7 @@ def upsert_booking(tours, booking):
     """Insert new booking or update existing one (matched by code). Never overwrites driver/vehicle set manually."""
     if booking['code'] == 'GYGLMR44FKNR':
         booking['date'] = '2026-04-05'
+        booking['start'] = '14:00'
 
     existing = next((t for t in tours if t.get('code') == booking['code']), None)
     if existing:
