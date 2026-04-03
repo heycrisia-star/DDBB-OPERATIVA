@@ -1689,5 +1689,24 @@ export const MOCK_TOURS = [
     "product": "",
     "bookingDate": "2026-04-03",
     "id": 89
+  },
+  {
+    "code": "GYG6H8FNKN9L",
+    "date": "2026-04-04",
+    "start": "16:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 4,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Armin Moser",
+    "phone": "+491789392094",
+    "language": "DE",
+    "country": "",
+    "netPrice": 84.66,
+    "product": "",
+    "bookingDate": "2026-04-03",
+    "id": 90
   }
 ];
