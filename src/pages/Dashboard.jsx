@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart, Globe, CalendarMinus } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart, Globe, CalendarMinus, Trophy } from 'lucide-react';
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, differenceInDays, parseISO } from 'date-fns';
 import MultiSelect from '../components/MultiSelect';
 import { MOCK_TOURS } from '../data/mockTours';
@@ -380,6 +380,51 @@ export default function Dashboard({ currentUser }) {
         }
     });
 
+    // === Récords Históricos Locales ===
+    const salesByDay = {};
+    const salesByWeek = {};
+    const salesByMonth = {};
+    const hoursByDay = {};
+
+    activeTours.forEach(t => {
+        if (!t.date || !t.start) return;
+        const d = parseISO(t.date);
+
+        // Day
+        const dayKey = t.date;
+        if (!salesByDay[dayKey]) salesByDay[dayKey] = 0;
+        salesByDay[dayKey] += parseFloat(t.netPrice) || 0;
+
+        if (!hoursByDay[dayKey]) hoursByDay[dayKey] = 0;
+        hoursByDay[dayKey] += parseFloat(t.duration) || 0;
+
+        // Week ISO
+        try {
+            const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+            if (!salesByWeek[wStart]) salesByWeek[wStart] = 0;
+            salesByWeek[wStart] += parseFloat(t.netPrice) || 0;
+        } catch (e) { }
+
+        // Month
+        try {
+            const mStart = format(startOfMonth(d), 'yyyy-MM');
+            if (!salesByMonth[mStart]) salesByMonth[mStart] = 0;
+            salesByMonth[mStart] += parseFloat(t.netPrice) || 0;
+        } catch (e) { }
+    });
+
+    const getRecord = (obj) => {
+        const entries = Object.entries(obj);
+        if (entries.length === 0) return { key: '-', val: 0 };
+        const best = entries.reduce((max, current) => current[1] > max[1] ? current : max, entries[0]);
+        return { key: best[0], val: best[1] };
+    };
+
+    const bestDay = getRecord(salesByDay);
+    const bestDayHours = getRecord(hoursByDay);
+    const bestWeek = getRecord(salesByWeek);
+    const bestMonth = getRecord(salesByMonth);
+
     const driverStats = isDriver ? {
         [currentUser.name]: {
             hours: driverStatsMap[currentUser.name]?.hours || 0,
@@ -682,6 +727,35 @@ export default function Dashboard({ currentUser }) {
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 600 }}>tasa</p>
                         <p style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: 'var(--status-cancelled)' }}>{kpis.cancelRate}%</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Sección de Récords y Tendencias */}
+            <div className="card" style={{ marginBottom: '2rem', padding: isMobile ? '1rem' : '1.5rem', background: 'linear-gradient(135deg, rgba(251,191,36,0.06) 0%, rgba(245,158,11,0.02) 100%)', border: '1px solid rgba(245,158,11,0.2)' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#b45309' }}>
+                    <Trophy size={20} color="#f59e0b" /> Récords Históricos (Vista Actual)
+                </h3>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: '1rem' }}>
+                    <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Día Mayor Facturación</p>
+                        <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestDay.val.toLocaleString('es-ES')} €</h4>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{bestDay.key}</p>
+                    </div>
+                    <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Día Más Intenso</p>
+                        <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestDayHours.val} h</h4>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{bestDayHours.key}</p>
+                    </div>
+                    <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Semana Récord (Inicio)</p>
+                        <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestWeek.val.toLocaleString('es-ES')} €</h4>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>Sem del {bestWeek.key}</p>
+                    </div>
+                    <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                        <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Mes Récord</p>
+                        <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestMonth.val.toLocaleString('es-ES')} €</h4>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>Mes {bestMonth.key}</p>
                     </div>
                 </div>
             </div>
