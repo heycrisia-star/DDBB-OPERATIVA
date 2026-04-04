@@ -772,12 +772,24 @@ export default function Dashboard({ currentUser }) {
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Semana Récord</p>
                         <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestWeek.val.toLocaleString('es-ES')} €</h4>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getWeekStr(bestWeek.key)} <span style={{ opacity: 0.8 }}>- {(hoursByWeek[bestWeek.key] || 0)}h</span></p>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getWeekStr(bestWeek.key)}</p>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', background: 'rgba(245,158,11,0.15)', padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(245,158,11,0.2)' }}>
+                                <Clock size={10} color="#b45309" strokeWidth={3} />
+                                <span style={{ fontSize: '0.65rem', color: '#b45309', fontWeight: 800 }}>{(hoursByWeek[bestWeek.key] || 0)}h tours</span>
+                            </div>
+                        </div>
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Mes Récord</p>
                         <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestMonth.val.toLocaleString('es-ES')} €</h4>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getMonthStr(bestMonth.key)} <span style={{ opacity: 0.8 }}>- {(hoursByMonth[bestMonth.key] || 0)}h</span></p>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getMonthStr(bestMonth.key)}</p>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', background: 'rgba(245,158,11,0.15)', padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(245,158,11,0.2)' }}>
+                                <Clock size={10} color="#b45309" strokeWidth={3} />
+                                <span style={{ fontSize: '0.65rem', color: '#b45309', fontWeight: 800 }}>{(hoursByMonth[bestMonth.key] || 0)}h tours</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
