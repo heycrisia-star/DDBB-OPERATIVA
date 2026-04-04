@@ -1784,5 +1784,24 @@ export const MOCK_TOURS = [
     "product": "Essential Barcelona",
     "bookingDate": "2026-04-04",
     "id": 94
+  },
+  {
+    "code": "GYG99659VVFK",
+    "date": "2026-04-12",
+    "start": "11:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 4,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Liz Markus",
+    "phone": "+447796802096",
+    "language": "EN",
+    "country": "",
+    "netPrice": 135.42,
+    "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
+    "bookingDate": "2026-04-04",
+    "id": 95
   }
 ];
