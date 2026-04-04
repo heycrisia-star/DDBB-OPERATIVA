@@ -385,6 +385,8 @@ export default function Dashboard({ currentUser }) {
     const salesByWeek = {};
     const salesByMonth = {};
     const hoursByDay = {};
+    const hoursByWeek = {};
+    const hoursByMonth = {};
 
     activeTours.forEach(t => {
         if (!t.date || !t.start) return;
@@ -403,6 +405,8 @@ export default function Dashboard({ currentUser }) {
             const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
             if (!salesByWeek[wStart]) salesByWeek[wStart] = 0;
             salesByWeek[wStart] += parseFloat(t.netPrice) || 0;
+            if (!hoursByWeek[wStart]) hoursByWeek[wStart] = 0;
+            hoursByWeek[wStart] += parseFloat(t.duration) || 0;
         } catch (e) { }
 
         // Month
@@ -410,6 +414,8 @@ export default function Dashboard({ currentUser }) {
             const mStart = format(startOfMonth(d), 'yyyy-MM');
             if (!salesByMonth[mStart]) salesByMonth[mStart] = 0;
             salesByMonth[mStart] += parseFloat(t.netPrice) || 0;
+            if (!hoursByMonth[mStart]) hoursByMonth[mStart] = 0;
+            hoursByMonth[mStart] += parseFloat(t.duration) || 0;
         } catch (e) { }
     });
 
@@ -424,6 +430,22 @@ export default function Dashboard({ currentUser }) {
     const bestDayHours = getRecord(hoursByDay);
     const bestWeek = getRecord(salesByWeek);
     const bestMonth = getRecord(salesByMonth);
+
+    const getWeekStr = (isoObjKey) => {
+        try { return 'S' + format(parseISO(isoObjKey), 'I'); } catch { return isoObjKey; }
+    };
+    const getMonthStr = (isoObjKey) => {
+        try {
+            const m = parseISO(isoObjKey + '-01').getMonth();
+            const meses = ['ABRIL', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+            // JS getMonth is 0-indexed, so 0=Jan, 1=Feb
+            const mesesMap = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+            return mesesMap[m];
+        } catch { return isoObjKey; }
+    };
+    const getDayStr = (isoStr) => {
+        try { return format(parseISO(isoStr), 'dd/MM/yyyy').replace(/\//g, '-'); } catch { return isoStr; }
+    };
 
     const driverStats = isDriver ? {
         [currentUser.name]: {
@@ -734,28 +756,28 @@ export default function Dashboard({ currentUser }) {
             {/* Sección de Récords y Tendencias */}
             <div className="card" style={{ marginBottom: '2rem', padding: isMobile ? '1rem' : '1.5rem', background: 'linear-gradient(135deg, rgba(251,191,36,0.06) 0%, rgba(245,158,11,0.02) 100%)', border: '1px solid rgba(245,158,11,0.2)' }}>
                 <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#b45309' }}>
-                    <Trophy size={20} color="#f59e0b" /> Récords Históricos (Vista Actual)
+                    <Trophy size={20} color="#f59e0b" /> Récords Históricos
                 </h3>
                 <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: '1rem' }}>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Día Mayor Facturación</p>
                         <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestDay.val.toLocaleString('es-ES')} €</h4>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{bestDay.key}</p>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getDayStr(bestDay.key)}</p>
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Día Más Intenso</p>
                         <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestDayHours.val} h</h4>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{bestDayHours.key}</p>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getDayStr(bestDayHours.key)}</p>
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
-                        <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Semana Récord (Inicio)</p>
+                        <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Semana Récord</p>
                         <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestWeek.val.toLocaleString('es-ES')} €</h4>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>Sem del {bestWeek.key}</p>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getWeekStr(bestWeek.key)} <span style={{ opacity: 0.8 }}>- {(hoursByWeek[bestWeek.key] || 0)}h</span></p>
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Mes Récord</p>
                         <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestMonth.val.toLocaleString('es-ES')} €</h4>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>Mes {bestMonth.key}</p>
+                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getMonthStr(bestMonth.key)} <span style={{ opacity: 0.8 }}>- {(hoursByMonth[bestMonth.key] || 0)}h</span></p>
                     </div>
                 </div>
             </div>
