@@ -103,14 +103,14 @@ def clean_price(price_str, apply_discount=True):
 
 def parse_date_gyg(date_str):
     """
-    Parse dates like 'March 25, 2026 6:00 PM' or 'March 25, 2026 18:00'
+    Parse dates like 'March 25, 2026 6:00 PM', 'March 25, 2026 18:00', or '6 de abril de 2026, 11:00'
     Returns (date_iso, time_hhmm)
     """
     date_str = date_str.strip()
-    # Try: "March 25, 2026 6:00 PM"
-    m = re.search(r'(\w+)\s+(\d+),\s+(\d{4})\s+(\d+):(\d+)\s*(AM|PM)?', date_str, re.IGNORECASE)
-    if m:
-        month_name, day, year, hour, minute, ampm = m.groups()
+    # Format 1: "March 25, 2026 6:00 PM"
+    m1 = re.search(r'(\w+)\s+(\d+),\s+(\d{4})\s+(\d+):(\d+)\s*(AM|PM)?', date_str, re.IGNORECASE)
+    if m1:
+        month_name, day, year, hour, minute, ampm = m1.groups()
         month = MONTHS_ES.get(month_name.lower(), '01')
         hour = int(hour)
         if ampm and ampm.upper() == 'PM' and hour != 12:
@@ -118,6 +118,14 @@ def parse_date_gyg(date_str):
         elif ampm and ampm.upper() == 'AM' and hour == 12:
             hour = 0
         return f"{year}-{month}-{day.zfill(2)}", f"{hour:02d}:{minute}"
+    
+    # Format 2 (Booking Modified or inside table): "6 de abril de 2026, 11:00"
+    m2 = re.search(r'(\d+)\s+de\s+(\w+)\s+de\s+(\d{4}),\s+(\d+):(\d+)', date_str, re.IGNORECASE)
+    if m2:
+        day, month_name, year, hour, minute = m2.groups()
+        month = MONTHS_ES.get(month_name.lower(), '01')
+        return f"{year}-{month}-{day.zfill(2)}", f"{int(hour):02d}:{minute}"
+
     return '', ''
 
 
@@ -194,10 +202,18 @@ def parse_gyg_email(msg):
     code = ref_m.group(1)
 
     # Date & Time
-    date_m = re.search(r'Fecha\s*\n+(.+)', text)
+    date_block_m = re.search(r'Fecha\s*\n(.*?)\n(?:Número de participantes|Número|Idioma|Precio)', text, re.DOTALL | re.IGNORECASE)
     date_iso, time_hm = '', ''
-    if date_m:
-        date_iso, time_hm = parse_date_gyg(date_m.group(1).strip())
+    if date_block_m:
+        lines = date_block_m.group(1).split('\n')
+        for line in lines:
+            line = line.strip()
+            if not line or line.lower() == 'nuevo':
+                continue
+            d, t = parse_date_gyg(line)
+            if d:
+                date_iso, time_hm = d, t
+                break
 
     # Pax
     pax_m = re.search(r'Número de participantes\s*\n+([\d]+)', text)

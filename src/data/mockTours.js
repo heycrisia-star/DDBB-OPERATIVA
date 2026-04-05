@@ -268,7 +268,7 @@ export const MOCK_TOURS = [
   {
     "id": 15,
     "code": "GYGWZA227YRK",
-    "date": "2026-03-03",
+    "date": "2026-03-02",
     "start": "19:00",
     "duration": 1,
     "operator": "GYG",
@@ -857,8 +857,8 @@ export const MOCK_TOURS = [
   {
     "id": 46,
     "code": "GYG6H8HW9W49",
-    "date": "2026-10-26",
-    "start": "11:00",
+    "date": "2026-10-31",
+    "start": "16:00",
     "duration": 1,
     "operator": "GYG",
     "status": "confirmado",
@@ -1787,7 +1787,7 @@ export const MOCK_TOURS = [
   },
   {
     "code": "GYG99659VVFK",
-    "date": "2026-04-12",
+    "date": "2026-04-06",
     "start": "11:00",
     "duration": 2,
     "operator": "GYG",
