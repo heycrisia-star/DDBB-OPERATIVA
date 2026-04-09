@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Search, Filter, Calendar as CalendarIcon, Clock, Users, UserCircle, Phone, Globe, Ship } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, Filter, Calendar as CalendarIcon, Clock, Users, UserCircle, Phone, Globe, Ship, MapPin } from 'lucide-react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addDays, parseISO, isToday } from 'date-fns';
 import { es } from 'date-fns/locale';
 import MultiSelect from '../components/MultiSelect';
@@ -426,6 +426,7 @@ export default function Calendar({ currentUser }) {
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
                                                 {tour.start}
                                                 <span style={{ fontSize: '0.6rem', opacity: 0.7, fontWeight: 500 }}>{parseInt(tour.duration)}h</span>
+                                                {tour.pickup && <MapPin size={10} color="#eab308" strokeWidth={3} />}
                                             </span>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.15rem', whiteSpace: 'nowrap' }}>
                                                 <span style={{ fontSize: isMobile ? '0.55rem' : '0.65rem', letterSpacing: '-0.5px', opacity: 0.85, whiteSpace: 'nowrap' }}>
@@ -645,7 +646,14 @@ export default function Calendar({ currentUser }) {
                                     </div>
                                 </div>
 
-                                <div style={{ color: 'var(--brand-primary)', fontWeight: 700, fontSize: isMobile ? '1.1rem' : '1.25rem' }}>{tour.clientName}</div>
+                                <div style={{ color: 'var(--brand-primary)', fontWeight: 700, fontSize: isMobile ? '1.1rem' : '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                    {tour.clientName}
+                                    {tour.pickup && (
+                                        <span style={{ fontSize: '0.75rem', backgroundColor: '#fef9c3', color: '#a16207', padding: '0.1rem 0.4rem', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '0.2rem', fontWeight: 800 }}>
+                                            <MapPin size={14} strokeWidth={2.5} /> Recogida Especial
+                                        </span>
+                                    )}
+                                </div>
 
                                 <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fill, minmax(130px, 1fr))', gap: '0.5rem', fontSize: isMobile ? '0.75rem' : '0.875rem', color: 'var(--text-secondary)' }}>
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Phone size={isMobile ? 12 : 14} /> {tour.phone}</span>
@@ -653,6 +661,13 @@ export default function Calendar({ currentUser }) {
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Clock size={isMobile ? 12 : 14} /> {tour.duration}h</span>
                                     <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Users size={isMobile ? 12 : 14} /> {tour.pax} pax</span>
                                 </div>
+
+                                {tour.pickup && (
+                                    <div style={{ marginTop: '0.5rem', padding: '0.5rem', backgroundColor: '#fef3c7', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: isMobile ? '0.75rem' : '0.875rem', color: '#92400e', fontWeight: 600 }}>
+                                        <MapPin size={isMobile ? 16 : 18} color="#d97706" />
+                                        <span>Recogida: {tour.pickup}</span>
+                                    </div>
+                                )}
 
                                 {tour.driver && (
                                     <div style={{ marginTop: '0.25rem', padding: '0.5rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>

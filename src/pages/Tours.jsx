@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, Edit2, Download, Plus, ChevronDown, Check, X } from 'lucide-react';
+import { Search, Filter, Edit2, Download, Plus, ChevronDown, Check, X, MapPin } from 'lucide-react';
 import { format, parseISO, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import MultiSelect from '../components/MultiSelect';
 
@@ -349,7 +349,10 @@ export default function Tours({ currentUser }) {
                                             <div style={{ whiteSpace: 'nowrap' }}>{formatDate(tour.date)}</div>
                                         </td>
                                         <td>
-                                            <span style={{ fontWeight: 600 }}>{tour.start}</span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                                <span style={{ fontWeight: 600 }}>{tour.start}</span>
+                                                {tour.pickup && <MapPin size={14} color="#eab308" strokeWidth={3} title={`Recogida: ${tour.pickup}`} />}
+                                            </div>
                                         </td>
                                         <td>{tour.duration}</td>
                                         <td>
