@@ -8,7 +8,7 @@ import { MOCK_TOURS } from '../data/mockTours';
 
 const VEHICLES = ['01-DR', '02-NR'];
 const DRIVERS = ['Cristian', 'Chofer 2', 'Chofer 3'];
-const OPERATORS = ['GYG', 'FH', 'VIA', 'IC'];
+const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'EFECTIVO'];
 const TIME_FILTERS = [
     { id: 'today', label: 'Hoy' },
     { id: 'weekly', label: 'Semanal' },
@@ -108,9 +108,9 @@ export default function Tours({ currentUser }) {
             const matchPhone = t.phone?.toLowerCase().includes(q);
             if (!matchCode && !matchName && !matchPhone) return false;
         }
-        if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
-        if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
-        if (selectedOperators.length !== OPERATORS.length && !selectedOperators.includes(t.operator)) return false;
+        if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.some(v => t.vehicle?.includes(v))) return false;
+        if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.some(d => t.driver?.includes(d))) return false;
+        if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
 
         if (startDate && t.date < startDate) return false;
         if (endDate && t.date > endDate) return false;

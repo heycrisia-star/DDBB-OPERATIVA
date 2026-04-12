@@ -17,7 +17,7 @@ const OPERATOR_COLORS = {
 
 const VEHICLES = ['01-DR', '02-NR'];
 const DRIVERS = ['Cristian', 'Chofer 2', 'Chofer 3'];
-const OPERATORS = ['GYG', 'FH', 'VIA', 'IC'];
+const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'EFECTIVO'];
 
 const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Chofer 2': '#0d9488', 'Chofer 3': '#be123c' };
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
@@ -329,8 +329,8 @@ export default function Calendar({ currentUser }) {
                             !t.phone?.toLowerCase().includes(q)
                         ) return false;
                     }
-                    if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
-                    if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
+                    if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.some(v => t.vehicle?.includes(v))) return false;
+                    if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.some(d => t.driver?.includes(d))) return false;
                     if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
                     return true;
                 });
@@ -587,8 +587,8 @@ export default function Calendar({ currentUser }) {
                         !t.phone?.toLowerCase().includes(q)
                     ) return false;
                 }
-                if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
-                if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
+                if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.some(v => t.vehicle?.includes(v))) return false;
+                if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.some(d => t.driver?.includes(d))) return false;
                 if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
 
                 if (startDate && t.date < startDate) return false;
