@@ -339,6 +339,11 @@ export default function Tours({ currentUser }) {
                                             >
                                                 {tour.operator}
                                             </span>
+                                            {tour.payment === 'CASH' && (
+                                                <span style={{ marginLeft: '0.4rem', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.65rem', fontWeight: 800, backgroundColor: '#dcfce7', border: '1px solid #22c55e', color: '#15803d' }}>
+                                                    CASH
+                                                </span>
+                                            )}
                                         </td>
                                         <td>
                                             <span style={{ padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 500, backgroundColor: 'var(--bg-hover)' }}>
