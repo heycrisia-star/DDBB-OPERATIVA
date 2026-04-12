@@ -240,9 +240,13 @@ def parse_gyg_email(msg):
     product_m = re.search(r'Se ha reservado tu producto\s*\n+(.+)', text)
     product = product_m.group(1).strip() if product_m else ''
 
-    # Duration: search for "Tour de X:00 h" or similar in text
-    dur_m = re.search(r'(?:Tour|Opc(?:i|í)ón).*?(\d+)[:\s]?(?:00)?\s*[hH]', text)
-    duration = int(dur_m.group(1)) if dur_m else 2
+    # Duration: search for "Tour de X:00 h" or "1,5 horas" or similar in text
+    dur_m = re.search(r'(?:Tour|Opc(?:i|í)ón).*?(\d+(?:[,.]\d+)?)[:\s]?(?:00)?\s*[hH]', text)
+    if dur_m:
+        dur_val = dur_m.group(1).replace(',', '.')
+        duration = float(dur_val) if '.' in dur_val else int(dur_val)
+    else:
+        duration = 2
 
     return {
         'code': code,
