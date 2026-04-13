@@ -2053,5 +2053,43 @@ export const MOCK_TOURS = [
     "payment": "CASH",
     "pickup": "Recogida Especial - Múltiples Vehículos",
     "id": 108
+  },
+  {
+    "code": "GYGMX4L9ZM8M",
+    "date": "2026-06-05",
+    "start": "16:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Rodrigo Cordeiro Ramos",
+    "phone": "+5524998610499",
+    "language": "PT",
+    "country": "",
+    "netPrice": 175.78,
+    "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
+    "bookingDate": "2026-04-12",
+    "id": 109
+  },
+  {
+    "code": "GYG2Q9NKWL3V",
+    "date": "2026-04-17",
+    "start": "10:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 4,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Anne-Cathrin Steinmetz",
+    "phone": "+41767471634",
+    "language": "DE",
+    "country": "",
+    "netPrice": 150.48,
+    "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
+    "bookingDate": "2026-04-13",
+    "id": 110
   }
 ];
