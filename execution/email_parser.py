@@ -240,8 +240,8 @@ def parse_gyg_email(msg):
     product_m = re.search(r'Se ha reservado tu producto\s*\n+(.+)', text)
     product = product_m.group(1).strip() if product_m else ''
 
-    # Duration: search for "Tour de X:00 h" or "1,5 horas" or similar in text
-    dur_m = re.search(r'(?:Tour|Opc(?:i|í)ón).*?(\d+(?:[,.]\d+)?)[:\s]?(?:00)?\s*[hH]', text)
+    # Duration: search for "Tour de X:00 h", "1,5 horas", "Duración: 1 hora", etc.
+    dur_m = re.search(r'(?:Tour|Opc(?:i|í)ón|Duraci(?:o|ó)n).*?(\d+(?:[,.]\d+)?)[:\s]?(?:00)?\s*[hH]', text, re.IGNORECASE)
     if dur_m:
         dur_val = dur_m.group(1).replace(',', '.')
         duration = float(dur_val) if '.' in dur_val else int(dur_val)
@@ -382,8 +382,8 @@ def upsert_booking(tours, booking):
 
     existing = next((t for t in tours if t.get('code') == booking['code']), None)
     if existing:
-        # Update only status, date, pax, price if changed — preserve driver/vehicle
-        for key in ['status', 'date', 'start', 'pax', 'netPrice', 'clientName', 'phone', 'language']:
+        # Update only status, date, start, duration, pax, price, clientName, phone, language if changed
+        for key in ['status', 'date', 'start', 'duration', 'pax', 'netPrice', 'clientName', 'phone', 'language']:
             if booking.get(key):
                 existing[key] = booking[key]
         print(f"  [UPDATE] {booking['code']} → status={booking['status']}")
