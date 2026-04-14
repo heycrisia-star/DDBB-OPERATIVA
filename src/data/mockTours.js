@@ -2125,7 +2125,7 @@ export const MOCK_TOURS = [
     "phone": "+447817993852",
     "language": "EN",
     "country": "",
-    "netPrice": 59.65,
+    "netPrice": 119.3,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-13",
     "id": 112
@@ -2178,11 +2178,11 @@ export const MOCK_TOURS = [
     "pax": 3,
     "vehicle": "01-DR",
     "driver": "Carlos",
-    "clientName": "Nina",
+    "clientName": "3",
     "phone": "+41 79 411 07 20",
     "language": "EN",
     "country": "",
-    "netPrice": 71.5,
+    "netPrice": 143.0,
     "product": "Park City & Beach",
     "bookingDate": "2026-04-14",
     "id": 115
@@ -2197,7 +2197,7 @@ export const MOCK_TOURS = [
     "pax": 3,
     "vehicle": "01-DR",
     "driver": "Cristian",
-    "clientName": "Nina",
+    "clientName": "3",
     "phone": "+41 79 411 07 20",
     "language": "EN",
     "country": "",
@@ -2205,5 +2205,24 @@ export const MOCK_TOURS = [
     "product": "Park City & Beach",
     "bookingDate": "2026-04-14",
     "id": 116
+  },
+  {
+    "code": "GYGMX4L7XH3X",
+    "date": "2026-04-16",
+    "start": "11:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Irina Bedanova",
+    "phone": "+4917680034236",
+    "language": "DE",
+    "country": "",
+    "netPrice": 107.37,
+    "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
+    "bookingDate": "2026-04-14",
+    "id": 117
   }
 ];
