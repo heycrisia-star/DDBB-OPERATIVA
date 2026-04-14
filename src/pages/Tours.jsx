@@ -7,7 +7,7 @@ import { MOCK_TOURS } from '../data/mockTours';
 
 
 const VEHICLES = ['01-DR', '02-NR'];
-const DRIVERS = ['Cristian', 'Chofer 2', 'Joao'];
+const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
 const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'CASH'];
 const TIME_FILTERS = [
     { id: 'today', label: 'Hoy' },
@@ -16,7 +16,7 @@ const TIME_FILTERS = [
     { id: 'year', label: 'Año' }
 ];
 
-const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Chofer 2': '#0d9488', 'Joao': '#be123c' };
+const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#be123c' };
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const OPERATOR_COLORS = {
     'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#c2410c' },

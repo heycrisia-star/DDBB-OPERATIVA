@@ -16,10 +16,10 @@ const OPERATOR_COLORS = {
 };
 
 const VEHICLES = ['01-DR', '02-NR'];
-const DRIVERS = ['Cristian', 'Chofer 2', 'Joao'];
+const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
 const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'CASH'];
 
-const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Chofer 2': '#0d9488', 'Joao': '#be123c' };
+const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#be123c' };
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };
 

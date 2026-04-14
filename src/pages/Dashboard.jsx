@@ -112,10 +112,10 @@ export default function Dashboard({ currentUser }) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Chofer 2': '#0d9488', 'Joao': '#be123c' };
+    const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#be123c' };
     const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
     const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'CASH'];
-    const DRIVERS = ['Cristian', 'Chofer 2', 'Joao'];
+    const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
     const VEHICLES = ['01-DR', '02-NR'];
     const OPERATOR_COLORS = {
         'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#ea580c' },
@@ -214,7 +214,7 @@ export default function Dashboard({ currentUser }) {
     };
 
     const activeTours = filteredTours.filter(t => t.status.toLowerCase() !== 'cancelado');
-    const totalSales = activeTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
+    const totalSales = activeTours.filter(t => !t.isSubTour).reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
     const totalHours = activeTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
     const activeToursCount = activeTours.length;
     const totalTours = filteredTours.length;
@@ -301,7 +301,7 @@ export default function Dashboard({ currentUser }) {
         }
 
         // Operator
-        if (t.payment === 'CASH') {
+        if (t.payment === 'CASH' || t.operator === 'CASH') {
             operatorStatsMap['CASH']++;
         } else if (operatorStatsMap[t.operator] !== undefined) {
             operatorStatsMap[t.operator]++;
@@ -857,9 +857,9 @@ export default function Dashboard({ currentUser }) {
                     {Object.entries(operatorStats)
                         .sort((a, b) => b[1].count - a[1].count)
                         .map(([op, stats]) => {
-                            const labels = { 'GYG': 'GetYourGuide', 'FH': 'FareHarbor', 'VIA': 'Viator', 'IC': 'Intercruises' };
-                            const colors = { 'GYG': '#c2410c', 'FH': '#4338ca', 'VIA': '#15803d', 'IC': '#7e22ce' };
-                            return <ProgressBar key={op} label={labels[op]} value={stats.perc} max={100} color={colors[op]} count={`${stats.count} tours`} />;
+                            const labels = { 'GYG': 'GetYourGuide', 'FH': 'FareHarbor', 'VIA': 'Viator', 'IC': 'Intercruises', 'CASH': 'Cash' };
+                            const colors = { 'GYG': '#c2410c', 'FH': '#4338ca', 'VIA': '#15803d', 'IC': '#7e22ce', 'CASH': '#16a34a' };
+                            return <ProgressBar key={op} label={labels[op] || op} value={stats.perc} max={100} color={colors[op] || '#94a3b8'} count={`${stats.count} tours`} />;
                         })}
                 </div>
 
