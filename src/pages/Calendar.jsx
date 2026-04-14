@@ -392,13 +392,23 @@ export default function Calendar({ currentUser }) {
                                 // Unificar lógica de pasado: día anterior o hoy después de hora inicio
                                 const isPast = tour.date < today || (tour.date === today && tour.start <= currentTime);
 
+                                // Driver color overrides — makes it easy to see who's driving
+                                const DRIVER_COLORS = {
+                                    'Carlos': { bg: '#d1fae5', border: '#10b981', text: '#065f46' },
+                                    'Joao': { bg: '#dbeafe', border: '#3b82f6', text: '#1e3a8a' },
+                                };
+                                const driverColor = DRIVER_COLORS[tour.driver];
+                                const cardBg = driverColor ? driverColor.bg : colors.bg;
+                                const cardBorder = driverColor ? driverColor.border : colors.text;
+                                const cardText = driverColor ? driverColor.text : colors.text;
+
                                 // Estilos dinámicos por estado
                                 const statusStyles = {
-                                    backgroundColor: isCancelled ? '#f1f5f9' : (isModified ? '#fef3c7' : (isPast ? '#f1f5f9' : colors.bg)),
-                                    borderLeftColor: isCancelled ? '#94a3b8' : (isModified ? '#f59e0b' : (isPast ? '#94a3b8' : colors.text)),
+                                    backgroundColor: isCancelled ? '#f1f5f9' : (isModified ? '#fef3c7' : (isPast ? '#f1f5f9' : cardBg)),
+                                    borderLeftColor: isCancelled ? '#94a3b8' : (isModified ? '#f59e0b' : (isPast ? '#94a3b8' : cardBorder)),
                                     textDecoration: isCancelled ? 'line-through' : 'none',
                                     opacity: (isPast || isCancelled) ? 0.6 : 1, // Reducir opacidad para ambos
-                                    color: (isCancelled || isPast) ? '#64748b' : (isModified ? '#92400e' : colors.text)
+                                    color: (isCancelled || isPast) ? '#64748b' : (isModified ? '#92400e' : cardText)
                                 };
 
                                 return (
