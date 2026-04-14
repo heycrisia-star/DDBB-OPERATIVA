@@ -412,7 +412,7 @@ def upsert_booking(tours, booking):
             if booking.get('clientName'):
                 existing['clientName'] = booking['clientName']
         # Protect duration for manually-corrected bookings
-        MANUAL_DURATION_CODES = {'GYG32L8B9B99'}
+        MANUAL_DURATION_CODES = {'GYG32L8B9B99', 'GYG2Q9NKWL3V'}
         if booking.get('code') not in MANUAL_DURATION_CODES:
             if booking.get('duration'):
                 existing['duration'] = booking['duration']

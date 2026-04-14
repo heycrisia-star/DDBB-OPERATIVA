@@ -1390,7 +1390,7 @@ export const MOCK_TOURS = [
     "code": "GYG2Q9NKWL3V",
     "date": "2026-04-17",
     "start": "10:00",
-    "duration": 3,
+    "duration": 2,
     "operator": "GYG",
     "status": "confirmado",
     "pax": 4,
@@ -1464,7 +1464,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-04-12",
     "payment": "CASH",
     "pickup": "Recogida Especial - Múltiples Vehículos",
-    "id": 108,
+    "id": 118,
     "isSubTour": true
   },
   {
