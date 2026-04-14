@@ -234,7 +234,9 @@ def parse_gyg_email(msg):
 
     # Price (gross, then apply 25% discount)
     price_m = re.search(r'Precio\s*\n+([\d,.]+\s*€)', text)
-    net_price = clean_price(price_m.group(1)) if price_m else 0.0
+    gross_price_str = price_m.group(1) if price_m else '0'
+    price = float(re.sub(r'[€$\s]', '', gross_price_str).replace(',', '.'))
+    net_price = clean_price(gross_price_str) if price_m else 0.0
 
     # Product
     product_m = re.search(r'Se ha reservado tu producto\s*\n+(.+)', text)
@@ -246,7 +248,15 @@ def parse_gyg_email(msg):
         dur_val = dur_m.group(1).replace(',', '.')
         duration = float(dur_val) if '.' in dur_val else int(dur_val)
     else:
-        duration = 2
+        # Nueva Lógica: GYG ya no incluye el texto con la duración. Se deduce a partir del precio bruto del ticket.
+        duration = 2  # Fallback
+        if price:
+            if price <= 100:
+                duration = 1
+            elif price <= 180:
+                duration = 2
+            else:
+                duration = 3
 
     return {
         'code': code,
