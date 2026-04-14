@@ -8,7 +8,7 @@ import { MOCK_TOURS } from '../data/mockTours';
 
 const VEHICLES = ['01-DR', '02-NR'];
 const DRIVERS = ['Cristian', 'Chofer 2', 'Joao'];
-const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'EFECTIVO'];
+const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'CASH'];
 const TIME_FILTERS = [
     { id: 'today', label: 'Hoy' },
     { id: 'weekly', label: 'Semanal' },

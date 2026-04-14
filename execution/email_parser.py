@@ -384,24 +384,72 @@ def save_mock(tours):
         f.write('export const MOCK_TOURS = ' + json.dumps(tours, indent=2, ensure_ascii=False) + ';\n')
 
 
+# New price table effective from 2026-04-17
+NEW_PRICE_DATE = '2026-04-17'
+GYG_NETO_TABLE = {
+    (1, '1-2'): 75, (1, '3-4'): 94,
+    (2, '1-2'): 119, (2, '3-4'): 150,
+    (3, '1-2'): 176, (3, '3-4'): 217,
+}
+FH_NETO_TABLE = {
+    (1, '1-4'): 94,
+    (2, '1-4'): 150,
+    (3, '1-4'): 217,
+}
+
+# Codes where netPrice was manually set and must NOT be overwritten by the parser
+MANUAL_PRICE_CODES = {
+    'CASH-849182-A', 'CASH-849182-B',
+    'FH343696332', 'FH343696684',
+    'GYGMX4L8YN23', 'GYGKBGGG2K3Q',
+    'GYGKBGGQ8MZ9',
+}
+
+def apply_new_table_price(booking):
+    """Apply rounding from new price table for bookings >= NEW_PRICE_DATE."""
+    if booking.get('code') in MANUAL_PRICE_CODES:
+        return
+    if booking.get('date', '') < NEW_PRICE_DATE:
+        return
+    dur = int(booking.get('duration', 2))
+    pax = booking.get('pax', 2)
+    op = booking.get('operator', '')
+    tier = '3-4' if pax >= 3 else '1-2'
+    if op == 'GYG':
+        neto = GYG_NETO_TABLE.get((dur, tier))
+        if neto:
+            booking['netPrice'] = neto
+    elif op == 'FH':
+        neto = FH_NETO_TABLE.get((dur, '1-4'))
+        if neto:
+            booking['netPrice'] = neto
+
+
 def upsert_booking(tours, booking):
-    """Insert new booking or update existing one (matched by code). Never overwrites driver/vehicle set manually."""
+    """Insert new booking or update existing one (matched by code). Never overwrites manually-set driver/vehicle/price."""
     if booking['code'] == 'GYGLMR44FKNR':
         booking['date'] = '2026-04-05'
         booking['start'] = '14:00'
 
     existing = next((t for t in tours if t.get('code') == booking['code']), None)
     if existing:
-        # Update only status, date, start, duration, pax, price, clientName, phone, language if changed
-        for key in ['status', 'date', 'start', 'duration', 'pax', 'netPrice', 'clientName', 'phone', 'language']:
+        # Update status, date, start, duration, pax, clientName, phone, language
+        for key in ['status', 'date', 'start', 'duration', 'pax', 'clientName', 'phone', 'language']:
             if booking.get(key):
                 existing[key] = booking[key]
-        print(f"  [UPDATE] {booking['code']} → status={booking['status']}")
+        # Only update netPrice if NOT in manual-price set
+        if booking.get('code') not in MANUAL_PRICE_CODES:
+            if booking.get('netPrice'):
+                existing['netPrice'] = booking['netPrice']
+        # Apply new table pricing for recent bookings
+        apply_new_table_price(existing)
+        print(f"  [UPDATE] {booking['code']} \u2192 status={booking['status']}")
     else:
         new_id = max((t.get('id', 0) for t in tours), default=0) + 1
         booking['id'] = new_id
+        apply_new_table_price(booking)
         tours.append(booking)
-        print(f"  [INSERT] {booking['code']} — {booking['clientName']} ({booking['date']})")
+        print(f"  [INSERT] {booking['code']} \u2014 {booking['clientName']} ({booking['date']})") 
 
 # ── 6. Stats summary ─────────────────────────────────────────────────────────
 

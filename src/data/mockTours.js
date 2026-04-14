@@ -90,7 +90,7 @@ export const MOCK_TOURS = [
     "phone": "+4916090946005",
     "language": "DE",
     "country": "Germany",
-    "netPrice": 75,
+    "netPrice": 59.32,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-12"
   },
@@ -109,7 +109,7 @@ export const MOCK_TOURS = [
     "phone": "+33667619829",
     "language": "FR",
     "country": "France",
-    "netPrice": 150,
+    "netPrice": 75.27,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-12"
   },
@@ -128,7 +128,7 @@ export const MOCK_TOURS = [
     "phone": "+46733008847",
     "language": "EN",
     "country": "Sweden",
-    "netPrice": 119,
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-11"
   },
@@ -147,7 +147,7 @@ export const MOCK_TOURS = [
     "phone": "+491737061256",
     "language": "DE",
     "country": "Germany",
-    "netPrice": 176,
+    "netPrice": 140.62,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-11"
   },
@@ -166,7 +166,7 @@ export const MOCK_TOURS = [
     "phone": "+491727426778",
     "language": "DE",
     "country": "Germany",
-    "netPrice": 150,
+    "netPrice": 75.26,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-11"
   },
@@ -204,7 +204,7 @@ export const MOCK_TOURS = [
     "phone": "+40769181754",
     "language": "EN",
     "country": "Romania",
-    "netPrice": 75,
+    "netPrice": 59.32,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-12"
   },
@@ -223,7 +223,7 @@ export const MOCK_TOURS = [
     "phone": "+12162532094",
     "language": "EN",
     "country": "United States",
-    "netPrice": 119,
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-11"
   },
@@ -242,7 +242,7 @@ export const MOCK_TOURS = [
     "phone": "+33751852747",
     "language": "FR",
     "country": "France",
-    "netPrice": 75,
+    "netPrice": 59.32,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-10"
   },
@@ -261,7 +261,7 @@ export const MOCK_TOURS = [
     "phone": "+32491555614",
     "language": "FR",
     "country": "Belgium",
-    "netPrice": 75,
+    "netPrice": 59.32,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-09"
   },
@@ -280,7 +280,7 @@ export const MOCK_TOURS = [
     "phone": "+33674317222",
     "language": "FR",
     "country": "France",
-    "netPrice": 75,
+    "netPrice": 59.32,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-11"
   },
@@ -299,7 +299,7 @@ export const MOCK_TOURS = [
     "phone": "+56975863818",
     "language": "ES",
     "country": "Chile",
-    "netPrice": 119,
+    "netPrice": 95.42,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-10"
   },
@@ -318,7 +318,7 @@ export const MOCK_TOURS = [
     "phone": "+33650739064",
     "language": "FR",
     "country": "France",
-    "netPrice": 75,
+    "netPrice": 59.32,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-22"
   },
@@ -337,7 +337,7 @@ export const MOCK_TOURS = [
     "phone": "+41782346759",
     "language": "DE",
     "country": "Switzerland",
-    "netPrice": 176,
+    "netPrice": 140.62,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-23"
   },
@@ -356,7 +356,7 @@ export const MOCK_TOURS = [
     "phone": "+12535143997",
     "language": "EN",
     "country": "United States",
-    "netPrice": 119,
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-24"
   },
@@ -375,7 +375,7 @@ export const MOCK_TOURS = [
     "phone": "+393475522751",
     "language": "EN",
     "country": "Italy",
-    "netPrice": 119,
+    "netPrice": 59.32,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-02-25"
   },
@@ -394,7 +394,7 @@ export const MOCK_TOURS = [
     "phone": "+19542002165",
     "language": "PT",
     "country": "United States",
-    "netPrice": 119,
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-05"
   },
@@ -413,7 +413,7 @@ export const MOCK_TOURS = [
     "phone": "+819073467504",
     "language": "EN",
     "country": "Japan",
-    "netPrice": 119,
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-05"
   },
@@ -432,7 +432,7 @@ export const MOCK_TOURS = [
     "phone": "6172857740",
     "language": "EN",
     "country": "United States",
-    "netPrice": 119,
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-04"
   },
@@ -451,7 +451,7 @@ export const MOCK_TOURS = [
     "phone": "+4917684185161",
     "language": "DE",
     "country": "Germany",
-    "netPrice": 119,
+    "netPrice": 95.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-04"
   },
@@ -470,7 +470,7 @@ export const MOCK_TOURS = [
     "phone": "+46709505077",
     "language": "EN",
     "country": "Sweden",
-    "netPrice": 217,
+    "netPrice": 173.81,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-03"
   },
@@ -489,7 +489,7 @@ export const MOCK_TOURS = [
     "phone": "+13058773682",
     "language": "EN",
     "country": "United States",
-    "netPrice": 75,
+    "netPrice": 59.32,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-02"
   },
@@ -508,7 +508,7 @@ export const MOCK_TOURS = [
     "phone": "+33608823400",
     "language": "FR",
     "country": "France",
-    "netPrice": 150,
+    "netPrice": 75.27,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-03"
   },
@@ -527,7 +527,7 @@ export const MOCK_TOURS = [
     "phone": "+5571988378140",
     "language": "PT",
     "country": "Brazil",
-    "netPrice": 75,
+    "netPrice": 59.32,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-02"
   },
@@ -546,7 +546,7 @@ export const MOCK_TOURS = [
     "phone": "+491706071397",
     "language": "DE",
     "country": "Germany",
-    "netPrice": 150,
+    "netPrice": 84.66,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-15"
   },
@@ -565,7 +565,7 @@ export const MOCK_TOURS = [
     "phone": "+12293100378",
     "language": "EN",
     "country": "United States",
-    "netPrice": 150,
+    "netPrice": 84.67,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-16"
   },
@@ -603,7 +603,7 @@ export const MOCK_TOURS = [
     "phone": "+14183892995",
     "language": "EN",
     "country": "Canada",
-    "netPrice": 217,
+    "netPrice": 195.52,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-17"
   },
@@ -622,7 +622,7 @@ export const MOCK_TOURS = [
     "phone": "+447921894433",
     "language": "EN",
     "country": "United Kingdom",
-    "netPrice": 150,
+    "netPrice": 84.67,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-17"
   },
@@ -641,7 +641,7 @@ export const MOCK_TOURS = [
     "phone": "+33651422388",
     "language": "FR",
     "country": "France",
-    "netPrice": 75,
+    "netPrice": 66.75,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-17"
   },
@@ -678,7 +678,7 @@ export const MOCK_TOURS = [
     "phone": "+32471747814",
     "language": "NL",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 84.67,
     "product": "",
     "bookingDate": "2026-03-23",
     "id": 67
@@ -717,7 +717,7 @@ export const MOCK_TOURS = [
     "phone": "+18165290747",
     "language": "EN",
     "country": "United States",
-    "netPrice": 217,
+    "netPrice": 135.42,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-20"
   },
@@ -735,7 +735,7 @@ export const MOCK_TOURS = [
     "phone": "+491606695665",
     "language": "DE",
     "country": "",
-    "netPrice": 119,
+    "netPrice": 107.37,
     "product": "Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "id": 63,
     "bookingDate": "2026-03-21"
@@ -773,7 +773,7 @@ export const MOCK_TOURS = [
     "phone": "+13104635802",
     "language": "EN",
     "country": "",
-    "netPrice": 217,
+    "netPrice": 135.43,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-27",
     "id": 71
@@ -793,7 +793,7 @@ export const MOCK_TOURS = [
     "phone": "+15145090696",
     "language": "FR",
     "country": "Canada",
-    "netPrice": 150,
+    "netPrice": 84.66,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-25"
   },
@@ -830,7 +830,7 @@ export const MOCK_TOURS = [
     "phone": "+491721826123",
     "language": "DE",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 84.66,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-28",
     "id": 74
@@ -887,7 +887,7 @@ export const MOCK_TOURS = [
     "phone": "+50670760750",
     "language": "EN",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 84.67,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-31",
     "id": 82
@@ -906,7 +906,7 @@ export const MOCK_TOURS = [
     "phone": "+447918168811",
     "language": "EN",
     "country": "",
-    "netPrice": 217,
+    "netPrice": 135.43,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-01",
     "id": 83
@@ -925,7 +925,7 @@ export const MOCK_TOURS = [
     "phone": "+447861804279",
     "language": "EN",
     "country": "",
-    "netPrice": 119,
+    "netPrice": 107.35,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-01",
     "id": 84
@@ -944,7 +944,7 @@ export const MOCK_TOURS = [
     "phone": "+447780101870",
     "language": "EN",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 84.66,
     "product": "",
     "bookingDate": "2026-04-03",
     "id": 87
@@ -963,7 +963,7 @@ export const MOCK_TOURS = [
     "phone": "+4915127747582",
     "language": "EN",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 84.66,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-01",
     "id": 85
@@ -982,7 +982,7 @@ export const MOCK_TOURS = [
     "phone": "+41762785404",
     "language": "EN",
     "country": "",
-    "netPrice": 217,
+    "netPrice": 135.42,
     "product": "",
     "bookingDate": "2026-04-03",
     "id": 89
@@ -1001,7 +1001,7 @@ export const MOCK_TOURS = [
     "phone": "+491789392094",
     "language": "DE",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 84.66,
     "product": "",
     "bookingDate": "2026-04-03",
     "id": 90
@@ -1020,7 +1020,7 @@ export const MOCK_TOURS = [
     "phone": "+447800974884",
     "language": "EN",
     "country": "",
-    "netPrice": 119,
+    "netPrice": 107.37,
     "product": "",
     "bookingDate": "2026-04-04",
     "id": 91
@@ -1040,7 +1040,7 @@ export const MOCK_TOURS = [
     "phone": "+905357695142",
     "language": "EN",
     "country": "Turkey",
-    "netPrice": 119,
+    "netPrice": 107.37,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-28"
   },
@@ -1059,7 +1059,7 @@ export const MOCK_TOURS = [
     "phone": "+491799075772",
     "language": "DE",
     "country": "Germany",
-    "netPrice": 217,
+    "netPrice": 135.42,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-28"
   },
@@ -1077,7 +1077,7 @@ export const MOCK_TOURS = [
     "phone": "+447796802096",
     "language": "EN",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 135.42,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-04",
     "id": 95
@@ -1096,7 +1096,7 @@ export const MOCK_TOURS = [
     "phone": "+16194953282",
     "language": "EN",
     "country": "",
-    "netPrice": 217,
+    "netPrice": 135.42,
     "product": "",
     "bookingDate": "2026-04-06",
     "id": 97
@@ -1115,7 +1115,7 @@ export const MOCK_TOURS = [
     "phone": "+491721075632",
     "language": "DE",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 84.67,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-06",
     "id": 99
@@ -1134,7 +1134,7 @@ export const MOCK_TOURS = [
     "phone": "+447786005106",
     "language": "EN",
     "country": "",
-    "netPrice": 217,
+    "netPrice": 195.57,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-27",
     "id": 73
@@ -1153,7 +1153,7 @@ export const MOCK_TOURS = [
     "phone": "+4916090214766",
     "language": "DE",
     "country": "",
-    "netPrice": 119,
+    "netPrice": 107.37,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-28",
     "id": 75
@@ -1173,7 +1173,7 @@ export const MOCK_TOURS = [
     "phone": "+4915752558978",
     "language": "DE",
     "country": "Germany",
-    "netPrice": 217,
+    "netPrice": 135.43,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-01"
   },
@@ -1192,7 +1192,7 @@ export const MOCK_TOURS = [
     "phone": "+4917681079720",
     "language": "DE",
     "country": "Germany",
-    "netPrice": 176,
+    "netPrice": 158.2,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-31"
   },
@@ -1210,7 +1210,7 @@ export const MOCK_TOURS = [
     "phone": "+32478487875",
     "language": "NL",
     "country": "",
-    "netPrice": 75,
+    "netPrice": 66.75,
     "product": "",
     "bookingDate": "2026-04-10",
     "id": 102
@@ -1229,7 +1229,7 @@ export const MOCK_TOURS = [
     "phone": "+31612825249",
     "language": "NL",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 84.67,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-30",
     "id": 80
@@ -1248,7 +1248,7 @@ export const MOCK_TOURS = [
     "phone": "+436648328330",
     "language": "DE",
     "country": "",
-    "netPrice": 119,
+    "netPrice": 107.37,
     "product": "",
     "bookingDate": "2026-04-11",
     "id": 103
@@ -1286,7 +1286,7 @@ export const MOCK_TOURS = [
     "phone": "+32478468767",
     "language": "NL",
     "country": "",
-    "netPrice": 150,
+    "netPrice": 84.67,
     "product": "",
     "bookingDate": "2026-04-12",
     "id": 106
@@ -1305,7 +1305,7 @@ export const MOCK_TOURS = [
     "phone": "+33676006744",
     "language": "FR",
     "country": "",
-    "netPrice": 75,
+    "netPrice": 66.75,
     "product": "Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-25",
     "id": 69
@@ -1324,7 +1324,7 @@ export const MOCK_TOURS = [
     "phone": "+306936693603",
     "language": "EN",
     "country": "",
-    "netPrice": 75,
+    "netPrice": 66.75,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-02",
     "id": 86
@@ -1343,7 +1343,7 @@ export const MOCK_TOURS = [
     "phone": "+33621864159",
     "language": "EN",
     "country": "",
-    "netPrice": 217,
+    "netPrice": 135.42,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-14",
     "id": 114
@@ -1363,7 +1363,7 @@ export const MOCK_TOURS = [
     "phone": "+13476076585",
     "language": "EN",
     "country": "United States",
-    "netPrice": 119,
+    "netPrice": 107.37,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-05"
   },
@@ -1381,7 +1381,7 @@ export const MOCK_TOURS = [
     "phone": "+4917680034236",
     "language": "DE",
     "country": "",
-    "netPrice": 119,
+    "netPrice": 107.37,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-14",
     "id": 117
@@ -1429,7 +1429,7 @@ export const MOCK_TOURS = [
     "date": "2026-04-18",
     "start": "10:00",
     "duration": 2,
-    "operator": "EFECTIVO",
+    "operator": "CASH",
     "status": "confirmado",
     "pax": 4,
     "vehicle": "01-DR",
@@ -1450,7 +1450,7 @@ export const MOCK_TOURS = [
     "date": "2026-04-18",
     "start": "10:00",
     "duration": 2,
-    "operator": "EFECTIVO",
+    "operator": "CASH",
     "status": "confirmado",
     "pax": 3,
     "vehicle": "02-NR",
@@ -1514,7 +1514,7 @@ export const MOCK_TOURS = [
     "pax": 3,
     "vehicle": "01-DR",
     "driver": "Carlos",
-    "clientName": "Nina",
+    "clientName": "3",
     "phone": "+41 79 411 07 20",
     "language": "EN",
     "country": "",
@@ -1533,7 +1533,7 @@ export const MOCK_TOURS = [
     "pax": 3,
     "vehicle": "01-DR",
     "driver": "Cristian",
-    "clientName": "Nina",
+    "clientName": "3",
     "phone": "+41 79 411 07 20",
     "language": "EN",
     "country": "",
@@ -1570,12 +1570,12 @@ export const MOCK_TOURS = [
     "status": "confirmado",
     "pax": 2,
     "vehicle": "01-DR",
-    "driver": "David",
+    "driver": "Cristian",
     "clientName": "Meryem Dogan",
     "phone": "+447817993852",
     "language": "EN",
     "country": "",
-    "netPrice": 59.29,
+    "netPrice": 119,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-13",
     "id": 112
@@ -1784,7 +1784,7 @@ export const MOCK_TOURS = [
     "phone": "+1 970-729-2073",
     "language": "EN",
     "country": "",
-    "netPrice": 143.0,
+    "netPrice": 150,
     "product": "Park City & Beach",
     "pickup": "Carrer de corsega, 541-543",
     "bookingDate": "2026-04-09",
@@ -1804,7 +1804,7 @@ export const MOCK_TOURS = [
     "phone": "+1 425-628-9098",
     "language": "EN",
     "country": "",
-    "netPrice": 89.0,
+    "netPrice": 150,
     "product": "Essential Barcelona",
     "bookingDate": "2026-04-04",
     "id": 94
@@ -1842,7 +1842,7 @@ export const MOCK_TOURS = [
     "phone": "+436644492687",
     "language": "EN",
     "country": "",
-    "netPrice": 175.78,
+    "netPrice": 119,
     "product": "Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-25",
     "id": 70
@@ -1899,7 +1899,7 @@ export const MOCK_TOURS = [
     "phone": "+12175530226",
     "language": "EN",
     "country": "",
-    "netPrice": 175.78,
+    "netPrice": 119,
     "product": "Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "id": 61,
     "bookingDate": "2026-06-06"
@@ -1956,7 +1956,7 @@ export const MOCK_TOURS = [
     "phone": "+13177757982",
     "language": "EN",
     "country": "",
-    "netPrice": 94.07,
+    "netPrice": 119,
     "product": "Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "id": 56,
     "bookingDate": "2026-06-09"
@@ -1975,7 +1975,7 @@ export const MOCK_TOURS = [
     "phone": "+33 6 09 07 53 81",
     "language": "EN",
     "country": "",
-    "netPrice": 89.0,
+    "netPrice": 150,
     "product": "Essential Barcelona",
     "bookingDate": "2026-03-29",
     "id": 81
@@ -2127,7 +2127,7 @@ export const MOCK_TOURS = [
     "phone": "+14385089966",
     "language": "EN",
     "country": "",
-    "netPrice": 217.26,
+    "netPrice": 119,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-28",
     "id": 76
@@ -2146,7 +2146,7 @@ export const MOCK_TOURS = [
     "phone": "+16043753737",
     "language": "EN",
     "country": "",
-    "netPrice": 217.29,
+    "netPrice": 119,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-04",
     "id": 92
@@ -2165,7 +2165,7 @@ export const MOCK_TOURS = [
     "phone": "+16047240513",
     "language": "EN",
     "country": "",
-    "netPrice": 119.28,
+    "netPrice": 119,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-03-27",
     "id": 72
@@ -2184,7 +2184,7 @@ export const MOCK_TOURS = [
     "phone": "+16292034286",
     "language": "EN",
     "country": "",
-    "netPrice": 74.56,
+    "netPrice": 119,
     "product": "Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "id": 60,
     "bookingDate": "2026-10-14"

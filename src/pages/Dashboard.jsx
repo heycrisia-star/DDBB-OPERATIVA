@@ -114,7 +114,7 @@ export default function Dashboard({ currentUser }) {
 
     const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Chofer 2': '#0d9488', 'Joao': '#be123c' };
     const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
-    const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'EFECTIVO'];
+    const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'CASH'];
     const DRIVERS = ['Cristian', 'Chofer 2', 'Joao'];
     const VEHICLES = ['01-DR', '02-NR'];
     const OPERATOR_COLORS = {
@@ -122,7 +122,7 @@ export default function Dashboard({ currentUser }) {
         'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4f46e5' },
         'VIA': { bg: '#dcfce7', border: '#86efac', text: '#16a34a' },
         'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#9333ea' },
-        'EFECTIVO': { bg: '#dcfce7', border: '#22c55e', text: '#15803d' }
+        'CASH': { bg: '#dcfce7', border: '#22c55e', text: '#15803d' }
     };
 
     const [selectedOperators, setSelectedOperators] = useState(OPERATORS);
@@ -168,7 +168,7 @@ export default function Dashboard({ currentUser }) {
         if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
         if (selectedOperators.length !== OPERATORS.length) {
             const hasMatch = selectedOperators.some(op => {
-                if (op === 'EFECTIVO') return t.payment === 'CASH';
+                if (op === 'CASH') return t.payment === 'CASH' || t.operator === 'CASH';
                 return t.operator === op;
             });
             if (!hasMatch) return false;
@@ -258,7 +258,7 @@ export default function Dashboard({ currentUser }) {
         2: { total: 0, pax4: 0, paxLess4: 0 },
         3: { total: 0, pax4: 0, paxLess4: 0 }
     };
-    const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0, 'EFECTIVO': 0 };
+    const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0, 'CASH': 0 };
     const countryStatsMap = {};
 
     const timeSlotStatsMap = {
@@ -302,7 +302,7 @@ export default function Dashboard({ currentUser }) {
 
         // Operator
         if (t.payment === 'CASH') {
-            operatorStatsMap['EFECTIVO']++;
+            operatorStatsMap['CASH']++;
         } else if (operatorStatsMap[t.operator] !== undefined) {
             operatorStatsMap[t.operator]++;
         }
@@ -531,7 +531,7 @@ export default function Dashboard({ currentUser }) {
         'FH': { perc: getPerc(operatorStatsMap['FH']), count: operatorStatsMap['FH'] },
         'VIA': { perc: getPerc(operatorStatsMap['VIA']), count: operatorStatsMap['VIA'] },
         'IC': { perc: getPerc(operatorStatsMap['IC']), count: operatorStatsMap['IC'] },
-        'EFECTIVO': { perc: getPerc(operatorStatsMap['EFECTIVO']), count: operatorStatsMap['EFECTIVO'] }
+        'CASH': { perc: getPerc(operatorStatsMap['CASH']), count: operatorStatsMap['CASH'] }
     };
 
     const totalKnownCountries = Object.values(countryStatsMap).reduce((sum, val) => sum + val, 0);
