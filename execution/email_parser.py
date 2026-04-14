@@ -387,9 +387,10 @@ def save_mock(tours):
 
 # Codes where netPrice was manually set and must NOT be overwritten by the parser
 MANUAL_PRICE_CODES = {
-    'CASH-849182-A', 'CASH-849182-B',
-    'FH343696332', 'FH343696684',
-    'GYGKBGGG2K3Q', 'GYGKBGGQ8MZ9',
+    'CASH-849182-A',  # manual cash: Cristian 55€
+    'CASH-849182-B',  # manual cash: Carlos 75€
+    'FH343696332',    # split: Cristian benefit 43.18 (not full 118.18)
+    'GYGKBGGG2K3Q',  # split: Cristian benefit 60 (not full 119.30)
 }
 
 
