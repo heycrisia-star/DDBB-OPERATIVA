@@ -432,8 +432,8 @@ export default function Calendar({ currentUser }) {
                                                 <span style={{ fontSize: isMobile ? '0.55rem' : '0.65rem', letterSpacing: '-0.5px', opacity: 0.85, whiteSpace: 'nowrap' }}>
                                                     {'👤'.repeat(Math.min(parseInt(tour.pax) || 1, 4))}
                                                 </span>
-                                                <span style={{ fontSize: isMobile ? '0.5rem' : '0.6rem', marginLeft: '0.2rem' }}>{tour.operator}</span>
-                                                {tour.payment === 'CASH' && (
+                                                <span style={{ fontSize: isMobile ? '0.5rem' : '0.6rem', marginLeft: '0.2rem' }}>{tour.operator !== 'CASH' ? tour.operator : ''}</span>
+                                                {(tour.payment === 'CASH' || tour.operator === 'CASH') && (
                                                     <span style={{ marginLeft: '0.1rem', backgroundColor: '#dcfce7', color: '#15803d', fontSize: '0.5rem', fontWeight: 800, padding: '0.1rem 0.2rem', borderRadius: '3px', border: '1px solid #86efac' }}>
                                                         CASH
                                                     </span>
@@ -543,7 +543,7 @@ export default function Calendar({ currentUser }) {
                                             <td style={{ padding: '0.75rem 1rem', fontWeight: 700, color: 'var(--brand-primary)', fontFamily: 'monospace' }}>{tour.code}</td>
                                             <td style={{ padding: '0.75rem 1rem' }}>
                                                 <span style={{ backgroundColor: opColors.bg, color: opColors.text, fontSize: '0.65rem', fontWeight: 700, padding: '0.15rem 0.4rem', borderRadius: '4px' }}>{tour.operator}</span>
-                                                {tour.payment === 'CASH' && (
+                                                {(tour.payment === 'CASH' || tour.operator === 'CASH') && (
                                                     <span style={{ marginLeft: '0.3rem', backgroundColor: '#dcfce7', color: '#15803d', fontSize: '0.6rem', fontWeight: 800, padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid #86efac' }}>
                                                         CASH
                                                     </span>

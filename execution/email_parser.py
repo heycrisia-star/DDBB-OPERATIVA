@@ -402,10 +402,20 @@ def upsert_booking(tours, booking):
 
     existing = next((t for t in tours if t.get('code') == booking['code']), None)
     if existing:
-        # Update status, date, start, duration, pax, clientName, phone, language
-        for key in ['status', 'date', 'start', 'duration', 'pax', 'clientName', 'phone', 'language']:
+        # Update status, date, start, pax, phone, language
+        for key in ['status', 'date', 'start', 'pax', 'phone', 'language']:
             if booking.get(key):
                 existing[key] = booking[key]
+        # Protect clientName for FH bookings with manually-corrected names
+        MANUAL_CLIENT_CODES = {'FH343696332', 'FH343696684'}
+        if booking.get('code') not in MANUAL_CLIENT_CODES:
+            if booking.get('clientName'):
+                existing['clientName'] = booking['clientName']
+        # Protect duration for manually-corrected bookings
+        MANUAL_DURATION_CODES = {'GYG32L8B9B99'}
+        if booking.get('code') not in MANUAL_DURATION_CODES:
+            if booking.get('duration'):
+                existing['duration'] = booking['duration']
         # Only update netPrice if NOT manually set — prices always come from the email
         if booking.get('code') not in MANUAL_PRICE_CODES:
             if booking.get('netPrice'):
