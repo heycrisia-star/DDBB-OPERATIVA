@@ -1571,8 +1571,8 @@ export const MOCK_TOURS = [
     "operator": "GYG",
     "status": "confirmado",
     "pax": 2,
-    "vehicle": "02-NR",
-    "driver": "Cristian",
+    "vehicle": "01-DR",
+    "driver": "Carlos",
     "clientName": "Meryem Dogan",
     "phone": "+447817993852",
     "language": "EN",
@@ -2248,23 +2248,5 @@ export const MOCK_TOURS = [
     "netPrice": 217,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-10-24"
-  },
-  {
-    "id": 119,
-    "code": "GYG-CARLOS-APR25",
-    "date": "2026-04-25",
-    "start": "10:00",
-    "duration": 2,
-    "pax": 2,
-    "clientName": "Meryem Dogan",
-    "operator": "GYG",
-    "language": "English",
-    "country": "Unknown",
-    "phone": "",
-    "driver": "Carlos",
-    "vehicle": "01-DR",
-    "netPrice": 59.29,
-    "status": "confirmado",
-    "isSubTour": true
   }
 ];
