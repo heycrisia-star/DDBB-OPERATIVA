@@ -114,14 +114,15 @@ export default function Dashboard({ currentUser }) {
 
     const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Chofer 2': '#0d9488', 'Chofer 3': '#be123c' };
     const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
-    const OPERATORS = ['GYG', 'FH', 'VIA', 'IC'];
+    const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'EFECTIVO'];
     const DRIVERS = ['Cristian', 'Chofer 2', 'Chofer 3'];
     const VEHICLES = ['01-DR', '02-NR'];
     const OPERATOR_COLORS = {
-        'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#c2410c' },
-        'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4338ca' },
-        'VIA': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },
-        'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#7e22ce' }
+        'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#ea580c' },
+        'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4f46e5' },
+        'VIA': { bg: '#dcfce7', border: '#86efac', text: '#16a34a' },
+        'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#9333ea' },
+        'EFECTIVO': { bg: '#dcfce7', border: '#22c55e', text: '#15803d' }
     };
 
     const [selectedOperators, setSelectedOperators] = useState(OPERATORS);
@@ -165,7 +166,13 @@ export default function Dashboard({ currentUser }) {
         if (isDriver && t.driver !== currentUser.name) return false;
         if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return false;
         if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return false;
-        if (selectedOperators.length !== OPERATORS.length && !selectedOperators.includes(t.operator)) return false;
+        if (selectedOperators.length !== OPERATORS.length) {
+            const hasMatch = selectedOperators.some(op => {
+                if (op === 'EFECTIVO') return t.payment === 'CASH';
+                return t.operator === op;
+            });
+            if (!hasMatch) return false;
+        }
 
         if (startDate && t.date < startDate) return false;
         if (endDate && t.date > endDate) return false;
@@ -251,7 +258,7 @@ export default function Dashboard({ currentUser }) {
         2: { total: 0, pax4: 0, paxLess4: 0 },
         3: { total: 0, pax4: 0, paxLess4: 0 }
     };
-    const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0 };
+    const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0, 'EFECTIVO': 0 };
     const countryStatsMap = {};
 
     const timeSlotStatsMap = {
@@ -294,7 +301,11 @@ export default function Dashboard({ currentUser }) {
         }
 
         // Operator
-        if (operatorStatsMap[t.operator] !== undefined) operatorStatsMap[t.operator]++;
+        if (t.payment === 'CASH') {
+            operatorStatsMap['EFECTIVO']++;
+        } else if (operatorStatsMap[t.operator] !== undefined) {
+            operatorStatsMap[t.operator]++;
+        }
 
         // Country (Native Country first, Phone prefix as fallback)
         let country = 'Desconocido';
@@ -519,7 +530,8 @@ export default function Dashboard({ currentUser }) {
         'GYG': { perc: getPerc(operatorStatsMap['GYG']), count: operatorStatsMap['GYG'] },
         'FH': { perc: getPerc(operatorStatsMap['FH']), count: operatorStatsMap['FH'] },
         'VIA': { perc: getPerc(operatorStatsMap['VIA']), count: operatorStatsMap['VIA'] },
-        'IC': { perc: getPerc(operatorStatsMap['IC']), count: operatorStatsMap['IC'] }
+        'IC': { perc: getPerc(operatorStatsMap['IC']), count: operatorStatsMap['IC'] },
+        'EFECTIVO': { perc: getPerc(operatorStatsMap['EFECTIVO']), count: operatorStatsMap['EFECTIVO'] }
     };
 
     const totalKnownCountries = Object.values(countryStatsMap).reduce((sum, val) => sum + val, 0);
