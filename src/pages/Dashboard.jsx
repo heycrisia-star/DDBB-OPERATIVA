@@ -647,15 +647,6 @@ export default function Dashboard({ currentUser }) {
                                     }}
                                 >
                                     {op}
-                                    {opCount > 0 && (
-                                        <span style={{
-                                            fontSize: '0.65rem', fontWeight: 900,
-                                            backgroundColor: isSelected ? 'rgba(0,0,0,0.15)' : 'var(--bg-hover)',
-                                            padding: '0.1rem 0.35rem', borderRadius: '4px', lineHeight: 1.4
-                                        }}>
-                                            {opCount}
-                                        </span>
-                                    )}
                                 </button>
                             );
                         })}
