@@ -1438,7 +1438,7 @@ export const MOCK_TOURS = [
     "phone": "---",
     "language": "EN",
     "country": "",
-    "netPrice": 55,
+    "netPrice": 130,
     "product": "Tour Especial (188€ netos tras deducciones)",
     "bookingDate": "2026-04-12",
     "payment": "CASH",
@@ -1519,11 +1519,11 @@ export const MOCK_TOURS = [
     "phone": "+41 79 411 07 20",
     "language": "EN",
     "country": "",
-    "netPrice": 43.18,
+    "netPrice": 75,
     "product": "Park City & Beach",
     "bookingDate": "2026-04-14",
     "id": 115,
-    "isSubTour": false
+    "isSubTour": true
   },
   {
     "code": "FH343696684",
@@ -1580,7 +1580,8 @@ export const MOCK_TOURS = [
     "netPrice": 60,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-13",
-    "id": 112
+    "id": 112,
+    "isSubTour": true
   },
   {
     "code": "GYGMX4L8YN23",
@@ -2248,5 +2249,59 @@ export const MOCK_TOURS = [
     "netPrice": 217,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-10-24"
+  },
+  {
+    "id": 119,
+    "code": "CASH-849182-B-BENE",
+    "date": "2026-04-18",
+    "start": "10:00",
+    "duration": 2,
+    "pax": 3,
+    "clientName": "Martina Franke",
+    "operator": "CASH",
+    "language": "English",
+    "country": "Germany",
+    "phone": "",
+    "driver": "Cristian",
+    "vehicle": "02-NR",
+    "netPrice": 55,
+    "status": "confirmado",
+    "hiddenInCalendar": true
+  },
+  {
+    "id": 120,
+    "code": "FH343696332-BENE",
+    "date": "2026-04-24",
+    "start": "10:00",
+    "duration": 2,
+    "pax": 1,
+    "clientName": "Nina",
+    "operator": "FH",
+    "language": "Spanish",
+    "country": "Switzerland",
+    "phone": "",
+    "driver": "Cristian",
+    "vehicle": "02-NR",
+    "netPrice": 43.18,
+    "status": "confirmado",
+    "hiddenInCalendar": true
+  },
+  {
+    "id": 121,
+    "code": "GYGKBGGG2K3Q-BENE",
+    "date": "2026-04-25",
+    "start": "10:00",
+    "duration": 2,
+    "pax": 2,
+    "clientName": "Meryem Dogan",
+    "operator": "GYG",
+    "language": "English",
+    "country": "Germany",
+    "phone": "",
+    "driver": "Cristian",
+    "vehicle": "02-NR",
+    "netPrice": 59.3,
+    "status": "confirmado",
+    "hiddenInCalendar": true
   }
 ];

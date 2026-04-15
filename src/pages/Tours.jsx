@@ -99,6 +99,7 @@ export default function Tours({ currentUser }) {
     }
 
     const filteredTours = MOCK_TOURS.filter(t => {
+        if (t.hiddenInCalendar) return false;
         if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
         // Búsqueda global: código, nombre, teléfono
         if (searchTerm) {

@@ -214,12 +214,13 @@ export default function Dashboard({ currentUser }) {
     };
 
     const activeTours = filteredTours.filter(t => t.status.toLowerCase() !== 'cancelado');
+    const realTours = activeTours.filter(t => !t.hiddenInCalendar); // excludes accounting-only companion entries
     const totalSales = activeTours.filter(t => !t.isSubTour).reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
-    const totalHours = activeTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
-    const activeToursCount = activeTours.length;
-    const totalTours = filteredTours.length;
+    const totalHours = realTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
+    const activeToursCount = realTours.length;
+    const totalTours = filteredTours.filter(t => !t.hiddenInCalendar).length;
     const avgTicket = activeToursCount > 0 ? Math.round(totalSales / activeToursCount) : 0;
-    const cancelledCount = filteredTours.filter(t => t.status.toLowerCase() === 'cancelado').length;
+    const cancelledCount = filteredTours.filter(t => t.status.toLowerCase() === 'cancelado' && !t.hiddenInCalendar).length;
     const cancelRate = totalTours > 0 ? Math.round((cancelledCount / totalTours) * 100) : 0;
     const today = format(new Date(), 'yyyy-MM-dd');
     const pipelineCount = filteredTours.filter(t => t.status.toLowerCase() === 'confirmado' && t.date >= today).length;

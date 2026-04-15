@@ -318,6 +318,7 @@ export default function Calendar({ currentUser }) {
 
                 // Obtener tours del día
                 const dayTours = MOCK_TOURS.filter(t => {
+                    if (t.hiddenInCalendar) return false;
                     if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
                     if (t.date !== format(day, 'yyyy-MM-dd')) return false;
                     if (searchTerm) {
@@ -511,6 +512,7 @@ export default function Calendar({ currentUser }) {
         const sevenDaysAgoStr = format(last7Days, 'yyyy-MM-dd');
 
         const recentTours = [...MOCK_TOURS]
+            .filter(t => !t.hiddenInCalendar)
             .sort((a, b) => (b.id || 0) - (a.id || 0))
             .slice(0, 10);
 
@@ -587,6 +589,7 @@ export default function Calendar({ currentUser }) {
         // Simple list view for agenda mode (better for mobile)
         const sortedTours = [...MOCK_TOURS]
             .filter(t => {
+                if (t.hiddenInCalendar) return false;
                 if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
                 if (searchTerm) {
                     const q = searchTerm.toLowerCase();
