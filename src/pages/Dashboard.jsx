@@ -301,11 +301,13 @@ export default function Dashboard({ currentUser }) {
             else durationStatsMap[dStr].paxLess4++;
         }
 
-        // Operator
-        if (t.payment === 'CASH' || t.operator === 'CASH') {
-            operatorStatsMap['CASH']++;
-        } else if (operatorStatsMap[t.operator] !== undefined) {
-            operatorStatsMap[t.operator]++;
+        // Operator — exclude hidden companion entries (accounting-only)
+        if (!t.hiddenInCalendar) {
+            if (t.payment === 'CASH' || t.operator === 'CASH') {
+                operatorStatsMap['CASH']++;
+            } else if (operatorStatsMap[t.operator] !== undefined) {
+                operatorStatsMap[t.operator]++;
+            }
         }
 
         // Country (Native Country first, Phone prefix as fallback)
