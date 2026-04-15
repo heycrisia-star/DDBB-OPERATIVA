@@ -223,7 +223,7 @@ export default function Dashboard({ currentUser }) {
     const cancelledCount = filteredTours.filter(t => t.status.toLowerCase() === 'cancelado' && !t.hiddenInCalendar).length;
     const cancelRate = totalTours > 0 ? Math.round((cancelledCount / totalTours) * 100) : 0;
     const today = format(new Date(), 'yyyy-MM-dd');
-    const pipelineCount = filteredTours.filter(t => t.status.toLowerCase() === 'confirmado' && t.date >= today).length;
+    const pipelineCount = filteredTours.filter(t => t.status.toLowerCase() === 'confirmado' && t.date >= today && !t.hiddenInCalendar).length;
 
     let emptyDays = 0;
     if (startDate && endDate) {
