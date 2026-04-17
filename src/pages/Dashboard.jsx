@@ -402,7 +402,7 @@ export default function Dashboard({ currentUser }) {
     const hoursByWeek = {};
     const hoursByMonth = {};
 
-    MOCK_TOURS.filter(t => t.status === 'confirmado').forEach(t => {
+    MOCK_TOURS.filter(t => t.status === 'confirmado' && !t.hiddenInCalendar).forEach(t => {
         if (!t.date || !t.start) return;
         const d = parseISO(t.date);
 
