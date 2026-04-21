@@ -387,13 +387,17 @@ def save_mock(tours):
 
 # Codes where netPrice was manually set and must NOT be overwritten by the parser
 MANUAL_PRICE_CODES = {
-    'CASH-849182-A',      # Cristian own cash: 130€
+    'CASH-849182-A',      # Cristian: 15€ (cobró 90€, 75€ a Carlos)
     'CASH-849182-B',      # Carlos cash payout: 75€
-    'CASH-849182-B-BENE', # Cristian cut from Carlos CASH: 55€
+    'CASH-849182-B-BENE', # Cristian cut from Carlos CASH (cancelado)
     'FH343696332',        # Carlos FH payout: 75€
     'FH343696332-BENE',   # Cristian cut from Carlos FH: 43.18€
     'GYGKBGGG2K3Q',       # Carlos GYG payout: 60€
     'GYGKBGGG2K3Q-BENE',  # Cristian cut from Carlos GYG: 59.30€
+    'GYGKBGGB8XRK',       # Carlos 18abr 14h split: 75€
+    'GYGKBGGB8XRK-BENE',  # Cristian 18abr 14h split: 75€
+    'GYGVN3AQAGAQ',       # Carlos 26abr 09h split: 33.37€
+    'GYGVN3AQAGAQ-BENE',  # Cristian 26abr 09h split: 33.37€
 }
 
 
