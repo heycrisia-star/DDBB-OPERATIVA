@@ -2485,7 +2485,7 @@ export const MOCK_TOURS = [
     "code": "FH344894659",
     "date": "2026-04-27",
     "start": "11:00",
-    "duration": 2,
+    "duration": 3,
     "operator": "FH",
     "status": "confirmado",
     "pax": 3,
