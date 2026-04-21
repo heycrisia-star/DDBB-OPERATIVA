@@ -2480,5 +2480,24 @@ export const MOCK_TOURS = [
     "hiddenInCalendar": true,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-04-19"
+  },
+  {
+    "code": "FH344894659",
+    "date": "2026-04-27",
+    "start": "11:00",
+    "duration": 2,
+    "operator": "FH",
+    "status": "confirmado",
+    "pax": 3,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "April Jaquez",
+    "phone": "+1 908-297-6929",
+    "language": "EN",
+    "country": "",
+    "netPrice": 217.26,
+    "product": "Complete Barcelona",
+    "bookingDate": "2026-04-21",
+    "id": 133
   }
 ];
