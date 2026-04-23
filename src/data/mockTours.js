@@ -1526,7 +1526,7 @@ export const MOCK_TOURS = [
   {
     "code": "GYGKBGGQ8MZ9",
     "date": "2026-04-25",
-    "start": "15:00",
+    "start": "16:00",
     "duration": 2,
     "operator": "GYG",
     "status": "confirmado",
@@ -1535,7 +1535,7 @@ export const MOCK_TOURS = [
     "driver": "Cristian",
     "clientName": "Anja Barth-Bloch",
     "phone": "+491733070082",
-    "language": "DE",
+    "language": "EN",
     "country": "",
     "netPrice": 119.3,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
@@ -2499,5 +2499,24 @@ export const MOCK_TOURS = [
     "product": "Complete Barcelona",
     "bookingDate": "2026-04-21",
     "id": 133
+  },
+  {
+    "code": "FH345188519",
+    "date": "2026-04-24",
+    "start": "12:30",
+    "duration": 2,
+    "operator": "FH",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Tanja Frühmark",
+    "phone": "+49 160 97550356",
+    "language": "EN",
+    "country": "",
+    "netPrice": 217.26,
+    "product": "Complete Barcelona",
+    "bookingDate": "2026-04-23",
+    "id": 134
   }
 ];
