@@ -112,7 +112,7 @@ export default function Dashboard({ currentUser }) {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#be123c' };
+    const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#ef4444' };
     const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
     const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'CASH'];
     const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
