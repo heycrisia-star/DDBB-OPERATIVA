@@ -398,6 +398,8 @@ MANUAL_PRICE_CODES = {
     'GYGKBGGB8XRK-BENE',  # Cristian 18abr 14h split: 75€
     'GYGVN3AQAGAQ',       # Carlos 26abr 09h split: 33.37€
     'GYGVN3AQAGAQ-BENE',  # Cristian 26abr 09h split: 33.37€
+    'GYGKBGF3M3ZR',       # Joao 25abr 12h split: 53.68€
+    'GYGKBGF3M3ZR-BENE',  # Cristian 25abr 12h split: 53.69€
 }
 
 
