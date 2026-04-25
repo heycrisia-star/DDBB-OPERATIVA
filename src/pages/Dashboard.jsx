@@ -238,11 +238,14 @@ export default function Dashboard({ currentUser }) {
         emptyDays = Math.max(0, totalDaysInRange - uniqueTourDates.size);
     }
 
+    const avgHourlyTicket = totalHours > 0 ? (totalSales / totalHours).toFixed(1) : 0;
+
     const kpis = {
         sales: totalSales.toLocaleString('es-ES'),
         hours: totalHours,
         tours: activeToursCount,
         ticket: avgTicket.toLocaleString('es-ES'),
+        hourly: avgHourlyTicket.toLocaleString('es-ES'),
         cancelRate: cancelRate,
         cancelledCount: cancelledCount,
         pipelineCount: pipelineCount
@@ -662,10 +665,11 @@ export default function Dashboard({ currentUser }) {
                 marginBottom: '2rem'
             }}>
                 <StatCard
-                    title="Venta Total"
+                    title="Beneficio Neto"
                     value={kpis.sales}
                     icon={TrendingUp}
                     isMobile={isMobile}
+                    extraLabel="Cristian"
                 />
                 <StatCard
                     title="Horas"
@@ -680,10 +684,18 @@ export default function Dashboard({ currentUser }) {
                     isMobile={isMobile}
                 />
                 <StatCard
-                    title="Ticket Medio"
+                    title="Ticket / Tour"
                     value={kpis.ticket}
                     icon={ShoppingBag}
                     isMobile={isMobile}
+                    extraLabel="Neto"
+                />
+                <StatCard
+                    title="Ticket / Hora"
+                    value={kpis.hourly}
+                    icon={Clock}
+                    isMobile={isMobile}
+                    extraLabel="Neto"
                 />
                 <StatCard
                     title="Días Libres"
