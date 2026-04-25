@@ -2601,7 +2601,7 @@ export const MOCK_TOURS = [
     "code": "GYG2Q9M34V8W",
     "date": "2026-04-28",
     "start": "10:00",
-    "duration": 3,
+    "duration": 2,
     "operator": "GYG",
     "status": "confirmado",
     "pax": 4,
