@@ -215,7 +215,7 @@ export default function Dashboard({ currentUser }) {
 
     const activeTours = filteredTours.filter(t => t.status.toLowerCase() !== 'cancelado');
     const realTours = activeTours.filter(t => !t.hiddenInCalendar); // excludes accounting-only companion entries
-    const totalSales = activeTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
+    const totalSales = activeTours.filter(t => !t.isSubTour).reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
     const totalHours = realTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
     const activeToursCount = realTours.length;
     const totalTours = filteredTours.filter(t => !t.hiddenInCalendar).length;
@@ -409,27 +409,28 @@ export default function Dashboard({ currentUser }) {
         if (!t.date || !t.start) return;
         const d = parseISO(t.date);
 
-        // Sales (Include everyone, even hidden entries for total business profit)
-        const dayKey = t.date;
-        if (!salesByDay[dayKey]) salesByDay[dayKey] = 0;
-        salesByDay[dayKey] += parseFloat(t.netPrice) || 0;
+        // Sales Record: Sum only Cristian's shares (entries that are not subTours)
+        if (!t.isSubTour) {
+            const dayKey = t.date;
+            if (!salesByDay[dayKey]) salesByDay[dayKey] = 0;
+            salesByDay[dayKey] += parseFloat(t.netPrice) || 0;
 
-        // Week ISO
-        try {
-            const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
-            if (!salesByWeek[wStart]) salesByWeek[wStart] = 0;
-            salesByWeek[wStart] += parseFloat(t.netPrice) || 0;
-        } catch (e) { }
+            try {
+                const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+                if (!salesByWeek[wStart]) salesByWeek[wStart] = 0;
+                salesByWeek[wStart] += parseFloat(t.netPrice) || 0;
+            } catch (e) { }
 
-        // Month
-        try {
-            const mStart = format(startOfMonth(d), 'yyyy-MM');
-            if (!salesByMonth[mStart]) salesByMonth[mStart] = 0;
-            salesByMonth[mStart] += parseFloat(t.netPrice) || 0;
-        } catch (e) { }
+            try {
+                const mStart = format(startOfMonth(d), 'yyyy-MM');
+                if (!salesByMonth[mStart]) salesByMonth[mStart] = 0;
+                salesByMonth[mStart] += parseFloat(t.netPrice) || 0;
+            } catch (e) { }
+        }
 
-        // Hours & Operational Records (Do NOT double count - exclude hidden entries)
+        // Hours & Operational Records: (Exclude hidden BENE entries to avoid double counting)
         if (!t.hiddenInCalendar) {
+            const dayKey = t.date;
             if (!hoursByDay[dayKey]) hoursByDay[dayKey] = 0;
             hoursByDay[dayKey] += parseFloat(t.duration) || 0;
 
