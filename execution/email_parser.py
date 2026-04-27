@@ -404,6 +404,7 @@ MANUAL_PRICE_CODES = {
     'GYG6H8BN8R75',       # Ismael 27abr Carlos split: 67.71€
     'GYG9966MGGBA',       # Petra 8may Carlos split: 37.08€
     'GYG83XLG8V2R',       # Vera 9may Carlos split: 75.24€
+    'GYGRFQRG7A67',       # Ana Neale 30abr Carlos split: 97.76€
 }
 
 
@@ -428,7 +429,7 @@ def upsert_booking(tours, booking):
         MANUAL_DURATION_CODES = {
             'GYG32L8B9B99', 'GYG2Q9NKWL3V', 'FH344894659', 
             'GYGBLHR7MLMW', 'GYGFWV877LM6', 'GYG2Q9M34V8W',
-            'GYG32L7YLNRQ', 'GYG6H8BN8R75'
+            'GYG32L7YLNRQ', 'GYG6H8BN8R75', 'GYGRFQRG7A67'
         }
         if booking.get('code') not in MANUAL_DURATION_CODES:
             if booking.get('duration'):
