@@ -315,12 +315,51 @@ export default function Dashboard({ currentUser }) {
             if (operatorStatsMap[op] !== undefined) operatorStatsMap[op]++;
         }
 
-        const rawCountry = t.country || '';
-        const cMap = { 'United States': 'Estados Unidos', 'Germany': 'Alemania', 'France': 'Francia', 'United Kingdom': 'Reino Unido', 'Sweden': 'Suecia', 'Italy': 'Italia', 'Canada': 'Canadá', 'Romania': 'Rumania', 'Belgium': 'Bélgica', 'Chile': 'Chile', 'Switzerland': 'Suiza', 'Japan': 'Japón', 'Brazil': 'Brasil', 'Turkey': 'Turquía', 'Netherlands': 'Países Bajos', 'Mexico': 'México' };
+        // INFERRED COUNTRY LOGIC (Fallback to phone prefix if country is missing)
+        let rawCountry = t.country || '';
+        if (!rawCountry && t.phone) {
+            if (t.phone.startsWith('+1')) rawCountry = 'United States';
+            else if (t.phone.startsWith('+44')) rawCountry = 'United Kingdom';
+            else if (t.phone.startsWith('+49')) rawCountry = 'Germany';
+            else if (t.phone.startsWith('+33')) rawCountry = 'France';
+            else if (t.phone.startsWith('+39')) rawCountry = 'Italy';
+            else if (t.phone.startsWith('+61')) rawCountry = 'Australia';
+            else if (t.phone.startsWith('+41')) rawCountry = 'Switzerland';
+            else if (t.phone.startsWith('+31')) rawCountry = 'Netherlands';
+            else if (t.phone.startsWith('+32')) rawCountry = 'Belgium';
+            else if (t.phone.startsWith('+43')) rawCountry = 'Austria';
+            else if (t.phone.startsWith('+45')) rawCountry = 'Denmark';
+            else if (t.phone.startsWith('+46')) rawCountry = 'Sweden';
+            else if (t.phone.startsWith('+351')) rawCountry = 'Portugal';
+            else if (t.phone.startsWith('+55')) rawCountry = 'Brazil';
+            else if (t.phone.startsWith('+52')) rawCountry = 'Mexico';
+            else if (t.phone.startsWith('+506')) rawCountry = 'Costa Rica';
+            else if (t.phone.startsWith('+34')) rawCountry = 'Spain';
+            else if (t.phone.startsWith('+90')) rawCountry = 'Turkey';
+            else if (t.phone.startsWith('+971')) rawCountry = 'United Arab Emirates';
+            else if (t.phone.startsWith('+91')) rawCountry = 'India';
+            else if (t.phone.startsWith('+54')) rawCountry = 'Argentina';
+            else if (t.phone.startsWith('+56')) rawCountry = 'Chile';
+            else if (t.phone.startsWith('+57')) rawCountry = 'Colombia';
+        }
+
+        const cMap = { 
+            'United States': 'Estados Unidos', 'Germany': 'Alemania', 'France': 'Francia', 
+            'United Kingdom': 'Reino Unido', 'Sweden': 'Suecia', 'Italy': 'Italia', 
+            'Canada': 'Canadá', 'Romania': 'Rumania', 'Belgium': 'Bélgica', 
+            'Chile': 'Chile', 'Switzerland': 'Suiza', 'Japan': 'Japón', 
+            'Brazil': 'Brasil', 'Turkey': 'Turquía', 'Netherlands': 'Países Bajos', 
+            'Mexico': 'México', 'Australia': 'Australia', 'Portugal': 'Portugal',
+            'Austria': 'Austria', 'Denmark': 'Dinamarca', 'Spain': 'España',
+            'United Arab Emirates': 'EAU', 'India': 'India', 'Argentina': 'Argentina',
+            'Colombia': 'Colombia', 'Costa Rica': 'Costa Rica'
+        };
         const countryStr = rawCountry ? (cMap[rawCountry] || rawCountry) : 'Desconocido';
         
-        if (!countryStatsMap[countryStr]) countryStatsMap[countryStr] = 0;
-        countryStatsMap[countryStr]++;
+        if (countryStr !== 'Desconocido') {
+            if (!countryStatsMap[countryStr]) countryStatsMap[countryStr] = 0;
+            countryStatsMap[countryStr]++;
+        }
 
         if (t.start) {
             const h = parseInt(t.start.split(':')[0], 10);
