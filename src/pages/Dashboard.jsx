@@ -115,15 +115,14 @@ export default function Dashboard({ currentUser }) {
 
     const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#ef4444' };
     const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
-    const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'CASH'];
+    const OPERATORS = ['GYG', 'FH', 'VIA', 'CASH'];
     const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
     const VEHICLES = ['01-DR', '02-NR'];
     const OPERATOR_COLORS = {
-        'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#ea580c' },
-        'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4f46e5' },
-        'VIA': { bg: '#dcfce7', border: '#86efac', text: '#16a34a' },
-        'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#9333ea' },
-        'CASH': { bg: '#dcfce7', border: '#22c55e', text: '#15803d' }
+        'GYG': { bg: '#fff7ed', border: '#ffedd5', text: '#c2410c' },
+        'FH': { bg: '#eef2ff', border: '#e0e7ff', text: '#4338ca' },
+        'VIA': { bg: '#f0fdf4', border: '#dcfce7', text: '#15803d' },
+        'CASH': { bg: '#f0fdfa', border: '#ccfbf1', text: '#0d9488' }
     };
 
     const [selectedOperators, setSelectedOperators] = useState(OPERATORS);
@@ -215,8 +214,17 @@ export default function Dashboard({ currentUser }) {
     };
 
     const activeTours = filteredTours.filter(t => t.status.toLowerCase() !== 'cancelado');
-    const realTours = activeTours.filter(t => !t.hiddenInCalendar); // excludes accounting-only companion entries
-    const totalSales = activeTours.filter(t => !t.isSubTour).reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
+    const realTours = activeTours.filter(t => !t.hiddenInCalendar); 
+    
+    // Venta Total should be the sum of all tours in the range, regardless of driver filtering for the main KPI
+    const totalSales = MOCK_TOURS
+        .filter(t => t.status.toLowerCase() !== 'cancelado')
+        .filter(t => {
+            if (startDate && t.date < startDate) return false;
+            if (endDate && t.date > endDate) return false;
+            return true;
+        })
+        .reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
     const totalHours = realTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
     const activeToursCount = realTours.length;
     const totalTours = filteredTours.filter(t => !t.hiddenInCalendar).length;
@@ -263,7 +271,7 @@ export default function Dashboard({ currentUser }) {
         2: { total: 0, pax4: 0, paxLess4: 0 },
         3: { total: 0, pax4: 0, paxLess4: 0 }
     };
-    const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'IC': 0, 'CASH': 0 };
+    const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'CASH': 0 };
     const countryStatsMap = {};
 
     const timeSlotStatsMap = {
@@ -287,14 +295,7 @@ export default function Dashboard({ currentUser }) {
 
     // Deduct -BENE tours from original drivers so they don't get double counted in Venta por Conductor
     activeTours.forEach(t => {
-        if (t.hiddenInCalendar && t.code && t.code.endsWith('-BENE')) {
-            const originalCode = t.code.replace('-BENE', '');
-            const mainTour = activeTours.find(x => x.code === originalCode);
-            if (mainTour && mainTour.driver) {
-                if (!driverStatsMap[mainTour.driver]) driverStatsMap[mainTour.driver] = { hours: 0, sales: 0 };
-                driverStatsMap[mainTour.driver].sales -= parseFloat(t.netPrice) || 0;
-            }
-        }
+
 
         if (t.vehicle) {
             if (!vehicleHoursMap[t.vehicle]) vehicleHoursMap[t.vehicle] = 0;
@@ -429,11 +430,17 @@ export default function Dashboard({ currentUser }) {
         const d = parseISO(t.date);
         const price = parseFloat(t.netPrice) || 0;
 
-        // TOTAL negocio: todas las entradas visibles en calendario (evita duplicar las contables -BENE)
-        if (!t.hiddenInCalendar) {
+        // TOTAL negocio: Sumamos todo (incluyendo ajustes -BENE) para que el record coincida con la suma de conductores
+        {
             const dayKey = t.date;
             if (!salesByDay_total[dayKey]) salesByDay_total[dayKey] = 0;
             salesByDay_total[dayKey] += price;
+            
+            // Horas y conteo solo para tours reales (no ocultos)
+            if (!t.hiddenInCalendar) {
+                if (!hoursByDay[dayKey]) hoursByDay[dayKey] = 0;
+                hoursByDay[dayKey] += parseFloat(t.duration) || 0;
+            }
 
             try {
                 const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
@@ -452,22 +459,24 @@ export default function Dashboard({ currentUser }) {
                 opByMonth_total[mStart][op] += price;
             } catch (e) { }
 
-            // Hours
-            const dayKeyH = t.date;
-            if (!hoursByDay[dayKeyH]) hoursByDay[dayKeyH] = 0;
-            hoursByDay[dayKeyH] += parseFloat(t.duration) || 0;
+            // Hours and intensity records (only real tours)
+            if (!t.hiddenInCalendar) {
+                const dayKeyH = t.date;
+                if (!hoursByDay[dayKeyH]) hoursByDay[dayKeyH] = 0;
+                hoursByDay[dayKeyH] += parseFloat(t.duration) || 0;
 
-            try {
-                const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
-                if (!hoursByWeek[wStart]) hoursByWeek[wStart] = 0;
-                hoursByWeek[wStart] += parseFloat(t.duration) || 0;
-            } catch (e) { }
+                try {
+                    const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+                    if (!hoursByWeek[wStart]) hoursByWeek[wStart] = 0;
+                    hoursByWeek[wStart] += parseFloat(t.duration) || 0;
+                } catch (e) { }
 
-            try {
-                const mStart = format(startOfMonth(d), 'yyyy-MM');
-                if (!hoursByMonth[mStart]) hoursByMonth[mStart] = 0;
-                hoursByMonth[mStart] += parseFloat(t.duration) || 0;
-            } catch (e) { }
+                try {
+                    const mStart = format(startOfMonth(d), 'yyyy-MM');
+                    if (!hoursByMonth[mStart]) hoursByMonth[mStart] = 0;
+                    hoursByMonth[mStart] += parseFloat(t.duration) || 0;
+                } catch (e) { }
+            }
         }
 
         // NET (Cristian): Only tours where Cristian is the driver (includes his main tours and his -BENE subtours)
@@ -523,7 +532,6 @@ export default function Dashboard({ currentUser }) {
             GYG: Math.round(ops['GYG'] || 0),
             FH: Math.round(ops['FH'] || 0),
             VIA: Math.round(ops['VIA'] || 0),
-            IC: Math.round(ops['IC'] || 0),
             CASH: Math.round(ops['CASH'] || 0),
         };
     });
@@ -616,7 +624,6 @@ export default function Dashboard({ currentUser }) {
         'GYG': { perc: getPerc(operatorStatsMap['GYG']), count: operatorStatsMap['GYG'] },
         'FH': { perc: getPerc(operatorStatsMap['FH']), count: operatorStatsMap['FH'] },
         'VIA': { perc: getPerc(operatorStatsMap['VIA']), count: operatorStatsMap['VIA'] },
-        'IC': { perc: getPerc(operatorStatsMap['IC']), count: operatorStatsMap['IC'] },
         'CASH': { perc: getPerc(operatorStatsMap['CASH']), count: operatorStatsMap['CASH'] }
     };
 
@@ -745,11 +752,10 @@ export default function Dashboard({ currentUser }) {
                 marginBottom: '2rem'
             }}>
                 <StatCard
-                    title="Beneficio Neto"
+                    title="Venta Total"
                     value={kpis.sales}
                     icon={TrendingUp}
                     isMobile={isMobile}
-                    extraLabel="Cristian"
                 />
                 <StatCard
                     title="Horas"
@@ -860,12 +866,7 @@ export default function Dashboard({ currentUser }) {
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Día Mayor Facturación</p>
                         <h4 style={{ margin: '0.5rem 0 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{Math.round(bestDay.val).toLocaleString('es-ES')} €</h4>
-                        <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.62rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Total negocio</p>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.3rem' }}>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0284c7' }}>{Math.round(bestDay_net).toLocaleString('es-ES')} €</span>
-                            <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#0284c7', background: 'rgba(2,132,199,0.1)', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>Neto Cristian</span>
-                        </div>
-                        <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getDayStr(bestDay.key)}</p>
+                        <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getDayStr(bestDay.key)}</p>
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Día Más Intenso</p>
@@ -875,11 +876,6 @@ export default function Dashboard({ currentUser }) {
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Semana Récord</p>
                         <h4 style={{ margin: '0.5rem 0 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{Math.round(bestWeek.val).toLocaleString('es-ES')} €</h4>
-                        <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.62rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Total negocio</p>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.3rem' }}>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0284c7' }}>{Math.round(bestWeek_net).toLocaleString('es-ES')} €</span>
-                            <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#0284c7', background: 'rgba(2,132,199,0.1)', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>Neto Cristian</span>
-                        </div>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getWeekStr(bestWeek.key)}</p>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', background: 'rgba(245,158,11,0.15)', padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(245,158,11,0.2)' }}>
@@ -891,11 +887,6 @@ export default function Dashboard({ currentUser }) {
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Mes Récord</p>
                         <h4 style={{ margin: '0.5rem 0 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{Math.round(bestMonth.val).toLocaleString('es-ES')} €</h4>
-                        <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.62rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Total negocio</p>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.3rem' }}>
-                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0284c7' }}>{Math.round(bestMonth_net).toLocaleString('es-ES')} €</span>
-                            <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#0284c7', background: 'rgba(2,132,199,0.1)', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>Neto Cristian</span>
-                        </div>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getMonthStr(bestMonth.key)}</p>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', background: 'rgba(245,158,11,0.15)', padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(245,158,11,0.2)' }}>
@@ -987,11 +978,10 @@ export default function Dashboard({ currentUser }) {
                                     <>
                                         {showTotal && (
                                             <>
-                                                <Bar dataKey="GYG" stackId="tot" name="GYG" fill="#c2410c"><LabelList content={<PercLabel/>} /></Bar>
-                                                <Bar dataKey="FH" stackId="tot" name="FH" fill="#4338ca"><LabelList content={<PercLabel/>} /></Bar>
-                                                <Bar dataKey="VIA" stackId="tot" name="VIA" fill="#15803d"><LabelList content={<PercLabel/>} /></Bar>
-                                                <Bar dataKey="IC" stackId="tot" name="IC" fill="#7e22ce"><LabelList content={<PercLabel/>} /></Bar>
-                                                <Bar dataKey="CASH" stackId="tot" name="CASH" fill="#16a34a" radius={[4, 4, 0, 0]}>
+                                                <Bar dataKey="GYG" stackId="tot" name="GYG" fill="#f97316"><LabelList content={<PercLabel/>} /></Bar>
+                                                <Bar dataKey="FH" stackId="tot" name="FH" fill="#6366f1"><LabelList content={<PercLabel/>} /></Bar>
+                                                <Bar dataKey="VIA" stackId="tot" name="VIA" fill="#22c55e"><LabelList content={<PercLabel/>} /></Bar>
+                                                <Bar dataKey="CASH" stackId="tot" name="CASH" fill="#14b8a6" radius={[4, 4, 0, 0]}>
                                                     <LabelList content={<PercLabel/>} />
                                                     <LabelList content={<TotalTopLabel/>} />
                                                 </Bar>
@@ -1062,8 +1052,8 @@ export default function Dashboard({ currentUser }) {
                     {Object.entries(operatorStats)
                         .sort((a, b) => b[1].count - a[1].count)
                         .map(([op, stats]) => {
-                            const labels = { 'GYG': 'GetYourGuide', 'FH': 'FareHarbor', 'VIA': 'Viator', 'IC': 'Intercruises', 'CASH': 'Cash' };
-                            const colors = { 'GYG': '#c2410c', 'FH': '#4338ca', 'VIA': '#15803d', 'IC': '#7e22ce', 'CASH': '#16a34a' };
+                            const labels = { 'GYG': 'GetYourGuide', 'FH': 'FareHarbor', 'VIA': 'Viator', 'CASH': 'Cash' };
+                            const colors = { 'GYG': '#f97316', 'FH': '#6366f1', 'VIA': '#22c55e', 'CASH': '#14b8a6' };
                             return <ProgressBar key={op} label={labels[op] || op} value={stats.perc} max={100} color={colors[op] || '#94a3b8'} count={`${stats.count} tours`} />;
                         })}
                 </div>
