@@ -315,14 +315,12 @@ export default function Dashboard({ currentUser }) {
             if (operatorStatsMap[op] !== undefined) operatorStatsMap[op]++;
         }
 
-        if (t.country) {
-            const cMap = { 'United States': 'Estados Unidos', 'Germany': 'Alemania', 'France': 'Francia', 'United Kingdom': 'Reino Unido', 'Sweden': 'Suecia', 'Italy': 'Italia', 'Canada': 'Canadá', 'Romania': 'Rumania', 'Belgium': 'Bélgica', 'Chile': 'Chile', 'Switzerland': 'Suiza', 'Japan': 'Japón', 'Brazil': 'Brasil', 'Turkey': 'Turquía', 'Netherlands': 'Países Bajos', 'Mexico': 'México' };
-            const countryStr = cMap[t.country] || t.country;
-            if (countryStr) {
-                if (!countryStatsMap[countryStr]) countryStatsMap[countryStr] = 0;
-                countryStatsMap[countryStr]++;
-            }
-        }
+        const rawCountry = t.country || '';
+        const cMap = { 'United States': 'Estados Unidos', 'Germany': 'Alemania', 'France': 'Francia', 'United Kingdom': 'Reino Unido', 'Sweden': 'Suecia', 'Italy': 'Italia', 'Canada': 'Canadá', 'Romania': 'Rumania', 'Belgium': 'Bélgica', 'Chile': 'Chile', 'Switzerland': 'Suiza', 'Japan': 'Japón', 'Brazil': 'Brasil', 'Turkey': 'Turquía', 'Netherlands': 'Países Bajos', 'Mexico': 'México' };
+        const countryStr = rawCountry ? (cMap[rawCountry] || rawCountry) : 'Desconocido';
+        
+        if (!countryStatsMap[countryStr]) countryStatsMap[countryStr] = 0;
+        countryStatsMap[countryStr]++;
 
         if (t.start) {
             const h = parseInt(t.start.split(':')[0], 10);
@@ -511,16 +509,13 @@ export default function Dashboard({ currentUser }) {
         'CASH': { perc: getPerc(operatorStatsMap['CASH']), count: operatorStatsMap['CASH'] }
     };
 
-    const totalKnownCountries = Object.values(countryStatsMap).reduce((sum, val) => sum + val, 0);
-    const getCountryPerc = (count) => totalKnownCountries > 0 ? Math.round((count / totalKnownCountries) * 100) : 0;
-
     const topCountries = Object.entries(countryStatsMap)
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 3)
+        .slice(0, 5) // Show top 5 to see more variety
         .map(([country, count]) => ({
             label: country,
             count: count,
-            perc: getCountryPerc(count)
+            perc: getPerc(count) // Use global getPerc
         }));
 
     return (
@@ -945,7 +940,7 @@ export default function Dashboard({ currentUser }) {
                 {/* Card 4: Top 3 Países */}
                 <div className="card" style={{ display: 'flex', flexDirection: 'column', breakInside: 'avoid', marginBottom: '1.5rem', WebkitColumnBreakInside: 'avoid' }}>
                     <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <Globe size={18} color="var(--brand-primary)" /> Top 3 Mercados (Países)
+                        <Globe size={18} color="var(--brand-primary)" /> Principales Mercados
                     </h3>
                     {topCountries.map((country, idx) => {
                         const colors = ['#f59e0b', '#10b981', '#6366f1', '#ec4899', '#8b5cf6'];
