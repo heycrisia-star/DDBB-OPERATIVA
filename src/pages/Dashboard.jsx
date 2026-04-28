@@ -391,8 +391,8 @@ export default function Dashboard({ currentUser }) {
             const op = t.operator || 'Otro';
             opByMonth_total[mStart][op] = (opByMonth_total[mStart][op] || 0) + price;
 
-            // NETO Cristian Record
-            if (t.driver === 'Cristian' && !t.isSubTour && !t.hiddenInCalendar) {
+            // NETO Cristian Record (Match Venta por Conductor card)
+            if (t.driver === 'Cristian') {
                 salesByMonth_net[mStart] = (salesByMonth_net[mStart] || 0) + price;
                 salesByDay_net[dayKey] = (salesByDay_net[dayKey] || 0) + price;
                 const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
