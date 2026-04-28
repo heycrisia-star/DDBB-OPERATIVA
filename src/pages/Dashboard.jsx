@@ -510,12 +510,13 @@ export default function Dashboard({ currentUser }) {
     };
 
     const topCountries = Object.entries(countryStatsMap)
+        .filter(([country]) => country !== 'Desconocido') // Hide the "Unknown" label from UI
         .sort((a, b) => b[1] - a[1])
-        .slice(0, 5) // Show top 5 to see more variety
+        .slice(0, 5)
         .map(([country, count]) => ({
             label: country,
             count: count,
-            perc: getPerc(count) // Use global getPerc
+            perc: getPerc(count)
         }));
 
     return (
