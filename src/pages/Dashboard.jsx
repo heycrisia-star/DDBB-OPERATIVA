@@ -216,23 +216,16 @@ export default function Dashboard({ currentUser }) {
     const activeTours = filteredTours.filter(t => t.status.toLowerCase() !== 'cancelado');
     const realTours = activeTours.filter(t => !t.hiddenInCalendar); 
     
-    // Venta Total should be the sum of all tours in the range, regardless of driver filtering for the main KPI
-    const totalSales = MOCK_TOURS
-        .filter(t => t.status.toLowerCase() !== 'cancelado')
-        .filter(t => {
-            if (startDate && t.date < startDate) return false;
-            if (endDate && t.date > endDate) return false;
-            return true;
-        })
-        .reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0);
-    const totalHours = realTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0);
+    // Venta Total should be the sum of all tours in the range, respecting ALL active filters
+    const totalSales = Math.round(activeTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0));
+    const totalHours = Math.round(realTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0));
     const activeToursCount = realTours.length;
     const totalTours = filteredTours.filter(t => !t.hiddenInCalendar).length;
     const avgTicket = activeToursCount > 0 ? Math.round(totalSales / activeToursCount) : 0;
     const cancelledCount = filteredTours.filter(t => t.status.toLowerCase() === 'cancelado' && !t.hiddenInCalendar).length;
     const cancelRate = totalTours > 0 ? Math.round((cancelledCount / totalTours) * 100) : 0;
-    const today = format(new Date(), 'yyyy-MM-dd');
-    const pipelineCount = filteredTours.filter(t => t.status.toLowerCase() === 'confirmado' && t.date >= today && !t.hiddenInCalendar).length;
+    const todayStr = format(new Date(), 'yyyy-MM-dd');
+    const pipelineCount = filteredTours.filter(t => t.status.toLowerCase() === 'confirmado' && t.date >= todayStr && !t.hiddenInCalendar).length;
 
     let emptyDays = 0;
     if (startDate && endDate) {
@@ -250,8 +243,8 @@ export default function Dashboard({ currentUser }) {
     const avgHourlyTicket = totalHours > 0 ? Math.round(totalSales / totalHours) : 0;
 
     const kpis = {
-        sales: Math.round(totalSales).toLocaleString('es-ES'),
-        hours: totalHours,
+        sales: totalSales.toLocaleString('es-ES'),
+        hours: Math.round(totalHours),
         tours: activeToursCount,
         ticket: avgTicket.toLocaleString('es-ES'),
         hourly: avgHourlyTicket.toLocaleString('es-ES'),
@@ -260,11 +253,9 @@ export default function Dashboard({ currentUser }) {
         pipelineCount: pipelineCount
     };
 
-    // Recalculate dynamic driver & vehicle stats
+    // --- Maps and Stats ---
     const driverStatsMap = {};
     const vehicleHoursMap = {};
-
-    // For Pax, Duration and Operators Mix
     const paxStatsMap = { 1: 0, 2: 0, 3: 0, 4: 0, '5+': 0 };
     const durationStatsMap = {
         1: { total: 0, pax4: 0, paxLess4: 0 },
@@ -273,112 +264,64 @@ export default function Dashboard({ currentUser }) {
     };
     const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'CASH': 0 };
     const countryStatsMap = {};
-
-    const timeSlotStatsMap = {
-        '08-10': 0,
-        '10-12': 0,
-        '12-14': 0,
-        '14-16': 0,
-        '16-18': 0,
-        '18-20': 0,
-        '20-22': 0
-    };
+    const timeSlotStatsMap = { '08-10': 0, '10-12': 0, '12-14': 0, '14-16': 0, '16-18': 0, '18-20': 0, '20-22': 0 };
     const leadTimeStatsMap = { 'Mismo día': 0, '1-3 días': 0, '4-7 días': 0, '8-30 días': 0, '+30 días': 0 };
+    
+    // --- Historical Records (Calculated from ALL tours matching the operator/driver filters, but independent of the main date range) ---
+    const salesByDay_total = {};
+    const salesByDay_net = {};
+    const salesByWeek_total = {};
+    const salesByWeek_net = {};
+    const salesByMonth_total = {};
+    const salesByMonth_net = {}; // Only Cristian's personal net
+    const opByMonth_total = {};
+    const hoursByDay = {};
+    const hoursByWeek = {};
+    const hoursByMonth = {};
+
     let toursWithBooking = 0;
     let totalLeadDays = 0;
 
+    // Single pass for most maps (uses filtered range)
     activeTours.forEach(t => {
+        const price = parseFloat(t.netPrice) || 0;
+        const dur = parseFloat(t.duration) || 0;
+        const pax = parseInt(t.pax) || 0;
+
         if (!driverStatsMap[t.driver]) driverStatsMap[t.driver] = { hours: 0, sales: 0 };
-        driverStatsMap[t.driver].hours += parseFloat(t.duration) || 0;
-        driverStatsMap[t.driver].sales += parseFloat(t.netPrice) || 0;
-    });
-
-    // Deduct -BENE tours from original drivers so they don't get double counted in Venta por Conductor
-    activeTours.forEach(t => {
-
+        driverStatsMap[t.driver].hours += dur;
+        driverStatsMap[t.driver].sales += price;
 
         if (t.vehicle) {
             if (!vehicleHoursMap[t.vehicle]) vehicleHoursMap[t.vehicle] = 0;
-            vehicleHoursMap[t.vehicle] += parseFloat(t.duration) || 0;
+            vehicleHoursMap[t.vehicle] += dur;
         }
 
-        // Pax
-        const p = parseInt(t.pax) || 0;
-        if (p === 1) paxStatsMap[1]++;
-        else if (p === 2) paxStatsMap[2]++;
-        else if (p === 3) paxStatsMap[3]++;
-        else if (p === 4) paxStatsMap[4]++;
-        else if (p >= 5) paxStatsMap['5+']++;
+        if (pax === 1) paxStatsMap[1]++;
+        else if (pax === 2) paxStatsMap[2]++;
+        else if (pax === 3) paxStatsMap[3]++;
+        else if (pax === 4) paxStatsMap[4]++;
+        else if (pax >= 5) paxStatsMap['5+']++;
 
-        // Duration
         const dStr = String(t.duration);
         if (durationStatsMap[dStr]) {
             durationStatsMap[dStr].total++;
-            if (p >= 4) durationStatsMap[dStr].pax4++;
+            if (pax >= 4) durationStatsMap[dStr].pax4++;
             else durationStatsMap[dStr].paxLess4++;
         }
 
-        // Operator — exclude hidden companion entries (accounting-only)
         if (!t.hiddenInCalendar) {
-            if (t.payment === 'CASH' || t.operator === 'CASH') {
-                operatorStatsMap['CASH']++;
-            } else if (operatorStatsMap[t.operator] !== undefined) {
-                operatorStatsMap[t.operator]++;
-            }
+            const op = (t.payment === 'CASH' || t.operator === 'CASH') ? 'CASH' : t.operator;
+            if (operatorStatsMap[op] !== undefined) operatorStatsMap[op]++;
         }
 
-        // Country (Native Country first, Phone prefix as fallback)
-        let country = 'Desconocido';
         if (t.country) {
-            const cMap = {
-                'United States': 'Estados Unidos',
-                'Germany': 'Alemania',
-                'France': 'Francia',
-                'United Kingdom': 'Reino Unido',
-                'Sweden': 'Suecia',
-                'Italy': 'Italia',
-                'Canada': 'Canadá',
-                'Romania': 'Rumania',
-                'Belgium': 'Bélgica',
-                'Chile': 'Chile',
-                'Switzerland': 'Suiza',
-                'Japan': 'Japón',
-                'Brazil': 'Brasil',
-                'Turkey': 'Turquía',
-                'Netherlands': 'Países Bajos',
-                'Mexico': 'México'
-            };
-            country = cMap[t.country] || t.country;
-        } else {
-            const phoneStr = (t.phone || '').trim().replace(/\D/g, '');
-            if (phoneStr.length > 3) {
-                if (phoneStr.startsWith('1')) country = 'Estados Unidos';
-                else if (phoneStr.startsWith('34')) country = 'España';
-                else if (phoneStr.startsWith('33')) country = 'Francia';
-                else if (phoneStr.startsWith('49')) country = 'Alemania';
-                else if (phoneStr.startsWith('39')) country = 'Italia';
-                else if (phoneStr.startsWith('44')) country = 'Reino Unido';
-                else if (phoneStr.startsWith('31')) country = 'Países Bajos';
-                else if (phoneStr.startsWith('351')) country = 'Portugal';
-                else if (phoneStr.startsWith('54')) country = 'Argentina';
-                else if (phoneStr.startsWith('52')) country = 'México';
-                else if (phoneStr.startsWith('57')) country = 'Colombia';
-                else if (phoneStr.startsWith('56')) country = 'Chile';
-                else if (phoneStr.startsWith('55')) country = 'Brasil';
-                else if (phoneStr.startsWith('41')) country = 'Suiza';
-                else if (phoneStr.startsWith('43')) country = 'Austria';
-                else if (phoneStr.startsWith('61')) country = 'Australia';
-                else if (phoneStr.startsWith('46')) country = 'Suecia';
+            const cMap = { 'United States': 'Estados Unidos', 'Germany': 'Alemania', 'France': 'Francia', 'United Kingdom': 'Reino Unido', 'Sweden': 'Suecia', 'Italy': 'Italia', 'Canada': 'Canadá', 'Romania': 'Rumania', 'Belgium': 'Bélgica', 'Chile': 'Chile', 'Switzerland': 'Suiza', 'Japan': 'Japón', 'Brazil': 'Brasil', 'Turkey': 'Turquía', 'Netherlands': 'Países Bajos', 'Mexico': 'México' };
+            const countryStr = cMap[t.country] || t.country;
+            if (countryStr) {
+                if (!countryStatsMap[countryStr]) countryStatsMap[countryStr] = 0;
+                countryStatsMap[countryStr]++;
             }
-        }
-
-        if (!country) country = 'Desconocido';
-
-
-
-        if (country !== 'Desconocido' && country !== 'Otros') {
-            if (!countryStatsMap[country]) countryStatsMap[country] = 0;
-            countryStatsMap[country]++;
         }
 
         if (t.start) {
@@ -391,10 +334,7 @@ export default function Dashboard({ currentUser }) {
             else if (h >= 16 && h < 18) bucket = "16-18";
             else if (h >= 18 && h < 20) bucket = "18-20";
             else if (h >= 20 && h < 22) bucket = "20-22";
-
-            if (bucket && timeSlotStatsMap[bucket] !== undefined) {
-                timeSlotStatsMap[bucket]++;
-            }
+            if (bucket) timeSlotStatsMap[bucket]++;
         }
 
         if (t.bookingDate && t.date) {
@@ -411,117 +351,73 @@ export default function Dashboard({ currentUser }) {
         }
     });
 
-    // === Récords Históricos Locales ===
-    // _net  = solo entradas de Cristian (sin isSubTour ni hiddenInCalendar) → beneficio neto del dueño
-    // _total = toda la facturación del negocio (todos los drivers, sin duplicados contables)
-    const salesByDay_net = {};
-    const salesByDay_total = {};
-    const salesByWeek_net = {};
-    const salesByWeek_total = {};
-    const salesByMonth_net = {};
-    const salesByMonth_total = {};
-    const opByMonth_total = {};
-    const hoursByDay = {};
-    const hoursByWeek = {};
-    const hoursByMonth = {};
-
+    // Separate pass for Records (independent of main date filter, but respecting operator/driver filters)
     MOCK_TOURS.filter(t => t.status === 'confirmado').forEach(t => {
-        if (!t.date || !t.start) return;
+        // Filter by operator/driver if multi-select is active
+        if (selectedOperators.length !== OPERATORS.length) {
+            const isMatch = selectedOperators.some(op => (op === 'CASH') ? (t.payment === 'CASH' || t.operator === 'CASH') : (t.operator === op));
+            if (!isMatch) return;
+        }
+        if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.includes(t.driver)) return;
+        if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return;
+
+        if (!t.date) return;
         const d = parseISO(t.date);
         const price = parseFloat(t.netPrice) || 0;
+        const dur = parseFloat(t.duration) || 0;
+        const dayKey = t.date;
 
-        // TOTAL negocio: Sumamos todo (incluyendo ajustes -BENE) para que el record coincida con la suma de conductores
-        {
-            const dayKey = t.date;
-            if (!salesByDay_total[dayKey]) salesByDay_total[dayKey] = 0;
-            salesByDay_total[dayKey] += price;
-            
-            // Horas y conteo solo para tours reales (no ocultos)
-            if (!t.hiddenInCalendar) {
-                if (!hoursByDay[dayKey]) hoursByDay[dayKey] = 0;
-                hoursByDay[dayKey] += parseFloat(t.duration) || 0;
-            }
+        // TOTAL Negocio Records
+        if (!salesByDay_total[dayKey]) salesByDay_total[dayKey] = 0;
+        salesByDay_total[dayKey] += price;
 
-            try {
-                const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
-                if (!salesByWeek_total[wStart]) salesByWeek_total[wStart] = 0;
-                salesByWeek_total[wStart] += price;
-            } catch (e) { }
-
-            try {
-                const mStart = format(startOfMonth(d), 'yyyy-MM');
-                if (!salesByMonth_total[mStart]) salesByMonth_total[mStart] = 0;
-                salesByMonth_total[mStart] += price;
-
-                if (!opByMonth_total[mStart]) opByMonth_total[mStart] = {};
-                const op = t.operator || 'Otro';
-                if (!opByMonth_total[mStart][op]) opByMonth_total[mStart][op] = 0;
-                opByMonth_total[mStart][op] += price;
-            } catch (e) { }
-
-            // Hours and intensity records (only real tours)
-            if (!t.hiddenInCalendar) {
-                const dayKeyH = t.date;
-                if (!hoursByDay[dayKeyH]) hoursByDay[dayKeyH] = 0;
-                hoursByDay[dayKeyH] += parseFloat(t.duration) || 0;
-
-                try {
-                    const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
-                    if (!hoursByWeek[wStart]) hoursByWeek[wStart] = 0;
-                    hoursByWeek[wStart] += parseFloat(t.duration) || 0;
-                } catch (e) { }
-
-                try {
-                    const mStart = format(startOfMonth(d), 'yyyy-MM');
-                    if (!hoursByMonth[mStart]) hoursByMonth[mStart] = 0;
-                    hoursByMonth[mStart] += parseFloat(t.duration) || 0;
-                } catch (e) { }
-            }
+        if (!t.hiddenInCalendar) {
+            if (!hoursByDay[dayKey]) hoursByDay[dayKey] = 0;
+            hoursByDay[dayKey] += dur;
         }
 
-        // NET (Cristian): Only tours where Cristian is the driver (includes his main tours and his -BENE subtours)
-        if (t.driver === 'Cristian') {
-            const dayKey = t.date;
-            if (!salesByDay_net[dayKey]) salesByDay_net[dayKey] = 0;
-            salesByDay_net[dayKey] += price;
+        try {
+            const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+            salesByWeek_total[wStart] = (salesByWeek_total[wStart] || 0) + price;
+            if (!t.hiddenInCalendar) hoursByWeek[wStart] = (hoursByWeek[wStart] || 0) + dur;
+        } catch (e) { }
 
-            try {
+        try {
+            const mStart = format(startOfMonth(d), 'yyyy-MM');
+            salesByMonth_total[mStart] = (salesByMonth_total[mStart] || 0) + price;
+            if (!t.hiddenInCalendar) hoursByMonth[mStart] = (hoursByMonth[mStart] || 0) + dur;
+
+            if (!opByMonth_total[mStart]) opByMonth_total[mStart] = {};
+            const op = t.operator || 'Otro';
+            opByMonth_total[mStart][op] = (opByMonth_total[mStart][op] || 0) + price;
+
+            // NETO Cristian Record
+            if (t.driver === 'Cristian' && !t.isSubTour && !t.hiddenInCalendar) {
+                salesByMonth_net[mStart] = (salesByMonth_net[mStart] || 0) + price;
+                salesByDay_net[dayKey] = (salesByDay_net[dayKey] || 0) + price;
                 const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
-                if (!salesByWeek_net[wStart]) salesByWeek_net[wStart] = 0;
-                salesByWeek_net[wStart] += price;
-            } catch (e) { }
-
-            try {
-                const mStart = format(startOfMonth(d), 'yyyy-MM');
-                if (!salesByMonth_net[mStart]) salesByMonth_net[mStart] = 0;
-                salesByMonth_net[mStart] += price;
-            } catch (e) { }
-        }
+                salesByWeek_net[wStart] = (salesByWeek_net[wStart] || 0) + price;
+            }
+        } catch (e) { }
     });
 
     const getRecord = (obj) => {
         const entries = Object.entries(obj);
         if (entries.length === 0) return { key: '-', val: 0 };
-        const best = entries.reduce((max, current) => current[1] > max[1] ? current : max, entries[0]);
-        return { key: best[0], val: best[1] };
+        const best = entries.reduce((max, curr) => curr[1] > max[1] ? curr : max, entries[0]);
+        return { key: best[0], val: Math.round(best[1]) };
     };
 
-    // Record month/week/day is determined by TOTAL revenue (all drivers)
     const bestDay = getRecord(salesByDay_total);
     const bestDayHours = getRecord(hoursByDay);
     const bestWeek = getRecord(salesByWeek_total);
     const bestMonth = getRecord(salesByMonth_total);
 
-    // Cristian's NET for the same record periods
     const bestDay_net = salesByDay_net[bestDay.key] || 0;
     const bestWeek_net = salesByWeek_net[bestWeek.key] || 0;
     const bestMonth_net = salesByMonth_net[bestMonth.key] || 0;
 
-    // Monthly evolution data for chart (all months with confirmed tours)
-    const allMonths = [...new Set([
-        ...Object.keys(salesByMonth_total),
-        ...Object.keys(salesByMonth_net)
-    ])].sort();
+    const allMonths = [...new Set([...Object.keys(salesByMonth_total), ...Object.keys(salesByMonth_net)])].sort();
     const monthlyChartData = allMonths.map(m => {
         const ops = opByMonth_total[m] || {};
         return {
@@ -536,32 +432,20 @@ export default function Dashboard({ currentUser }) {
         };
     });
 
-    const getWeekStr = (isoObjKey) => {
-        try { return 'S' + format(parseISO(isoObjKey), 'I'); } catch { return isoObjKey; }
-    };
-    const getMonthStr = (isoObjKey) => {
-        try {
-            const m = parseISO(isoObjKey + '-01').getMonth();
-            const meses = ['ABRIL', 'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-            // JS getMonth is 0-indexed, so 0=Jan, 1=Feb
-            const mesesMap = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
-            return mesesMap[m];
-        } catch { return isoObjKey; }
-    };
-    const getDayStr = (isoStr) => {
-        try { return format(parseISO(isoStr), 'dd/MM/yyyy').replace(/\//g, '-'); } catch { return isoStr; }
-    };
+    const getWeekStr = (k) => { try { return 'S' + format(parseISO(k), 'I'); } catch { return k; } };
+    const getMonthStr = (k) => { try { return ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'][parseISO(k + '-01').getMonth()]; } catch { return k; } };
+    const getDayStr = (k) => { try { return format(parseISO(k), 'dd-MM-yyyy'); } catch { return k; } };
 
     const driverStats = isDriver ? {
         [currentUser.name]: {
-            hours: driverStatsMap[currentUser.name]?.hours || 0,
+            hours: Math.round(driverStatsMap[currentUser.name]?.hours || 0),
             sales: Math.round(driverStatsMap[currentUser.name]?.sales || 0).toLocaleString('es-ES')
         }
     } : (() => {
         const stats = {};
         DRIVERS.forEach(d => {
             stats[d] = {
-                hours: driverStatsMap[d]?.hours || 0,
+                hours: Math.round(driverStatsMap[d]?.hours || 0),
                 sales: Math.round(driverStatsMap[d]?.sales || 0).toLocaleString('es-ES')
             };
         });
@@ -571,7 +455,7 @@ export default function Dashboard({ currentUser }) {
     const vehicleHours = (() => {
         const vStats = {};
         VEHICLES.forEach(v => {
-            vStats[v] = vehicleHoursMap[v] || 0;
+            vStats[v] = Math.round(vehicleHoursMap[v] || 0);
         });
         return vStats;
     })();
@@ -870,7 +754,7 @@ export default function Dashboard({ currentUser }) {
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Día Más Intenso</p>
-                        <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestDayHours.val} h</h4>
+                        <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{Math.round(bestDayHours.val)} h</h4>
                         <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getDayStr(bestDayHours.key)}</p>
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
@@ -880,7 +764,7 @@ export default function Dashboard({ currentUser }) {
                             <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getWeekStr(bestWeek.key)}</p>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', background: 'rgba(245,158,11,0.15)', padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(245,158,11,0.2)' }}>
                                 <Clock size={10} color="#b45309" strokeWidth={3} />
-                                <span style={{ fontSize: '0.65rem', color: '#b45309', fontWeight: 800 }}>{(hoursByWeek[bestWeek.key] || 0)}h tours</span>
+                                <span style={{ fontSize: '0.65rem', color: '#b45309', fontWeight: 800 }}>{Math.round(hoursByWeek[bestWeek.key] || 0)}h tours</span>
                             </div>
                         </div>
                     </div>
@@ -891,7 +775,7 @@ export default function Dashboard({ currentUser }) {
                             <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getMonthStr(bestMonth.key)}</p>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', background: 'rgba(245,158,11,0.15)', padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(245,158,11,0.2)' }}>
                                 <Clock size={10} color="#b45309" strokeWidth={3} />
-                                <span style={{ fontSize: '0.65rem', color: '#b45309', fontWeight: 800 }}>{(hoursByMonth[bestMonth.key] || 0)}h tours</span>
+                                <span style={{ fontSize: '0.65rem', color: '#b45309', fontWeight: 800 }}>{Math.round(hoursByMonth[bestMonth.key] || 0)}h tours</span>
                             </div>
                         </div>
                     </div>
