@@ -118,9 +118,10 @@ export default function Tours({ currentUser }) {
 
         // Filtro de estado
         if (statusFilter !== 'all') {
-            const isCancelled = t.status.toLowerCase() === 'cancelado';
-            const isPast = (t.date < today || (t.date === today && t.start <= currentTime)) && t.status.toLowerCase() === 'confirmado';
-            const isConfirmedFuture = t.status.toLowerCase() === 'confirmado' && !isPast;
+            const status = (t.status || '').toLowerCase();
+            const isCancelled = status === 'cancelado';
+            const isPast = (t.date < today || (t.date === today && (t.start || '') <= currentTime)) && status === 'confirmado';
+            const isConfirmedFuture = status === 'confirmado' && !isPast;
             if (statusFilter === 'cancelado' && !isCancelled) return false;
             if (statusFilter === 'realizado' && !isPast) return false;
             if (statusFilter === 'confirmado' && !isConfirmedFuture) return false;
@@ -316,8 +317,9 @@ export default function Tours({ currentUser }) {
                         <tbody>
                             {filteredTours.map(tour => {
                                 const operatorColors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
-                                const isCancelled = tour.status.toLowerCase() === 'cancelado';
-                                const isPast = (tour.date < today || (tour.date === today && tour.start <= currentTime)) && tour.status.toLowerCase() === 'confirmado';
+                                const status = (tour.status || '').toLowerCase();
+                                const isCancelled = status === 'cancelado';
+                                const isPast = (tour.date < today || (tour.date === today && (tour.start || '') <= currentTime)) && status === 'confirmado';
                                 return (
                                     <tr key={tour.id} style={{
                                         textDecoration: isCancelled ? 'line-through' : 'none',
@@ -365,7 +367,7 @@ export default function Tours({ currentUser }) {
                                         <td>{tour.duration}</td>
                                         <td>
                                             <span
-                                                className={`badge ${isPast ? '' : `badge-${tour.status.toLowerCase()}`}`}
+                                                className={`badge ${isPast ? '' : `badge-${status}`}`}
                                                 style={isPast ? {
                                                     backgroundColor: 'rgba(5,150,105,0.1)',
                                                     color: '#059669',
@@ -376,7 +378,7 @@ export default function Tours({ currentUser }) {
                                                     border: '1px solid rgba(5,150,105,0.2)'
                                                 } : {}}
                                             >
-                                                {isPast ? '✓ Realizado' : tour.status}
+                                                {isPast ? '✓ Realizado' : (tour.status || 'Desconocido')}
                                             </span>
                                         </td>
                                         <td>{tour.pax}</td>
