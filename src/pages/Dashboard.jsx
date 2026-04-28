@@ -929,7 +929,7 @@ export default function Dashboard({ currentUser }) {
 
                 const PercLabel = (props) => {
                     const { x, y, width, height, value, payload } = props;
-                    if (!height || height < 14 || !value) return null;
+                    if (!height || height < 14 || !value || !payload) return null;
                     const total = payload.total;
                     if (!total) return null;
                     const perc = Math.round((value / total) * 100);
@@ -943,6 +943,7 @@ export default function Dashboard({ currentUser }) {
 
                 const TotalTopLabel = (props) => {
                     const { x, y, width, payload } = props;
+                    if (!payload) return null;
                     const total = payload.total;
                     if (!total) return null;
                     return (
