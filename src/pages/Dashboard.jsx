@@ -398,9 +398,14 @@ export default function Dashboard({ currentUser }) {
     });
 
     // === Récords Históricos Locales ===
-    const salesByDay = {};
-    const salesByWeek = {};
-    const salesByMonth = {};
+    // _net  = solo entradas de Cristian (sin isSubTour ni hiddenInCalendar) → beneficio neto del dueño
+    // _total = toda la facturación del negocio (todos los drivers, sin duplicados contables)
+    const salesByDay_net = {};
+    const salesByDay_total = {};
+    const salesByWeek_net = {};
+    const salesByWeek_total = {};
+    const salesByMonth_net = {};
+    const salesByMonth_total = {};
     const hoursByDay = {};
     const hoursByWeek = {};
     const hoursByMonth = {};
@@ -408,31 +413,49 @@ export default function Dashboard({ currentUser }) {
     MOCK_TOURS.filter(t => t.status === 'confirmado').forEach(t => {
         if (!t.date || !t.start) return;
         const d = parseISO(t.date);
+        const price = parseFloat(t.netPrice) || 0;
 
-        // Sales Record: Sum only Cristian's shares (entries that are not subTours)
+        // NET (Cristian): entries that are not isSubTour (already Cristian's share)
         if (!t.isSubTour) {
             const dayKey = t.date;
-            if (!salesByDay[dayKey]) salesByDay[dayKey] = 0;
-            salesByDay[dayKey] += parseFloat(t.netPrice) || 0;
+            if (!salesByDay_net[dayKey]) salesByDay_net[dayKey] = 0;
+            salesByDay_net[dayKey] += price;
 
             try {
                 const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
-                if (!salesByWeek[wStart]) salesByWeek[wStart] = 0;
-                salesByWeek[wStart] += parseFloat(t.netPrice) || 0;
+                if (!salesByWeek_net[wStart]) salesByWeek_net[wStart] = 0;
+                salesByWeek_net[wStart] += price;
             } catch (e) { }
 
             try {
                 const mStart = format(startOfMonth(d), 'yyyy-MM');
-                if (!salesByMonth[mStart]) salesByMonth[mStart] = 0;
-                salesByMonth[mStart] += parseFloat(t.netPrice) || 0;
+                if (!salesByMonth_net[mStart]) salesByMonth_net[mStart] = 0;
+                salesByMonth_net[mStart] += price;
             } catch (e) { }
         }
 
-        // Hours & Operational Records: (Exclude hidden BENE entries to avoid double counting)
+        // TOTAL negocio: todas las entradas visibles en calendario (evita duplicar las contables -BENE)
         if (!t.hiddenInCalendar) {
             const dayKey = t.date;
-            if (!hoursByDay[dayKey]) hoursByDay[dayKey] = 0;
-            hoursByDay[dayKey] += parseFloat(t.duration) || 0;
+            if (!salesByDay_total[dayKey]) salesByDay_total[dayKey] = 0;
+            salesByDay_total[dayKey] += price;
+
+            try {
+                const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+                if (!salesByWeek_total[wStart]) salesByWeek_total[wStart] = 0;
+                salesByWeek_total[wStart] += price;
+            } catch (e) { }
+
+            try {
+                const mStart = format(startOfMonth(d), 'yyyy-MM');
+                if (!salesByMonth_total[mStart]) salesByMonth_total[mStart] = 0;
+                salesByMonth_total[mStart] += price;
+            } catch (e) { }
+
+            // Hours
+            const dayKeyH = t.date;
+            if (!hoursByDay[dayKeyH]) hoursByDay[dayKeyH] = 0;
+            hoursByDay[dayKeyH] += parseFloat(t.duration) || 0;
 
             try {
                 const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
@@ -455,10 +478,16 @@ export default function Dashboard({ currentUser }) {
         return { key: best[0], val: best[1] };
     };
 
-    const bestDay = getRecord(salesByDay);
+    // Best records by NET (to find the record month key using Cristian's net)
+    const bestDay = getRecord(salesByDay_net);
     const bestDayHours = getRecord(hoursByDay);
-    const bestWeek = getRecord(salesByWeek);
-    const bestMonth = getRecord(salesByMonth);
+    const bestWeek = getRecord(salesByWeek_net);
+    const bestMonth = getRecord(salesByMonth_net);
+
+    // For each record key, also get the total business revenue that month/week/day
+    const bestDay_total = salesByDay_total[bestDay.key] || 0;
+    const bestWeek_total = salesByWeek_total[bestWeek.key] || 0;
+    const bestMonth_total = salesByMonth_total[bestMonth.key] || 0;
 
     const getWeekStr = (isoObjKey) => {
         try { return 'S' + format(parseISO(isoObjKey), 'I'); } catch { return isoObjKey; }
@@ -812,7 +841,14 @@ export default function Dashboard({ currentUser }) {
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Mes Récord</p>
-                        <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestMonth.val.toLocaleString('es-ES')} €</h4>
+                        {/* Total negocio (todos los drivers) */}
+                        <h4 style={{ margin: '0.5rem 0 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestMonth_total.toLocaleString('es-ES')} €</h4>
+                        <p style={{ margin: '0 0 0.25rem 0', fontSize: '0.65rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Total negocio</p>
+                        {/* Beneficio neto de Cristian */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.4rem' }}>
+                            <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0284c7' }}>{bestMonth.val.toLocaleString('es-ES')} €</span>
+                            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#0284c7', background: 'rgba(2,132,199,0.1)', padding: '0.1rem 0.35rem', borderRadius: '4px', border: '1px solid rgba(2,132,199,0.2)' }}>Neto Cristian</span>
+                        </div>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getMonthStr(bestMonth.key)}</p>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', background: 'rgba(245,158,11,0.15)', padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(245,158,11,0.2)' }}>
