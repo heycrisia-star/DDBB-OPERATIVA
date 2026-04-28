@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart, Globe, CalendarMinus, Trophy } from 'lucide-react';
+import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart, Globe, CalendarMinus, Trophy, BarChart2 } from 'lucide-react';
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, differenceInDays, parseISO } from 'date-fns';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 import MultiSelect from '../components/MultiSelect';
 import { MOCK_TOURS } from '../data/mockTours';
 
@@ -238,10 +239,10 @@ export default function Dashboard({ currentUser }) {
         emptyDays = Math.max(0, totalDaysInRange - uniqueTourDates.size);
     }
 
-    const avgHourlyTicket = totalHours > 0 ? (totalSales / totalHours).toFixed(1) : 0;
+    const avgHourlyTicket = totalHours > 0 ? Math.round(totalSales / totalHours) : 0;
 
     const kpis = {
-        sales: totalSales.toLocaleString('es-ES'),
+        sales: Math.round(totalSales).toLocaleString('es-ES'),
         hours: totalHours,
         tours: activeToursCount,
         ticket: avgTicket.toLocaleString('es-ES'),
@@ -478,16 +479,28 @@ export default function Dashboard({ currentUser }) {
         return { key: best[0], val: best[1] };
     };
 
-    // Best records by NET (to find the record month key using Cristian's net)
-    const bestDay = getRecord(salesByDay_net);
+    // Record month/week/day is determined by TOTAL revenue (all drivers)
+    const bestDay = getRecord(salesByDay_total);
     const bestDayHours = getRecord(hoursByDay);
-    const bestWeek = getRecord(salesByWeek_net);
-    const bestMonth = getRecord(salesByMonth_net);
+    const bestWeek = getRecord(salesByWeek_total);
+    const bestMonth = getRecord(salesByMonth_total);
 
-    // For each record key, also get the total business revenue that month/week/day
-    const bestDay_total = salesByDay_total[bestDay.key] || 0;
-    const bestWeek_total = salesByWeek_total[bestWeek.key] || 0;
-    const bestMonth_total = salesByMonth_total[bestMonth.key] || 0;
+    // Cristian's NET for the same record periods
+    const bestDay_net = salesByDay_net[bestDay.key] || 0;
+    const bestWeek_net = salesByWeek_net[bestWeek.key] || 0;
+    const bestMonth_net = salesByMonth_net[bestMonth.key] || 0;
+
+    // Monthly evolution data for chart (all months with confirmed tours)
+    const allMonths = [...new Set([
+        ...Object.keys(salesByMonth_total),
+        ...Object.keys(salesByMonth_net)
+    ])].sort();
+    const monthlyChartData = allMonths.map(m => ({
+        mes: (() => { try { const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']; return meses[parseISO(m+'-01').getMonth()] + ' ' + String(parseISO(m+'-01').getFullYear()).slice(2); } catch { return m; } })(),
+        key: m,
+        total: Math.round(salesByMonth_total[m] || 0),
+        neto: Math.round(salesByMonth_net[m] || 0),
+    }));
 
     const getWeekStr = (isoObjKey) => {
         try { return 'S' + format(parseISO(isoObjKey), 'I'); } catch { return isoObjKey; }
@@ -508,14 +521,14 @@ export default function Dashboard({ currentUser }) {
     const driverStats = isDriver ? {
         [currentUser.name]: {
             hours: driverStatsMap[currentUser.name]?.hours || 0,
-            sales: (driverStatsMap[currentUser.name]?.sales || 0).toLocaleString('es-ES')
+            sales: Math.round(driverStatsMap[currentUser.name]?.sales || 0).toLocaleString('es-ES')
         }
     } : (() => {
         const stats = {};
         DRIVERS.forEach(d => {
             stats[d] = {
                 hours: driverStatsMap[d]?.hours || 0,
-                sales: (driverStatsMap[d]?.sales || 0).toLocaleString('es-ES')
+                sales: Math.round(driverStatsMap[d]?.sales || 0).toLocaleString('es-ES')
             };
         });
         return stats;
@@ -820,7 +833,12 @@ export default function Dashboard({ currentUser }) {
                 <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: '1rem' }}>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Día Mayor Facturación</p>
-                        <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestDay.val.toLocaleString('es-ES')} €</h4>
+                        <h4 style={{ margin: '0.5rem 0 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{Math.round(bestDay.val).toLocaleString('es-ES')} €</h4>
+                        <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.62rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Total negocio</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.3rem' }}>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0284c7' }}>{Math.round(bestDay_net).toLocaleString('es-ES')} €</span>
+                            <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#0284c7', background: 'rgba(2,132,199,0.1)', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>Neto Cristian</span>
+                        </div>
                         <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getDayStr(bestDay.key)}</p>
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
@@ -830,7 +848,12 @@ export default function Dashboard({ currentUser }) {
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Semana Récord</p>
-                        <h4 style={{ margin: '0.5rem 0 0.25rem 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestWeek.val.toLocaleString('es-ES')} €</h4>
+                        <h4 style={{ margin: '0.5rem 0 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{Math.round(bestWeek.val).toLocaleString('es-ES')} €</h4>
+                        <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.62rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Total negocio</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.3rem' }}>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0284c7' }}>{Math.round(bestWeek_net).toLocaleString('es-ES')} €</span>
+                            <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#0284c7', background: 'rgba(2,132,199,0.1)', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>Neto Cristian</span>
+                        </div>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getWeekStr(bestWeek.key)}</p>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.2rem', background: 'rgba(245,158,11,0.15)', padding: '0.15rem 0.4rem', borderRadius: '4px', border: '1px solid rgba(245,158,11,0.2)' }}>
@@ -841,13 +864,11 @@ export default function Dashboard({ currentUser }) {
                     </div>
                     <div style={{ padding: '1rem', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-color)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                         <p style={{ margin: 0, fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Mes Récord</p>
-                        {/* Total negocio (todos los drivers) */}
-                        <h4 style={{ margin: '0.5rem 0 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{bestMonth_total.toLocaleString('es-ES')} €</h4>
-                        <p style={{ margin: '0 0 0.25rem 0', fontSize: '0.65rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Total negocio</p>
-                        {/* Beneficio neto de Cristian */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.4rem' }}>
-                            <span style={{ fontSize: '0.95rem', fontWeight: 800, color: '#0284c7' }}>{bestMonth.val.toLocaleString('es-ES')} €</span>
-                            <span style={{ fontSize: '0.62rem', fontWeight: 700, color: '#0284c7', background: 'rgba(2,132,199,0.1)', padding: '0.1rem 0.35rem', borderRadius: '4px', border: '1px solid rgba(2,132,199,0.2)' }}>Neto Cristian</span>
+                        <h4 style={{ margin: '0.5rem 0 0', fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-primary)' }}>{Math.round(bestMonth.val).toLocaleString('es-ES')} €</h4>
+                        <p style={{ margin: '0 0 0.2rem 0', fontSize: '0.62rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Total negocio</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginBottom: '0.3rem' }}>
+                            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#0284c7' }}>{Math.round(bestMonth_net).toLocaleString('es-ES')} €</span>
+                            <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#0284c7', background: 'rgba(2,132,199,0.1)', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>Neto Cristian</span>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <p style={{ margin: 0, fontSize: '0.75rem', color: '#d97706', fontWeight: 600 }}>{getMonthStr(bestMonth.key)}</p>
@@ -859,6 +880,73 @@ export default function Dashboard({ currentUser }) {
                     </div>
                 </div>
             </div>
+
+            {/* Gráfico Evolutivo Mensual */}
+            {(() => {
+                const [chartMode, setChartMode] = React.useState('bars'); // 'bars' | 'lines'
+                const [showNeto, setShowNeto] = React.useState(true);
+                const [showTotal, setShowTotal] = React.useState(true);
+
+                const CustomTooltip = ({ active, payload, label }) => {
+                    if (!active || !payload || !payload.length) return null;
+                    return (
+                        <div style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '0.75rem 1rem', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', minWidth: '150px' }}>
+                            <p style={{ margin: '0 0 0.5rem 0', fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-primary)' }}>{label}</p>
+                            {payload.map((p, i) => (
+                                <p key={i} style={{ margin: '0.15rem 0', fontSize: '0.8rem', color: p.color, fontWeight: 700 }}>
+                                    {p.name}: {p.value.toLocaleString('es-ES')} €
+                                </p>
+                            ))}
+                        </div>
+                    );
+                };
+
+                const ChartComp = chartMode === 'bars' ? BarChart : LineChart;
+
+                return (
+                    <div className="card" style={{ marginBottom: '2rem', padding: isMobile ? '1rem' : '1.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+                            <h3 style={{ fontSize: '1.125rem', fontWeight: 700, margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-primary)' }}>
+                                <BarChart2 size={18} color="var(--brand-primary)" /> Evolutivo de Venta Mensual
+                            </h3>
+                            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                                {/* Toggle líneas/barras */}
+                                <div style={{ display: 'flex', background: 'var(--bg-hover)', borderRadius: '8px', padding: '3px', border: '1px solid var(--border-color)' }}>
+                                    {[['bars', '▦ Barras'], ['lines', '↗ Líneas']].map(([mode, label]) => (
+                                        <button key={mode} onClick={() => setChartMode(mode)} style={{ fontSize: '0.72rem', padding: '0.3rem 0.6rem', borderRadius: '6px', border: 'none', cursor: 'pointer', fontWeight: 700, background: chartMode === mode ? 'var(--brand-primary)' : 'transparent', color: chartMode === mode ? '#fff' : 'var(--text-secondary)', transition: 'all 0.15s' }}>{label}</button>
+                                    ))}
+                                </div>
+                                {/* Toggle series */}
+                                <button onClick={() => setShowTotal(v => !v)} style={{ fontSize: '0.72rem', padding: '0.3rem 0.7rem', borderRadius: '6px', border: `2px solid #64748b`, cursor: 'pointer', fontWeight: 700, background: showTotal ? '#64748b' : 'transparent', color: showTotal ? '#fff' : '#64748b', transition: 'all 0.15s' }}>
+                                    Total Negocio
+                                </button>
+                                <button onClick={() => setShowNeto(v => !v)} style={{ fontSize: '0.72rem', padding: '0.3rem 0.7rem', borderRadius: '6px', border: `2px solid #0284c7`, cursor: 'pointer', fontWeight: 700, background: showNeto ? '#0284c7' : 'transparent', color: showNeto ? '#fff' : '#0284c7', transition: 'all 0.15s' }}>
+                                    Neto Cristian
+                                </button>
+                            </div>
+                        </div>
+                        <ResponsiveContainer width="100%" height={280}>
+                            <ChartComp data={monthlyChartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
+                                <XAxis dataKey="mes" tick={{ fontSize: 11, fill: 'var(--text-secondary)', fontWeight: 600 }} axisLine={false} tickLine={false} />
+                                <YAxis tick={{ fontSize: 11, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} tickFormatter={v => `${v.toLocaleString('es-ES')}€`} width={70} />
+                                <Tooltip content={<CustomTooltip />} />
+                                {chartMode === 'bars' ? (
+                                    <>
+                                        {showTotal && <Bar dataKey="total" name="Total Negocio" fill="#64748b" radius={[4, 4, 0, 0]} />}
+                                        {showNeto && <Bar dataKey="neto" name="Neto Cristian" fill="#0284c7" radius={[4, 4, 0, 0]} />}
+                                    </>
+                                ) : (
+                                    <>
+                                        {showTotal && <Line type="monotone" dataKey="total" name="Total Negocio" stroke="#64748b" strokeWidth={2.5} dot={{ r: 4, fill: '#64748b' }} activeDot={{ r: 6 }} />}
+                                        {showNeto && <Line type="monotone" dataKey="neto" name="Neto Cristian" stroke="#0284c7" strokeWidth={2.5} dot={{ r: 4, fill: '#0284c7' }} activeDot={{ r: 6 }} />}
+                                    </>
+                                )}
+                            </ChartComp>
+                        </ResponsiveContainer>
+                    </div>
+                );
+            })()}
 
             <div style={{ columnCount: isMobile ? 1 : 2, columnGap: '1.5rem', paddingBottom: '2rem' }}>
 
