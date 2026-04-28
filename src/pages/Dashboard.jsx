@@ -283,6 +283,18 @@ export default function Dashboard({ currentUser }) {
         if (!driverStatsMap[t.driver]) driverStatsMap[t.driver] = { hours: 0, sales: 0 };
         driverStatsMap[t.driver].hours += parseFloat(t.duration) || 0;
         driverStatsMap[t.driver].sales += parseFloat(t.netPrice) || 0;
+    });
+
+    // Deduct -BENE tours from original drivers so they don't get double counted in Venta por Conductor
+    activeTours.forEach(t => {
+        if (t.hiddenInCalendar && t.code && t.code.endsWith('-BENE')) {
+            const originalCode = t.code.replace('-BENE', '');
+            const mainTour = activeTours.find(x => x.code === originalCode);
+            if (mainTour && mainTour.driver) {
+                if (!driverStatsMap[mainTour.driver]) driverStatsMap[mainTour.driver] = { hours: 0, sales: 0 };
+                driverStatsMap[mainTour.driver].sales -= parseFloat(t.netPrice) || 0;
+            }
+        }
 
         if (t.vehicle) {
             if (!vehicleHoursMap[t.vehicle]) vehicleHoursMap[t.vehicle] = 0;
@@ -407,6 +419,7 @@ export default function Dashboard({ currentUser }) {
     const salesByWeek_total = {};
     const salesByMonth_net = {};
     const salesByMonth_total = {};
+    const opByMonth_total = {};
     const hoursByDay = {};
     const hoursByWeek = {};
     const hoursByMonth = {};
@@ -415,25 +428,6 @@ export default function Dashboard({ currentUser }) {
         if (!t.date || !t.start) return;
         const d = parseISO(t.date);
         const price = parseFloat(t.netPrice) || 0;
-
-        // NET (Cristian): entries that are not isSubTour (already Cristian's share)
-        if (!t.isSubTour) {
-            const dayKey = t.date;
-            if (!salesByDay_net[dayKey]) salesByDay_net[dayKey] = 0;
-            salesByDay_net[dayKey] += price;
-
-            try {
-                const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
-                if (!salesByWeek_net[wStart]) salesByWeek_net[wStart] = 0;
-                salesByWeek_net[wStart] += price;
-            } catch (e) { }
-
-            try {
-                const mStart = format(startOfMonth(d), 'yyyy-MM');
-                if (!salesByMonth_net[mStart]) salesByMonth_net[mStart] = 0;
-                salesByMonth_net[mStart] += price;
-            } catch (e) { }
-        }
 
         // TOTAL negocio: todas las entradas visibles en calendario (evita duplicar las contables -BENE)
         if (!t.hiddenInCalendar) {
@@ -451,6 +445,11 @@ export default function Dashboard({ currentUser }) {
                 const mStart = format(startOfMonth(d), 'yyyy-MM');
                 if (!salesByMonth_total[mStart]) salesByMonth_total[mStart] = 0;
                 salesByMonth_total[mStart] += price;
+
+                if (!opByMonth_total[mStart]) opByMonth_total[mStart] = {};
+                const op = t.operator || 'Otro';
+                if (!opByMonth_total[mStart][op]) opByMonth_total[mStart][op] = 0;
+                opByMonth_total[mStart][op] += price;
             } catch (e) { }
 
             // Hours
@@ -468,6 +467,25 @@ export default function Dashboard({ currentUser }) {
                 const mStart = format(startOfMonth(d), 'yyyy-MM');
                 if (!hoursByMonth[mStart]) hoursByMonth[mStart] = 0;
                 hoursByMonth[mStart] += parseFloat(t.duration) || 0;
+            } catch (e) { }
+        }
+
+        // NET (Cristian): Only tours where Cristian is the driver (includes his main tours and his -BENE subtours)
+        if (t.driver === 'Cristian') {
+            const dayKey = t.date;
+            if (!salesByDay_net[dayKey]) salesByDay_net[dayKey] = 0;
+            salesByDay_net[dayKey] += price;
+
+            try {
+                const wStart = format(startOfWeek(d, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+                if (!salesByWeek_net[wStart]) salesByWeek_net[wStart] = 0;
+                salesByWeek_net[wStart] += price;
+            } catch (e) { }
+
+            try {
+                const mStart = format(startOfMonth(d), 'yyyy-MM');
+                if (!salesByMonth_net[mStart]) salesByMonth_net[mStart] = 0;
+                salesByMonth_net[mStart] += price;
             } catch (e) { }
         }
     });
@@ -495,12 +513,20 @@ export default function Dashboard({ currentUser }) {
         ...Object.keys(salesByMonth_total),
         ...Object.keys(salesByMonth_net)
     ])].sort();
-    const monthlyChartData = allMonths.map(m => ({
-        mes: (() => { try { const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']; return meses[parseISO(m+'-01').getMonth()] + ' ' + String(parseISO(m+'-01').getFullYear()).slice(2); } catch { return m; } })(),
-        key: m,
-        total: Math.round(salesByMonth_total[m] || 0),
-        neto: Math.round(salesByMonth_net[m] || 0),
-    }));
+    const monthlyChartData = allMonths.map(m => {
+        const ops = opByMonth_total[m] || {};
+        return {
+            mes: (() => { try { const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']; return meses[parseISO(m+'-01').getMonth()] + ' ' + String(parseISO(m+'-01').getFullYear()).slice(2); } catch { return m; } })(),
+            key: m,
+            total: Math.round(salesByMonth_total[m] || 0),
+            neto: Math.round(salesByMonth_net[m] || 0),
+            GYG: Math.round(ops['GYG'] || 0),
+            FH: Math.round(ops['FH'] || 0),
+            VIA: Math.round(ops['VIA'] || 0),
+            IC: Math.round(ops['IC'] || 0),
+            CASH: Math.round(ops['CASH'] || 0),
+        };
+    });
 
     const getWeekStr = (isoObjKey) => {
         try { return 'S' + format(parseISO(isoObjKey), 'I'); } catch { return isoObjKey; }
@@ -901,6 +927,31 @@ export default function Dashboard({ currentUser }) {
                     );
                 };
 
+                const PercLabel = (props) => {
+                    const { x, y, width, height, value, payload } = props;
+                    if (!height || height < 14 || !value) return null;
+                    const total = payload.total;
+                    if (!total) return null;
+                    const perc = Math.round((value / total) * 100);
+                    if (perc < 4) return null;
+                    return (
+                        <text x={x + width / 2} y={y + height / 2} fill="#fff" fontSize={10} fontWeight={700} textAnchor="middle" dominantBaseline="middle" style={{ pointerEvents: 'none' }}>
+                            {perc}%
+                        </text>
+                    );
+                };
+
+                const TotalTopLabel = (props) => {
+                    const { x, y, width, payload } = props;
+                    const total = payload.total;
+                    if (!total) return null;
+                    return (
+                        <text x={x + width / 2} y={y - 8} fill="var(--text-primary)" fontSize={11} fontWeight={800} textAnchor="middle" style={{ pointerEvents: 'none' }}>
+                            {total.toLocaleString('es-ES')}€
+                        </text>
+                    );
+                };
+
                 const ChartComp = chartMode === 'bars' ? BarChart : LineChart;
 
                 return (
@@ -933,7 +984,18 @@ export default function Dashboard({ currentUser }) {
                                 <Tooltip content={<CustomTooltip />} />
                                 {chartMode === 'bars' ? (
                                     <>
-                                        {showTotal && <Bar dataKey="total" name="Total Negocio" fill="#64748b" radius={[4, 4, 0, 0]} />}
+                                        {showTotal && (
+                                            <>
+                                                <Bar dataKey="GYG" stackId="tot" name="GYG" fill="#c2410c"><LabelList content={<PercLabel/>} /></Bar>
+                                                <Bar dataKey="FH" stackId="tot" name="FH" fill="#4338ca"><LabelList content={<PercLabel/>} /></Bar>
+                                                <Bar dataKey="VIA" stackId="tot" name="VIA" fill="#15803d"><LabelList content={<PercLabel/>} /></Bar>
+                                                <Bar dataKey="IC" stackId="tot" name="IC" fill="#7e22ce"><LabelList content={<PercLabel/>} /></Bar>
+                                                <Bar dataKey="CASH" stackId="tot" name="CASH" fill="#16a34a" radius={[4, 4, 0, 0]}>
+                                                    <LabelList content={<PercLabel/>} />
+                                                    <LabelList content={<TotalTopLabel/>} />
+                                                </Bar>
+                                            </>
+                                        )}
                                         {showNeto && <Bar dataKey="neto" name="Neto Cristian" fill="#0284c7" radius={[4, 4, 0, 0]} />}
                                     </>
                                 ) : (
