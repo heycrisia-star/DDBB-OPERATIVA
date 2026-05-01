@@ -493,6 +493,11 @@ MANUAL_PRICE_CODES = {
     'GYGRFQRG7A67',       # Ana Neale 30abr Carlos split: 97.76€
     'VIATOR-1391951661',  # Christophe 9may Carlos split: 46.88€
     'VIATOR-1391951661-BENE', # Christophe 9may Cristian split: 46.88€
+    'FH346502467'         # Duplicate FH today, refund done
+}
+
+MANUAL_STATUS_CODES = {
+    'FH346502467'
 }
 
 
@@ -507,6 +512,8 @@ def upsert_booking(tours, booking):
         # Update status, date, start, pax, phone, language
         for key in ['status', 'date', 'start', 'pax', 'phone', 'language']:
             if booking.get(key):
+                if key == 'status' and booking.get('code') in MANUAL_STATUS_CODES:
+                    continue
                 existing[key] = booking[key]
         # Protect clientName for FH bookings with manually-corrected names
         MANUAL_CLIENT_CODES = {'FH343696332', 'FH343696684'}

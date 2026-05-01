@@ -3022,7 +3022,7 @@ export const MOCK_TOURS = [
     "start": "17:30",
     "duration": 2,
     "operator": "FH",
-    "status": "confirmado",
+    "status": "cancelado",
     "pax": 3,
     "vehicle": "02-NR",
     "driver": "Cristian",
