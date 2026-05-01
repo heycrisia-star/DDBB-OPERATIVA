@@ -11,13 +11,14 @@ import { MOCK_CRUISES } from '../data/mockCruises';
 const OPERATOR_COLORS = {
     'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#c2410c' }, // Naranja
     'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4338ca' },  // Indigo
-    'VIA': { bg: '#dcfce7', border: '#86efac', text: '#15803d' }, // Verde
-    'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#7e22ce' }   // Purpura
+    'VIATOR': { bg: '#dcfce7', border: '#86efac', text: '#15803d' }, // Verde
+    'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#7e22ce' },  // Purpura
+    'CASH': { bg: '#f0fdfa', border: '#ccfbf1', text: '#0d9488' } 
 };
 
 const VEHICLES = ['01-DR', '02-NR'];
 const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
-const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'CASH'];
+const OPERATORS = ['GYG', 'FH', 'VIATOR', 'IC', 'CASH'];
 
 const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#ef4444' };
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };

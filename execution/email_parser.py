@@ -164,6 +164,92 @@ LANG_MAP = {
     'portuguese': 'PT', 'portugués': 'PT',
 }
 
+# ── 3. Viator Parser ─────────────────────────────────────────────────────────
+
+def parse_viator_email(msg):
+    """
+    Extract booking data from a Viator email (often forwarded).
+    Returns a dict or None if not parseable.
+    """
+    subject = msg.get('Subject', '')
+    date_header = msg.get('Date')
+    booking_date = ''
+    if date_header:
+        try:
+            booking_date = email.utils.parsedate_to_datetime(date_header).strftime('%Y-%m-%d')
+        except:
+            booking_date = datetime.now().strftime('%Y-%m-%d')
+    else:
+        booking_date = datetime.now().strftime('%Y-%m-%d')
+
+    html, plain = get_text_and_html(msg)
+    text = parse_text(html, plain)
+
+    # Status
+    if any(w in subject.lower() for w in ['cancel', 'cancelad']):
+        status = 'cancelado'
+    else:
+        status = 'confirmado'
+
+    # Booking reference (e.g. BR-1391951661)
+    ref_m = re.search(r'(BR-[\d]+)', text)
+    if not ref_m:
+        ref_m = re.search(r'#\s*(BR-[\d]+)', subject)
+    if not ref_m:
+        return None
+    code = f"VIATOR-{ref_m.group(1).replace('BR-', '')}"
+
+    # Date
+    # Format: "May 09, 2026" or "9 de mayo de 2026"
+    date_iso = ''
+    m_date = re.search(r'(\w+)\s+(\d{1,2}),\s+(\d{4})', text) # English
+    if m_date:
+        month_name, day, year = m_date.groups()
+        month = MONTHS_ES.get(month_name.lower(), '01')
+        date_iso = f"{year}-{month}-{day.zfill(2)}"
+    else:
+        m_date_es = re.search(r'(\d{1,2})\s+de\s+(\w+)\s+de\s+(\d{4})', text) # Spanish
+        if m_date_es:
+            day, month_name, year = m_date_es.groups()
+            month = MONTHS_ES.get(month_name.lower(), '01')
+            date_iso = f"{year}-{month}-{day.zfill(2)}"
+
+    # Price
+    price_m = re.search(r'Tarifa neta:\s*\n*(?:EUR|€)\s*€?([\d,.]+)', text, re.IGNORECASE)
+    net_price = 0.0
+    if price_m:
+        net_price = float(price_m.group(1).replace(',', '.'))
+
+    # Client
+    client_m = re.search(r'Cliente:\s*\n*(.+)', text)
+    if not client_m:
+         # Try to find name before "French - Guide" or similar
+         client_m = re.search(r'([A-Z][a-z]+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)\s*\n*.*Guide', text)
+    client = client_m.group(1).strip() if client_m else ''
+
+    # Phone
+    phone_m = re.search(r'Teléfono:.*?([+\d\s\-()]{10,})', text, re.DOTALL)
+    phone = phone_m.group(1).strip() if phone_m else ''
+
+    return {
+        'code': code,
+        'date': date_iso,
+        'start': '10:00', # Default for now
+        'duration': 2,
+        'operator': 'VIATOR',
+        'status': status,
+        'pax': 1,
+        'vehicle': '02-NR',
+        'driver': 'Carlos', # Default for Viator currently
+        'clientName': client,
+        'phone': phone,
+        'language': 'EN',
+        'country': '',
+        'netPrice': net_price,
+        'product': 'Viator Tour',
+        'bookingDate': booking_date
+    }
+
 # ── 3. GYG Parser ────────────────────────────────────────────────────────────
 
 def parse_gyg_email(msg):
@@ -405,6 +491,8 @@ MANUAL_PRICE_CODES = {
     'GYG9966MGGBA',       # Petra 8may Carlos split: 37.08€
     'GYG83XLG8V2R',       # Vera 9may Carlos split: 75.24€
     'GYGRFQRG7A67',       # Ana Neale 30abr Carlos split: 97.76€
+    'VIATOR-1391951661',  # Christophe 9may Carlos split: 46.88€
+    'VIATOR-1391951661-BENE', # Christophe 9may Cristian split: 46.88€
 }
 
 
@@ -492,6 +580,27 @@ def main():
     print(f"   Found {len(fh_msgs)} FH emails")
     for msg in fh_msgs:
         booking = parse_fh_email(msg)
+        if not booking:
+            skipped_count += 1
+            continue
+        was_existing = booking['code'] in existing_codes
+        upsert_booking(tours, booking)
+        if was_existing:
+            updated_count += 1
+        else:
+            new_count += 1
+            existing_codes.add(booking['code'])
+
+    # ── Viator ──
+    print("\n📬 Fetching Viator emails...")
+    # Search for Viator in subject or sender
+    status, data = mail.search(None, 'OR', '(FROM "viator.com")', '(BODY "Viator")')
+    ids = data[0].split()
+    print(f"   Found {len(ids)} Viator-related emails")
+    for eid in ids:
+        status, msg_data = mail.fetch(eid, '(RFC822)')
+        msg = email.message_from_bytes(msg_data[0][1])
+        booking = parse_viator_email(msg)
         if not booking:
             skipped_count += 1
             continue

@@ -8,7 +8,7 @@ import { MOCK_TOURS } from '../data/mockTours';
 
 const VEHICLES = ['01-DR', '02-NR'];
 const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
-const OPERATORS = ['GYG', 'FH', 'VIA', 'IC', 'CASH'];
+const OPERATORS = ['GYG', 'FH', 'VIATOR', 'IC', 'CASH'];
 const TIME_FILTERS = [
     { id: 'today', label: 'Hoy' },
     { id: 'weekly', label: 'Semanal' },
@@ -21,7 +21,7 @@ const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const OPERATOR_COLORS = {
     'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#c2410c' },
     'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4338ca' },
-    'VIA': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },
+    'VIATOR': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },
     'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#7e22ce' }
 };
 
@@ -159,7 +159,7 @@ export default function Tours({ currentUser }) {
         switch (operator) {
             case 'GYG': return 'op-gyg';
             case 'FH': return 'op-fh';
-            case 'VIA': return 'op-via';
+            case 'VIATOR': return 'op-viator';
             case 'IC': return 'op-ic';
             default: return 'op-fh';
         }

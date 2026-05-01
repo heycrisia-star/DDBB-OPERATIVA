@@ -115,13 +115,13 @@ export default function Dashboard({ currentUser }) {
 
     const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#ef4444' };
     const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
-    const OPERATORS = ['GYG', 'FH', 'VIA', 'CASH'];
+    const OPERATORS = ['GYG', 'FH', 'VIATOR', 'CASH'];
     const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
     const VEHICLES = ['01-DR', '02-NR'];
     const OPERATOR_COLORS = {
         'GYG': { bg: '#fff7ed', border: '#ffedd5', text: '#c2410c' },
         'FH': { bg: '#eef2ff', border: '#e0e7ff', text: '#4338ca' },
-        'VIA': { bg: '#f0fdf4', border: '#dcfce7', text: '#15803d' },
+        'VIATOR': { bg: '#f0fdf4', border: '#dcfce7', text: '#15803d' },
         'CASH': { bg: '#f0fdfa', border: '#ccfbf1', text: '#0d9488' }
     };
 
@@ -262,7 +262,7 @@ export default function Dashboard({ currentUser }) {
         2: { total: 0, pax4: 0, paxLess4: 0 },
         3: { total: 0, pax4: 0, paxLess4: 0 }
     };
-    const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIA': 0, 'CASH': 0 };
+    const operatorStatsMap = { 'GYG': 0, 'FH': 0, 'VIATOR': 0, 'CASH': 0 };
     const countryStatsMap = {};
     const timeSlotStatsMap = { '08-10': 0, '10-12': 0, '12-14': 0, '14-16': 0, '16-18': 0, '18-20': 0, '20-22': 0 };
     const leadTimeStatsMap = { 'Mismo día': 0, '1-3 días': 0, '4-7 días': 0, '8-30 días': 0, '+30 días': 0 };
@@ -464,7 +464,7 @@ export default function Dashboard({ currentUser }) {
             neto: Math.round(salesByMonth_net[m] || 0),
             GYG: Math.round(ops['GYG'] || 0),
             FH: Math.round(ops['FH'] || 0),
-            VIA: Math.round(ops['VIA'] || 0),
+            VIATOR: Math.round(ops['VIATOR'] || 0),
             CASH: Math.round(ops['CASH'] || 0),
         };
     });
@@ -544,7 +544,7 @@ export default function Dashboard({ currentUser }) {
     const operatorStats = {
         'GYG': { perc: getPerc(operatorStatsMap['GYG']), count: operatorStatsMap['GYG'] },
         'FH': { perc: getPerc(operatorStatsMap['FH']), count: operatorStatsMap['FH'] },
-        'VIA': { perc: getPerc(operatorStatsMap['VIA']), count: operatorStatsMap['VIA'] },
+        'VIATOR': { perc: getPerc(operatorStatsMap['VIATOR']), count: operatorStatsMap['VIATOR'] },
         'CASH': { perc: getPerc(operatorStatsMap['CASH']), count: operatorStatsMap['CASH'] }
     };
 
@@ -899,7 +899,7 @@ export default function Dashboard({ currentUser }) {
                                             <>
                                                 <Bar dataKey="GYG" stackId="tot" name="GYG" fill="#f97316"><LabelList content={<PercLabel/>} /></Bar>
                                                 <Bar dataKey="FH" stackId="tot" name="FH" fill="#6366f1"><LabelList content={<PercLabel/>} /></Bar>
-                                                <Bar dataKey="VIA" stackId="tot" name="VIA" fill="#22c55e"><LabelList content={<PercLabel/>} /></Bar>
+                                                <Bar dataKey="VIATOR" stackId="tot" name="VIATOR" fill="#22c55e"><LabelList content={<PercLabel/>} /></Bar>
                                                 <Bar dataKey="CASH" stackId="tot" name="CASH" fill="#14b8a6" radius={[4, 4, 0, 0]}>
                                                     <LabelList content={<PercLabel/>} />
                                                     <LabelList content={<TotalTopLabel/>} />
@@ -971,8 +971,8 @@ export default function Dashboard({ currentUser }) {
                     {Object.entries(operatorStats)
                         .sort((a, b) => b[1].count - a[1].count)
                         .map(([op, stats]) => {
-                            const labels = { 'GYG': 'GetYourGuide', 'FH': 'FareHarbor', 'VIA': 'Viator', 'CASH': 'Cash' };
-                            const colors = { 'GYG': '#f97316', 'FH': '#6366f1', 'VIA': '#22c55e', 'CASH': '#14b8a6' };
+                            const labels = { 'GYG': 'GetYourGuide', 'FH': 'FareHarbor', 'VIATOR': 'Viator', 'CASH': 'Cash' };
+                            const colors = { 'GYG': '#f97316', 'FH': '#6366f1', 'VIATOR': '#22c55e', 'CASH': '#14b8a6' };
                             return <ProgressBar key={op} label={labels[op] || op} value={stats.perc} max={100} color={colors[op] || '#94a3b8'} count={`${stats.count} tours`} />;
                         })}
                 </div>
