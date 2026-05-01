@@ -3073,5 +3073,24 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-05-01",
     "id": 159,
     "hiddenInCalendar": true
+  },
+  {
+    "code": "GYG83XH8GWNL",
+    "date": "2026-05-02",
+    "start": "13:00",
+    "duration": 3,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Ann Piscitelli",
+    "phone": "+19413218973",
+    "language": "EN",
+    "country": "",
+    "netPrice": 158.2,
+    "product": "",
+    "bookingDate": "2026-05-01",
+    "id": 160
   }
 ];
