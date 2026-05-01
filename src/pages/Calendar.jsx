@@ -12,6 +12,7 @@ const OPERATOR_COLORS = {
     'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#c2410c' }, // Naranja
     'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4338ca' },  // Indigo
     'VIATOR': { bg: '#dcfce7', border: '#86efac', text: '#15803d' }, // Verde
+    'VIA': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },    // Alias para Viator
     'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#7e22ce' },  // Purpura
     'CASH': { bg: '#f0fdfa', border: '#ccfbf1', text: '#0d9488' } 
 };
@@ -20,7 +21,7 @@ const VEHICLES = ['01-DR', '02-NR'];
 const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
 const OPERATORS = ['GYG', 'FH', 'VIATOR', 'IC', 'CASH'];
 
-const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#ef4444' };
+const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#ef4444', 'Joao': '#a855f7' };
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };
 
@@ -395,14 +396,9 @@ export default function Calendar({ currentUser }) {
                                 const isPast = tour.date < today || (tour.date === today && tour.start <= currentTime);
 
                                 // Driver color overrides — makes it easy to see who's driving
-                                const DRIVER_COLORS = {
-                                    'Carlos': { bg: '#fee2e2', border: '#ef4444', text: '#991b1b' },
-                                    'Joao': { bg: '#f3e8ff', border: '#a855f7', text: '#6b21a8' },
-                                };
-                                const driverColor = DRIVER_COLORS[tour.driver];
-                                const cardBg = driverColor ? driverColor.bg : colors.bg;
-                                const cardBorder = driverColor ? driverColor.border : colors.text;
-                                const cardText = driverColor ? driverColor.text : colors.text;
+                                const cardBg = colors.bg;
+                                const cardBorder = colors.text;
+                                const cardText = colors.text;
 
                                 // Estilos dinámicos por estado
                                 const statusStyles = {
@@ -482,7 +478,7 @@ export default function Calendar({ currentUser }) {
                                                     alignItems: 'center',
                                                     gap: '0.15rem',
                                                     color: (isCancelled || isPast) ? '#64748b' : (DRIVER_COLORS[tour.driver] || 'var(--text-secondary)'),
-                                                    fontWeight: 700
+                                                    fontWeight: 800
                                                 }}>
                                                     {tour.driver}
                                                 </span>

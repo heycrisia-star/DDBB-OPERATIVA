@@ -22,7 +22,9 @@ const OPERATOR_COLORS = {
     'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#c2410c' },
     'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4338ca' },
     'VIATOR': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },
-    'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#7e22ce' }
+    'VIA': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },
+    'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#7e22ce' },
+    'CASH': { bg: '#f0fdfa', border: '#ccfbf1', text: '#0d9488' }
 };
 
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };

@@ -122,6 +122,7 @@ export default function Dashboard({ currentUser }) {
         'GYG': { bg: '#fff7ed', border: '#ffedd5', text: '#c2410c' },
         'FH': { bg: '#eef2ff', border: '#e0e7ff', text: '#4338ca' },
         'VIATOR': { bg: '#f0fdf4', border: '#dcfce7', text: '#15803d' },
+        'VIA': { bg: '#f0fdf4', border: '#dcfce7', text: '#15803d' },
         'CASH': { bg: '#f0fdfa', border: '#ccfbf1', text: '#0d9488' }
     };
 
