@@ -119,7 +119,7 @@ export default function Dashboard({ currentUser }) {
     const DRIVERS = ['Cristian', 'Carlos', 'Joao'];
     const VEHICLES = ['01-DR', '02-NR'];
     const OPERATOR_COLORS = {
-        'GYG': { bg: '#fff7ed', border: '#ffedd5', text: '#c2410c' },
+        'GYG': { bg: '#fff2f0', border: '#ff9c8a', text: '#e6391d' },
         'FH': { bg: '#eef2ff', border: '#e0e7ff', text: '#4338ca' },
         'VIATOR': { bg: '#f0fdf4', border: '#dcfce7', text: '#15803d' },
         'VIA': { bg: '#f0fdf4', border: '#dcfce7', text: '#15803d' },

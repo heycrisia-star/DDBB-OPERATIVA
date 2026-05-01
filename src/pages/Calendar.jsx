@@ -9,7 +9,7 @@ import { MOCK_CRUISES } from '../data/mockCruises';
 
 
 const OPERATOR_COLORS = {
-    'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#c2410c' }, // Naranja
+    'GYG': { bg: '#fff2f0', border: '#ff9c8a', text: '#e6391d' }, // Naranja GYG Brand
     'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4338ca' },  // Indigo
     'VIATOR': { bg: '#dcfce7', border: '#86efac', text: '#15803d' }, // Verde
     'VIA': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },    // Alias para Viator

@@ -19,7 +19,7 @@ const TIME_FILTERS = [
 const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#ef4444', 'Joao': '#a855f7' };
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const OPERATOR_COLORS = {
-    'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#c2410c' },
+    'GYG': { bg: '#fff2f0', border: '#ff9c8a', text: '#e6391d' },
     'FH': { bg: '#e0e7ff', border: '#a5b4fc', text: '#4338ca' },
     'VIATOR': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },
     'VIA': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },
