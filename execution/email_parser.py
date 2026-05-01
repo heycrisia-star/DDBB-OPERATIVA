@@ -530,7 +530,7 @@ def upsert_booking(tours, booking):
         MANUAL_DURATION_CODES = {
             'GYG32L8B9B99', 'GYG2Q9NKWL3V', 'FH344894659', 
             'GYGBLHR7MLMW', 'GYGFWV877LM6', 'GYG2Q9M34V8W',
-            'GYG32L7YLNRQ', 'GYG6H8BN8R75', 'GYGRFQRG7A67'
+            'GYG32L7YLNRQ', 'GYG6H8BN8R75', 'GYGRFQRG7A67', 'GYG83XLG8V2R'
         }
         if booking.get('code') not in MANUAL_DURATION_CODES:
             if booking.get('duration'):
