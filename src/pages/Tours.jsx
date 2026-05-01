@@ -16,7 +16,7 @@ const TIME_FILTERS = [
     { id: 'year', label: 'Año' }
 ];
 
-const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#0d9488', 'Joao': '#ef4444' };
+const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#ef4444', 'Joao': '#a855f7' };
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const OPERATOR_COLORS = {
     'GYG': { bg: '#ffedd5', border: '#fdba74', text: '#c2410c' },

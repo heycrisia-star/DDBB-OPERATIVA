@@ -396,8 +396,8 @@ export default function Calendar({ currentUser }) {
 
                                 // Driver color overrides — makes it easy to see who's driving
                                 const DRIVER_COLORS = {
-                                    'Carlos': { bg: '#d1fae5', border: '#10b981', text: '#065f46' },
-                                    'Joao': { bg: '#dbeafe', border: '#3b82f6', text: '#1e3a8a' },
+                                    'Carlos': { bg: '#fee2e2', border: '#ef4444', text: '#991b1b' },
+                                    'Joao': { bg: '#f3e8ff', border: '#a855f7', text: '#6b21a8' },
                                 };
                                 const driverColor = DRIVER_COLORS[tour.driver];
                                 const cardBg = driverColor ? driverColor.bg : colors.bg;
