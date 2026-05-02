@@ -493,6 +493,8 @@ MANUAL_PRICE_CODES = {
     'GYGRFQRG7A67',       # Ana Neale 30abr Carlos split: 97.76€
     'VIATOR-1391951661',  # Christophe 9may Carlos split: 46.88€
     'VIATOR-1391951661-BENE', # Christophe 9may Cristian split: 46.88€
+    'GYG2Q9NWYWBL',       # Michelle 2may Roger split: 37.08€
+    'GYG2Q9NWYWBL-BENE',  # Michelle 2may Cristian split: 37.08€
     'FH346502467'         # Duplicate FH today, refund done
 }
 
