@@ -506,6 +506,10 @@ MANUAL_TIME_CODES = {
     'FH342800523'         # Thomas Whitby: moved to 19:30
 }
 
+MANUAL_PAX_CODES = {
+    'VIATOR-1391951661'   # Christophe 9may: 2 pax
+}
+
 
 def upsert_booking(tours, booking):
     """Insert new booking or update existing one (matched by code). Never overwrites manually-set driver/vehicle/price."""
@@ -521,6 +525,8 @@ def upsert_booking(tours, booking):
                 if key == 'status' and booking.get('code') in MANUAL_STATUS_CODES:
                     continue
                 if key == 'start' and booking.get('code') in MANUAL_TIME_CODES:
+                    continue
+                if key == 'pax' and booking.get('code') in MANUAL_PAX_CODES:
                     continue
                 existing[key] = booking[key]
         # Protect clientName for FH bookings with manually-corrected names
