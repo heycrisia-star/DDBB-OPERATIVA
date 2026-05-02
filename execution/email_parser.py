@@ -495,6 +495,8 @@ MANUAL_PRICE_CODES = {
     'VIATOR-1391951661-BENE', # Christophe 9may Cristian split: 46.88€
     'GYG2Q9NWYWBL',       # Michelle 2may Roger split: 37.08€
     'GYG2Q9NWYWBL-BENE',  # Michelle 2may Cristian split: 37.08€
+    'GYGBLHN2MZ7Q',       # Michelle 2may 19h Roger split: 33.37€
+    'GYGBLHN2MZ7Q-BENE',  # Michelle 2may 19h Cristian split: 33.38€
     'FH346502467'         # Duplicate FH today, refund done
 }
 
@@ -503,7 +505,8 @@ MANUAL_STATUS_CODES = {
 }
 
 MANUAL_TIME_CODES = {
-    'FH342800523'         # Thomas Whitby: moved to 19:30
+    'FH342800523',         # Thomas Whitby: moved to 19:30
+    'VIATOR-1391951661'   # Christophe: moved to 10:30
 }
 
 MANUAL_PAX_CODES = {
@@ -529,8 +532,8 @@ def upsert_booking(tours, booking):
                 if key == 'pax' and booking.get('code') in MANUAL_PAX_CODES:
                     continue
                 existing[key] = booking[key]
-        # Protect clientName for FH bookings with manually-corrected names
-        MANUAL_CLIENT_CODES = {'FH343696332', 'FH343696684'}
+        # Protect clientName for manual notes (e.g. No asistió)
+        MANUAL_CLIENT_CODES = {'FH343696332', 'FH343696684', 'GYG2Q9NWYWBL'}
         if booking.get('code') not in MANUAL_CLIENT_CODES:
             if booking.get('clientName'):
                 existing['clientName'] = booking['clientName']
