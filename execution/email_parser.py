@@ -533,7 +533,7 @@ def upsert_booking(tours, booking):
                     continue
                 existing[key] = booking[key]
         # Protect clientName for manual notes (e.g. No asistió)
-        MANUAL_CLIENT_CODES = {'FH343696332', 'FH343696684', 'GYG2Q9NWYWBL'}
+        MANUAL_CLIENT_CODES = {'FH343696332', 'FH343696684', 'GYG2Q9NWYWBL', 'VIATOR-1391951661'}
         if booking.get('code') not in MANUAL_CLIENT_CODES:
             if booking.get('clientName'):
                 existing['clientName'] = booking['clientName']
