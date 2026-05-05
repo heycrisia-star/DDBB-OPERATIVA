@@ -506,7 +506,8 @@ MANUAL_STATUS_CODES = {
 
 MANUAL_TIME_CODES = {
     'FH342800523',         # Thomas Whitby: moved to 19:30
-    'VIATOR-1391951661'   # Christophe: moved to 10:30
+    'VIATOR-1391951661',   # Christophe: moved to 10:30
+    'VIATOR-1393069057'    # Date fixed to Oct 1st
 }
 
 MANUAL_PAX_CODES = {
@@ -527,7 +528,7 @@ def upsert_booking(tours, booking):
             if booking.get(key):
                 if key == 'status' and booking.get('code') in MANUAL_STATUS_CODES:
                     continue
-                if key == 'start' and booking.get('code') in MANUAL_TIME_CODES:
+                if key in ['start', 'date'] and booking.get('code') in MANUAL_TIME_CODES:
                     continue
                 if key == 'pax' and booking.get('code') in MANUAL_PAX_CODES:
                     continue

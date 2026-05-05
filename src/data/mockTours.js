@@ -3249,7 +3249,7 @@ export const MOCK_TOURS = [
   },
   {
     "code": "VIATOR-1393069057",
-    "date": "2026-01-10",
+    "date": "2026-10-01",
     "start": "10:00",
     "duration": 2,
     "operator": "VIATOR",
