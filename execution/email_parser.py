@@ -240,7 +240,7 @@ def parse_viator_email(msg):
         'status': status,
         'pax': 1,
         'vehicle': '02-NR',
-        'driver': 'Carlos', # Default for Viator currently
+        'driver': 'Cristian', # Default to owner to avoid incorrect assumptions
         'clientName': client,
         'phone': phone,
         'language': 'EN',
