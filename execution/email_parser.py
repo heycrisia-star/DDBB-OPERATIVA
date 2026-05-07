@@ -536,7 +536,8 @@ def upsert_booking(tours, booking):
         # Protect clientName for manual notes (e.g. No asistió) or splits
         MANUAL_CLIENT_CODES = {
             'FH343696332', 'FH343696684', 'GYG2Q9NWYWBL', 
-            'VIATOR-1391951661', 'GYG9964YQ7XB', 'FH347413216'
+            'VIATOR-1391951661', 'GYG9964YQ7XB', 'FH347413216',
+            'GYGFWV8NXLXW'
         }
         if booking.get('code') not in MANUAL_CLIENT_CODES:
             if booking.get('clientName'):
