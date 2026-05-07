@@ -3396,7 +3396,7 @@ export const MOCK_TOURS = [
     "phone": "+64274370180",
     "language": "EN",
     "country": "",
-    "netPrice": 50.78,
+    "netPrice": 67.5,
     "product": "",
     "bookingDate": "2026-05-07",
     "id": 177
@@ -3453,7 +3453,7 @@ export const MOCK_TOURS = [
     "phone": "+64274370180",
     "language": "EN",
     "country": "",
-    "netPrice": 50.78,
+    "netPrice": 67.5,
     "product": "Barcelona Private Tuk Tuk Tour (Split)",
     "bookingDate": "2026-05-07",
     "id": 180,
