@@ -28,6 +28,7 @@ const OPERATOR_COLORS = {
 };
 
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };
+const LANGUAGES = Object.keys(LANG_MAP);
 
 export default function Tours({ currentUser }) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -47,6 +48,7 @@ export default function Tours({ currentUser }) {
 
     // Multiple Operator Selection State
     const [selectedOperators, setSelectedOperators] = useState(OPERATORS);
+    const [selectedLanguages, setSelectedLanguages] = useState(LANGUAGES);
 
     const toggleVehicle = (v) => {
         if (selectedVehicles.length === VEHICLES.length) {
@@ -100,6 +102,17 @@ export default function Tours({ currentUser }) {
         setSelectedOperators(selectedOperators.length === OPERATORS.length ? [] : OPERATORS);
     }
 
+    const toggleLanguage = (l) => {
+        if (selectedLanguages.length === LANGUAGES.length) {
+            setSelectedLanguages([l]);
+        } else if (selectedLanguages.includes(l)) {
+            setSelectedLanguages(selectedLanguages.filter(x => x !== l));
+        } else setSelectedLanguages([...selectedLanguages, l]);
+    };
+    const toggleAllLanguages = () => {
+        setSelectedLanguages(selectedLanguages.length === LANGUAGES.length ? [] : LANGUAGES);
+    };
+
     const filteredTours = MOCK_TOURS.filter(t => {
         if (t.hiddenInCalendar) return false;
         if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
@@ -109,10 +122,12 @@ export default function Tours({ currentUser }) {
             const matchCode = t.code?.toLowerCase().includes(q);
             const matchName = t.clientName?.toLowerCase().includes(q);
             const matchPhone = t.phone?.toLowerCase().includes(q);
-            if (!matchCode && !matchName && !matchPhone) return false;
+            const matchLang = t.language?.toLowerCase().includes(q) || LANG_MAP[t.language]?.toLowerCase().includes(q);
+            if (!matchCode && !matchName && !matchPhone && !matchLang) return false;
         }
         if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.some(v => t.vehicle?.includes(v))) return false;
         if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.some(d => t.driver?.includes(d))) return false;
+        if (selectedLanguages.length !== LANGUAGES.length && !selectedLanguages.includes(t.language)) return false;
         if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
 
         if (startDate && t.date < startDate) return false;
@@ -240,6 +255,10 @@ export default function Tours({ currentUser }) {
                             selected={selectedDrivers} onChange={toggleDriver} onToggleAll={toggleAllDrivers}
                         />
                     )}
+                    <MultiSelect
+                        label="Idiomas" options={LANGUAGES}
+                        selected={selectedLanguages} onChange={toggleLanguage} onToggleAll={toggleAllLanguages}
+                    />
                 </div>
 
                 {/* Status Filter Bar */}

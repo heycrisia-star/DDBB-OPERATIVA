@@ -24,6 +24,7 @@ const OPERATORS = ['GYG', 'FH', 'VIATOR', 'IC', 'CASH'];
 const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#ef4444', 'Joao': '#a855f7', 'Roger': '#f59e0b' };
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };
+const LANGUAGES = Object.keys(LANG_MAP);
 
 export default function Calendar({ currentUser }) {
     const now = new Date();
@@ -51,6 +52,7 @@ export default function Calendar({ currentUser }) {
     const [selectedVehicles, setSelectedVehicles] = useState(VEHICLES);
     const [selectedDrivers, setSelectedDrivers] = useState(DRIVERS);
     const [selectedOperators, setSelectedOperators] = useState(OPERATORS);
+    const [selectedLanguages, setSelectedLanguages] = useState(LANGUAGES);
 
     const setDateRangeShortcut = (type) => {
         const today = new Date();
@@ -94,6 +96,15 @@ export default function Calendar({ currentUser }) {
     };
     const toggleAllDrivers = () => {
         setSelectedDrivers(selectedDrivers.length === DRIVERS.length ? [] : DRIVERS);
+    };
+
+    const toggleLanguage = (l) => {
+        if (selectedLanguages.includes(l)) {
+            setSelectedLanguages(selectedLanguages.filter(x => x !== l));
+        } else setSelectedLanguages([...selectedLanguages, l]);
+    };
+    const toggleAllLanguages = () => {
+        setSelectedLanguages(selectedLanguages.length === LANGUAGES.length ? [] : LANGUAGES);
     };
 
     const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
@@ -224,6 +235,10 @@ export default function Calendar({ currentUser }) {
                                     selected={selectedDrivers} onChange={toggleDriver} onToggleAll={toggleAllDrivers}
                                 />
                             )}
+                            <MultiSelect
+                                label="Idiomas" options={LANGUAGES}
+                                selected={selectedLanguages} onChange={toggleLanguage} onToggleAll={toggleAllLanguages}
+                            />
                         </div>
                     </div>
 
@@ -329,11 +344,14 @@ export default function Calendar({ currentUser }) {
                             !t.code?.toLowerCase().includes(q) &&
                             !t.driver?.toLowerCase().includes(q) &&
                             !t.clientName?.toLowerCase().includes(q) &&
-                            !t.phone?.toLowerCase().includes(q)
+                            !t.phone?.toLowerCase().includes(q) &&
+                            !t.language?.toLowerCase().includes(q) &&
+                            !LANG_MAP[t.language]?.toLowerCase().includes(q)
                         ) return false;
                     }
                     if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.some(v => t.vehicle?.includes(v))) return false;
                     if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.some(d => t.driver?.includes(d))) return false;
+                    if (selectedLanguages.length !== LANGUAGES.length && !selectedLanguages.includes(t.language)) return false;
                     if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
                     return true;
                 });
@@ -594,11 +612,14 @@ export default function Calendar({ currentUser }) {
                         !t.code?.toLowerCase().includes(q) &&
                         !t.driver?.toLowerCase().includes(q) &&
                         !t.clientName?.toLowerCase().includes(q) &&
-                        !t.phone?.toLowerCase().includes(q)
+                        !t.phone?.toLowerCase().includes(q) &&
+                        !t.language?.toLowerCase().includes(q) &&
+                        !LANG_MAP[t.language]?.toLowerCase().includes(q)
                     ) return false;
                 }
                 if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.some(v => t.vehicle?.includes(v))) return false;
                 if (selectedDrivers.length !== DRIVERS.length && !selectedDrivers.some(d => t.driver?.includes(d))) return false;
+                if (selectedLanguages.length !== LANGUAGES.length && !selectedLanguages.includes(t.language)) return false;
                 if (selectedOperators.length > 0 && !selectedOperators.includes(t.operator)) return false;
 
                 if (startDate && t.date < startDate) return false;
