@@ -507,7 +507,8 @@ MANUAL_STATUS_CODES = {
 MANUAL_TIME_CODES = {
     'FH342800523',         # Thomas Whitby: moved to 19:30
     'VIATOR-1391951661',   # Christophe: moved to 10:30
-    'VIATOR-1393069057'    # Date fixed to Oct 1st
+    'VIATOR-1393069057',   # Date fixed to Oct 1st
+    'VIATOR-1395074415'    # Carlos: moved to 13:00
 }
 
 MANUAL_PAX_CODES = {
@@ -537,7 +538,7 @@ def upsert_booking(tours, booking):
         MANUAL_CLIENT_CODES = {
             'FH343696332', 'FH343696684', 'GYG2Q9NWYWBL', 
             'VIATOR-1391951661', 'GYG9964YQ7XB', 'FH347413216',
-            'GYGFWV8NXLXW'
+            'GYGFWV8NXLXW', 'GYGKBGFF5YF6', 'VIATOR-1395074415'
         }
         if booking.get('code') not in MANUAL_CLIENT_CODES:
             if booking.get('clientName'):
