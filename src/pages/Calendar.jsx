@@ -446,13 +446,18 @@ export default function Calendar({ currentUser }) {
                                             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                                             marginBottom: '1px'
                                         }}
-                                        title={`${tour.operator} - ${tour.code} | Coche: ${tour.vehicle} | Chofer: ${tour.driver}`}
+                                        title={`${tour.operator} - ${tour.code} | Coche: ${tour.vehicle} | Chofer: ${tour.driver}${tour.pickup ? ` | Recogida: ${tour.pickup}` : ''}`}
                                     >
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 800 }}>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
                                                 {tour.start}
                                                 <span style={{ fontSize: '0.6rem', opacity: 0.7, fontWeight: 500 }}>{parseInt(tour.duration)}h</span>
-                                                {tour.pickup && <MapPin size={10} color="#eab308" strokeWidth={3} />}
+                                                {tour.pickup && (
+                                                    <span style={{ display: 'flex', alignItems: 'center', gap: '2px', backgroundColor: '#fef3c7', color: '#92400e', padding: '0 4px', borderRadius: '4px', fontSize: '0.55rem', fontWeight: 800 }}>
+                                                        <MapPin size={10} color="#f59e0b" strokeWidth={3} />
+                                                        NOTA
+                                                    </span>
+                                                )}
                                             </span>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.15rem', whiteSpace: 'nowrap', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                                                 <span style={{ fontSize: isMobile ? '0.55rem' : '0.65rem', letterSpacing: '-0.5px', opacity: 0.85, whiteSpace: 'nowrap' }}>
