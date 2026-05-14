@@ -511,7 +511,9 @@ MANUAL_TIME_CODES = {
     'VIATOR-1393069057',   # Date fixed to Oct 1st
     'VIATOR-1395074415',   # Carlos: moved to 13:00
     'FH348617963',         # Joshua Vargas: move to 11:00
-    'FH348618439'          # Joshua Vargas: move to 11:00
+    'FH348618439',         # Joshua Vargas: move to 11:00
+    'GYG7VK522QVA',        # Danielle Allum: fix duration to 1h
+    'GYGLMRZ3RWQM'         # Timo Plenz: fix duration to 2h
 }
 
 MANUAL_PAX_CODES = {
