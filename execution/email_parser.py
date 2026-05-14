@@ -497,7 +497,8 @@ MANUAL_PRICE_CODES = {
     'GYG2Q9NWYWBL-BENE',  # Michelle 2may Cristian split: 37.08€
     'GYGBLHN2MZ7Q',       # Michelle 2may 19h Roger split: 33.37€
     'GYGBLHN2MZ7Q-BENE',  # Michelle 2may 19h Cristian split: 33.38€
-    'FH346502467'         # Duplicate FH today, refund done
+    'FH346502467',         # Duplicate FH today, refund done
+    'FH348618439'          # Joshua Vargas 3jun Carlos split: 47.04€
 }
 
 MANUAL_STATUS_CODES = {
@@ -508,7 +509,9 @@ MANUAL_TIME_CODES = {
     'FH342800523',         # Thomas Whitby: moved to 19:30
     'VIATOR-1391951661',   # Christophe: moved to 10:30
     'VIATOR-1393069057',   # Date fixed to Oct 1st
-    'VIATOR-1395074415'    # Carlos: moved to 13:00
+    'VIATOR-1395074415',   # Carlos: moved to 13:00
+    'FH348617963',         # Joshua Vargas: move to 11:00
+    'FH348618439'          # Joshua Vargas: move to 11:00
 }
 
 MANUAL_PAX_CODES = {
