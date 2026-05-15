@@ -499,9 +499,9 @@ MANUAL_PRICE_CODES = {
     'GYGBLHN2MZ7Q-BENE',  # Michelle 2may 19h Cristian split: 33.38€
     'FH346502467',         # Duplicate FH today, refund done
     'FH348618439',         # Joshua Vargas 3jun Carlos split: 47.04€
-    'GYG7VK522QVA',        # Danielle Allum 16may Carlos split: 35.1€
-    'GYGLMRZ3RWQM',        # Timo Plenz 16may Carlos split: 56.43€
-    'GYG48YRZB9MX'         # Meredith Palomo 16may Carlos split: 27.81€
+    'GYG7VK522QVA',        # Danielle Allum 16may Carlos split: 48.3€
+    'GYGLMRZ3RWQM',        # Timo Plenz 16may Carlos split: 75.24€
+    'GYG48YRZB9MX'         # Meredith Palomo 16may Carlos split: 37.05€
 }
 
 MANUAL_STATUS_CODES = {
