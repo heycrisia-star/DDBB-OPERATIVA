@@ -498,7 +498,10 @@ MANUAL_PRICE_CODES = {
     'GYGBLHN2MZ7Q',       # Michelle 2may 19h Roger split: 33.37€
     'GYGBLHN2MZ7Q-BENE',  # Michelle 2may 19h Cristian split: 33.38€
     'FH346502467',         # Duplicate FH today, refund done
-    'FH348618439'          # Joshua Vargas 3jun Carlos split: 47.04€
+    'FH348618439',         # Joshua Vargas 3jun Carlos split: 47.04€
+    'GYG7VK522QVA',        # Danielle Allum 16may Carlos split: 35.1€
+    'GYGLMRZ3RWQM',        # Timo Plenz 16may Carlos split: 56.43€
+    'GYG48YRZB9MX'         # Meredith Palomo 16may Carlos split: 27.81€
 }
 
 MANUAL_STATUS_CODES = {
@@ -513,7 +516,8 @@ MANUAL_TIME_CODES = {
     'FH348617963',         # Joshua Vargas: move to 11:00
     'FH348618439',         # Joshua Vargas: move to 11:00
     'GYG7VK522QVA',        # Danielle Allum: fix duration to 1h
-    'GYGLMRZ3RWQM'         # Timo Plenz: fix duration to 2h
+    'GYGLMRZ3RWQM',        # Timo Plenz: fix duration to 2h
+    'GYG48YRZB9MX'         # Meredith Palomo: fix duration to 2h
 }
 
 MANUAL_PAX_CODES = {
@@ -545,14 +549,20 @@ def upsert_booking(tours, booking):
             'VIATOR-1391951661', 'GYG9964YQ7XB', 'FH347413216',
             'GYGFWV8NXLXW', 'GYGKBGFF5YF6', 'VIATOR-1395074415'
         }
-        if booking.get('code') not in MANUAL_CLIENT_CODES:
+        
+        # Protect clientName for splits (BENE)
+        if booking.get('code') in MANUAL_PRICE_CODES:
+             # Don't update clientName if it's a split
+             pass
+        elif booking.get('code') not in MANUAL_CLIENT_CODES:
             if booking.get('clientName'):
                 existing['clientName'] = booking['clientName']
         # Protect duration for manually-corrected bookings
         MANUAL_DURATION_CODES = {
             'GYG32L8B9B99', 'GYG2Q9NKWL3V', 'FH344894659', 
             'GYGBLHR7MLMW', 'GYGFWV877LM6', 'GYG2Q9M34V8W',
-            'GYG32L7YLNRQ', 'GYG6H8BN8R75', 'GYGRFQRG7A67', 'GYG83XLG8V2R'
+            'GYG32L7YLNRQ', 'GYG6H8BN8R75', 'GYGRFQRG7A67', 'GYG83XLG8V2R',
+            'GYG7VK522QVA', 'GYGLMRZ3RWQM', 'GYG48YRZB9MX'
         }
         if booking.get('code') not in MANUAL_DURATION_CODES:
             if booking.get('duration'):
