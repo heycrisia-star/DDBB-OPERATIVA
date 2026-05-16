@@ -517,7 +517,8 @@ MANUAL_TIME_CODES = {
     'FH348618439',         # Joshua Vargas: move to 11:00
     'GYG7VK522QVA',        # Danielle Allum: fix duration to 1h
     'GYGLMRZ3RWQM',        # Timo Plenz: fix duration to 2h
-    'GYG48YRZB9MX'         # Meredith Palomo: fix duration to 2h
+    'GYG48YRZB9MX',        # Meredith Palomo: fix duration to 1h
+    'GYG48YVFFBB4'         # Viktorija: fix duration to 2h
 }
 
 MANUAL_PAX_CODES = {
