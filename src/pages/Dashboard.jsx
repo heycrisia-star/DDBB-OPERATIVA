@@ -857,9 +857,14 @@ export default function Dashboard({ currentUser }) {
                     if (value === undefined || value === 0) return null;
                     // For LineChart, width might be undefined, use a default or 0
                     const xPos = x + (width ? width / 2 : 0);
+                    
+                    const formattedValue = value >= 1000 
+                        ? (value / 1000).toFixed(1).replace('.0', '') + 'k' 
+                        : Math.round(value).toString();
+
                     return (
                         <text x={xPos} y={y - 10} fill="var(--text-primary)" fontSize={10} fontWeight={800} textAnchor="middle" style={{ pointerEvents: 'none' }}>
-                            {Math.round(value).toLocaleString('es-ES')}€
+                            {formattedValue}€
                         </text>
                     );
                 };
