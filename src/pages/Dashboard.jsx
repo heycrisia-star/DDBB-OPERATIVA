@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar as CalendarIcon, Clock, TrendingUp, Users, Car, UserCircle, Timer, AlertCircle, ShoppingBag, PieChart, Globe, CalendarMinus, Trophy, BarChart2 } from 'lucide-react';
 import { format, startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, differenceInDays, parseISO } from 'date-fns';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, LabelList } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, LabelList, ComposedChart } from 'recharts';
 import MultiSelect from '../components/MultiSelect';
 import { MOCK_TOURS } from '../data/mockTours';
 
@@ -853,18 +853,19 @@ export default function Dashboard({ currentUser }) {
                 };
 
                 const TotalTopLabel = (props) => {
-                    const { x, y, width, payload } = props;
-                    if (!payload) return null;
-                    const total = payload.total;
-                    if (!total) return null;
+                    const { x, y, width, value } = props;
+                    if (value === undefined || value === 0) return null;
+                    // For LineChart, width might be undefined, use a default or 0
+                    const xPos = x + (width ? width / 2 : 0);
                     return (
-                        <text x={x + width / 2} y={y - 8} fill="var(--text-primary)" fontSize={11} fontWeight={800} textAnchor="middle" style={{ pointerEvents: 'none' }}>
-                            {total.toLocaleString('es-ES')}€
+                        <text x={xPos} y={y - 10} fill="var(--text-primary)" fontSize={10} fontWeight={800} textAnchor="middle" style={{ pointerEvents: 'none' }}>
+                            {Math.round(value).toLocaleString('es-ES')}€
                         </text>
                     );
                 };
 
-                const ChartComp = chartMode === 'bars' ? BarChart : LineChart;
+                const ChartComp = chartMode === 'bars' ? ComposedChart : LineChart;
+                const BarComp = Bar;
 
                 return (
                     <div className="card" style={{ marginBottom: '2rem', padding: isMobile ? '1rem' : '1.5rem' }}>
@@ -903,16 +904,31 @@ export default function Dashboard({ currentUser }) {
                                                 <Bar dataKey="VIATOR" stackId="tot" name="VIATOR" fill="#22c55e"><LabelList content={<PercLabel/>} /></Bar>
                                                 <Bar dataKey="CASH" stackId="tot" name="CASH" fill="#14b8a6" radius={[4, 4, 0, 0]}>
                                                     <LabelList content={<PercLabel/>} />
-                                                    <LabelList content={<TotalTopLabel/>} />
                                                 </Bar>
+                                                {/* Line just for the total label - using strokeWidth 0 instead of none */}
+                                                <Line type="monotone" dataKey="total" stroke="transparent" strokeWidth={0} dot={false} isAnimationActive={false}>
+                                                    <LabelList dataKey="total" content={<TotalTopLabel/>} />
+                                                </Line>
                                             </>
                                         )}
-                                        {showNeto && <Bar dataKey="neto" name="Neto Cristian" fill="#0284c7" radius={[4, 4, 0, 0]} />}
+                                        {showNeto && (
+                                            <Bar dataKey="neto" name="Neto Cristian" fill="#0284c7" radius={[4, 4, 0, 0]}>
+                                                <LabelList dataKey="neto" content={<TotalTopLabel/>} />
+                                            </Bar>
+                                        )}
                                     </>
                                 ) : (
                                     <>
-                                        {showTotal && <Line type="monotone" dataKey="total" name="Total Negocio" stroke="#64748b" strokeWidth={2.5} dot={{ r: 4, fill: '#64748b' }} activeDot={{ r: 6 }} />}
-                                        {showNeto && <Line type="monotone" dataKey="neto" name="Neto Cristian" stroke="#0284c7" strokeWidth={2.5} dot={{ r: 4, fill: '#0284c7' }} activeDot={{ r: 6 }} />}
+                                        {showTotal && (
+                                            <Line type="monotone" dataKey="total" name="Total Negocio" stroke="#64748b" strokeWidth={2.5} dot={{ r: 4, fill: '#64748b' }} activeDot={{ r: 6 }}>
+                                                <LabelList dataKey="total" content={<TotalTopLabel/>} />
+                                            </Line>
+                                        )}
+                                        {showNeto && (
+                                            <Line type="monotone" dataKey="neto" name="Neto Cristian" stroke="#0284c7" strokeWidth={2.5} dot={{ r: 4, fill: '#0284c7' }} activeDot={{ r: 6 }}>
+                                                <LabelList dataKey="neto" content={<TotalTopLabel/>} />
+                                            </Line>
+                                        )}
                                     </>
                                 )}
                             </ChartComp>

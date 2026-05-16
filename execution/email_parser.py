@@ -502,7 +502,11 @@ MANUAL_PRICE_CODES = {
     'GYG7VK522QVA',        # Danielle Allum 16may Carlos split: 48.3€
     'GYGLMRZ3RWQM',        # Timo Plenz 16may Carlos split: 75.24€
     'GYG48YRZB9MX',        # Meredith Palomo 16may Carlos split: 37.05€
-    'GYGBLHNB9QMQ'         # Hans Jansma 16may Roger split: 47.04€
+    'GYG48YVFFBB4',        # Viktorija 15may Carlos split: 48.3€
+    'GYG48YVFFBB4-BENE',   # Viktorija 15may Cristian split: 48.3€
+    'GYGX7NGAH4NG',        # Roger 15may split: 47.04€
+    'GYGBLHNB9QMQ',        # Hans Jansma 16may Roger split: 47.04€
+    'GYGBLHNB9QMQ-BENE'    # Hans Jansma 16may Cristian split: 47.04€
 }
 
 MANUAL_STATUS_CODES = {
@@ -556,13 +560,12 @@ def upsert_booking(tours, booking):
         elif booking.get('code') not in MANUAL_CLIENT_CODES:
             if booking.get('clientName'):
                 existing['clientName'] = booking['clientName']
-        # Protect duration for manually-corrected bookings
         MANUAL_DURATION_CODES = {
             'GYG32L8B9B99', 'GYG2Q9NKWL3V', 'FH344894659', 
             'GYGBLHR7MLMW', 'GYGFWV877LM6', 'GYG2Q9M34V8W',
             'GYG32L7YLNRQ', 'GYG6H8BN8R75', 'GYGRFQRG7A67', 'GYG83XLG8V2R',
             'GYG7VK522QVA', 'GYGLMRZ3RWQM', 'GYG48YRZB9MX', 'GYG48YVFFBB4',
-            'GYGX7NGAH4NG'
+            'GYG48YVFFBB4-BENE', 'GYGX7NGAH4NG', 'GYGBLHNB9QMQ', 'GYGBLHNB9QMQ-BENE'
         }
         if booking.get('code') not in MANUAL_DURATION_CODES:
             if booking.get('duration'):
