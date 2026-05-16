@@ -501,7 +501,8 @@ MANUAL_PRICE_CODES = {
     'FH348618439',         # Joshua Vargas 3jun Carlos split: 47.04€
     'GYG7VK522QVA',        # Danielle Allum 16may Carlos split: 48.3€
     'GYGLMRZ3RWQM',        # Timo Plenz 16may Carlos split: 75.24€
-    'GYG48YRZB9MX'         # Meredith Palomo 16may Carlos split: 37.05€
+    'GYG48YRZB9MX',        # Meredith Palomo 16may Carlos split: 37.05€
+    'GYGBLHNB9QMQ'         # Hans Jansma 16may Roger split: 47.04€
 }
 
 MANUAL_STATUS_CODES = {
