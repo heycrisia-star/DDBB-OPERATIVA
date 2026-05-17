@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { Lock, User, LogIn } from 'lucide-react';
 
 const USERS = {
-    '2026': { name: 'Cristian', role: 'admin' },
-    '0000': { name: 'Carlos', role: 'driver' },
-    '1111': { name: 'Joao', role: 'driver' }
+    '202020': { name: 'Cristian', role: 'admin' }
 };
 
 export default function Login({ onLogin }) {

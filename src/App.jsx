@@ -9,11 +9,11 @@ import { useState, useEffect } from 'react';
 function App() {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('currentUser');
+      const saved = localStorage.getItem('legacy_session_v2');
       return saved ? JSON.parse(saved) : null;
     } catch (e) {
       console.error("Error parsing user from localStorage:", e);
-      localStorage.removeItem('currentUser');
+      localStorage.removeItem('legacy_session_v2');
       return null;
     }
   });
@@ -27,12 +27,12 @@ function App() {
 
   const handleLogin = (user) => {
     setCurrentUser(user);
-    localStorage.setItem('currentUser', JSON.stringify(user));
+    localStorage.setItem('legacy_session_v2', JSON.stringify(user));
   };
 
   const handleLogout = () => {
     setCurrentUser(null);
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('legacy_session_v2');
   };
 
   return (
