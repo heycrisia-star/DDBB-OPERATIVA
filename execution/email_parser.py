@@ -510,7 +510,8 @@ MANUAL_PRICE_CODES = {
 }
 
 MANUAL_STATUS_CODES = {
-    'FH346502467'
+    'FH346502467',
+    'VIATOR-1396370015'
 }
 
 MANUAL_TIME_CODES = {
@@ -521,10 +522,12 @@ MANUAL_TIME_CODES = {
     'FH348617963',         # Joshua Vargas: move to 11:00
     'FH348618439',         # Joshua Vargas: move to 11:00
     'FH348618439',         # Joshua Vargas: move to 11:00
+    'VIATOR-1398494071'
 }
 
 MANUAL_PAX_CODES = {
-    'VIATOR-1391951661'   # Christophe 9may: 2 pax
+    'VIATOR-1391951661',   # Christophe 9may: 2 pax
+    'VIATOR-1398494071'
 }
 
 
@@ -550,7 +553,8 @@ def upsert_booking(tours, booking):
         MANUAL_CLIENT_CODES = {
             'FH343696332', 'FH343696684', 'GYG2Q9NWYWBL', 
             'VIATOR-1391951661', 'GYG9964YQ7XB', 'FH347413216',
-            'GYGFWV8NXLXW', 'GYGKBGFF5YF6', 'VIATOR-1395074415'
+            'GYGFWV8NXLXW', 'GYGKBGFF5YF6', 'VIATOR-1395074415',
+            'VIATOR-1398494071'
         }
         
         # Protect clientName for splits (BENE)
