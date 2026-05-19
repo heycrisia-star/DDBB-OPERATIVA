@@ -377,12 +377,25 @@ export default function Calendar({ currentUser }) {
                         }}
                     >
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
-                            {MOCK_CRUISES[format(day, 'yyyy-MM-dd')] > 0 ? (
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#0369a1', fontSize: '0.65rem', fontWeight: 800, backgroundColor: '#e0f2fe', padding: '2px 5px', borderRadius: '4px' }} title={`${MOCK_CRUISES[format(day, 'yyyy-MM-dd')]} cruceros hoy`}>
-                                    <Ship size={12} strokeWidth={2.5} />
-                                    <span>x{MOCK_CRUISES[format(day, 'yyyy-MM-dd')]}</span>
-                                </div>
-                            ) : <div />}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                {MOCK_CRUISES[format(day, 'yyyy-MM-dd')] > 0 && (
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#0369a1', fontSize: '0.65rem', fontWeight: 800, backgroundColor: '#e0f2fe', padding: '2px 5px', borderRadius: '4px' }} title={`${MOCK_CRUISES[format(day, 'yyyy-MM-dd')]} cruceros hoy`}>
+                                        <Ship size={12} strokeWidth={2.5} />
+                                        <span>x{MOCK_CRUISES[format(day, 'yyyy-MM-dd')]}</span>
+                                    </div>
+                                )}
+                                {MOCK_TOURS.filter(t => t.operator === 'PERSONAL' && t.date === format(day, 'yyyy-MM-dd')).map((ev, idx) => {
+  let emoji = '👦👦'; // default two children
+  if (ev.code?.includes('JUNTOS')) {
+    emoji = '👨‍👩‍👧‍👦'; // family of 4
+  } else if (ev.code?.includes('PAPA')) {
+    emoji = '👨'; // papa icon
+  }
+  return (
+    <span key={idx} style={{ marginRight: '2px', fontSize: isMobile ? '0.9rem' : '1rem' }} title={ev.clientName}>{emoji}</span>
+  );
+})}
+                            </div>
                             <span style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
