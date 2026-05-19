@@ -4132,5 +4132,24 @@ export const MOCK_TOURS = [
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-05-18",
     "id": 215
+  },
+  {
+    "code": "CASH-20260605-1000",
+    "date": "2026-06-05",
+    "start": "10:00",
+    "duration": 3,
+    "operator": "CASH",
+    "status": "confirmado",
+    "pax": 4,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "",
+    "phone": "",
+    "language": "ES",
+    "country": "",
+    "netPrice": 230,
+    "product": "Tour Privado (Efectivo)",
+    "bookingDate": "2026-05-19",
+    "id": 216
   }
 ];
