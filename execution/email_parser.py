@@ -554,7 +554,7 @@ def upsert_booking(tours, booking):
             'FH343696332', 'FH343696684', 'GYG2Q9NWYWBL', 
             'VIATOR-1391951661', 'GYG9964YQ7XB', 'FH347413216',
             'GYGFWV8NXLXW', 'GYGKBGFF5YF6', 'VIATOR-1395074415',
-            'VIATOR-1398494071', 'GYGVN29WBG65'
+            'VIATOR-1398494071', 'GYGVN29WBG65', 'GYGG45WFRG2R'
         }
         
         # Protect clientName for splits (BENE)

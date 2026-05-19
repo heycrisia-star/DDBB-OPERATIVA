@@ -3681,7 +3681,7 @@ export const MOCK_TOURS = [
     "vehicle": "02-NR",
     "driver": "Cristian",
     "pickup": "Recoger en Hotel Regina en Plaza Cataluña",
-    "clientName": "Sandrine Lenquette",
+    "clientName": "Sandrine Lenquette (Recoger en hotel regina)",
     "phone": "+33637168186",
     "language": "FR",
     "country": "",
