@@ -14,12 +14,13 @@ const OPERATOR_COLORS = {
     'VIATOR': { bg: '#dcfce7', border: '#86efac', text: '#15803d' }, // Verde
     'VIA': { bg: '#dcfce7', border: '#86efac', text: '#15803d' },    // Alias para Viator
     'IC': { bg: '#f3e8ff', border: '#d8b4fe', text: '#7e22ce' },  // Purpura
-    'CASH': { bg: '#f0fdfa', border: '#ccfbf1', text: '#0d9488' } 
+    'CASH': { bg: '#f0fdfa', border: '#ccfbf1', text: '#0d9488' },
+    'PERSONAL': { bg: '#e0f2fe', border: '#7dd3fc', text: '#0284c7' }
 };
 
 const VEHICLES = ['01-DR', '02-NR'];
 const DRIVERS = ['Cristian', 'Carlos', 'Joao', 'Roger'];
-const OPERATORS = ['GYG', 'FH', 'VIATOR', 'IC', 'CASH'];
+const OPERATORS = ['GYG', 'FH', 'VIATOR', 'IC', 'CASH', 'PERSONAL'];
 
 const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#ef4444', 'Joao': '#a855f7', 'Roger': '#f59e0b' };
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
