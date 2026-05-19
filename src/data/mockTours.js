@@ -3546,7 +3546,7 @@ export const MOCK_TOURS = [
     "pax": 3,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Melanie Dierking",
+    "clientName": "Melanie Dierking (Recoger en Innside by melia barcelona apolo)",
     "phone": "+491796771900",
     "language": "EN",
     "country": "",
