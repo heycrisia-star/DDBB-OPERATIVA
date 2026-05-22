@@ -384,17 +384,9 @@ export default function Calendar({ currentUser }) {
                                         <span>x{MOCK_CRUISES[format(day, 'yyyy-MM-dd')]}</span>
                                     </div>
                                 )}
-                                {MOCK_TOURS.filter(t => t.operator === 'PERSONAL' && t.date === format(day, 'yyyy-MM-dd')).map((ev, idx) => {
-  let emoji = '👦👦'; // default two children
-  if (ev.code?.includes('JUNTOS')) {
-    emoji = '👨‍👩‍👧‍👦'; // family of 4
-  } else if (ev.code?.includes('PAPA')) {
-    emoji = '👨'; // papa icon
-  }
-  return (
-    <span key={idx} style={{ marginRight: '2px', fontSize: isMobile ? '0.9rem' : '1rem' }} title={ev.clientName}>{emoji}</span>
-  );
-})}
+                                {MOCK_TOURS.filter(t => t.operator === 'PERSONAL' && t.date === format(day, 'yyyy-MM-dd')).length > 0 && (
+  <span style={{ marginLeft: '4px', fontSize: isMobile ? '0.9rem' : '1rem' }} title="Niños">👦👦</span>
+)}
                             </div>
                             <span style={{
                                 display: 'inline-flex',
