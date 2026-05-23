@@ -3107,6 +3107,25 @@ export const MOCK_TOURS = [
     "id": 211
   },
   {
+    "id": 222,
+    "code": "GYG-NEW-23MAY16",
+    "date": "2026-05-23",
+    "start": "16:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Cliente Nuevo",
+    "phone": "",
+    "language": "EN",
+    "country": "",
+    "netPrice": 119,
+    "product": "Nueva reserva GYG",
+    "bookingDate": "2026-05-23"
+  },
+  {
     "id": 37,
     "code": "GYGWZAZ5KNKG",
     "date": "2026-05-24",
@@ -3124,6 +3143,25 @@ export const MOCK_TOURS = [
     "netPrice": 75.0,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-05-20"
+  },
+  {
+    "id": 223,
+    "code": "GYG-NEW-24MAY11",
+    "date": "2026-05-24",
+    "start": "11:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Cliente Nuevo",
+    "phone": "",
+    "language": "EN",
+    "country": "",
+    "netPrice": 119,
+    "product": "Nueva reserva GYG",
+    "bookingDate": "2026-05-23"
   },
   {
     "code": "GYGBLHN28FZH",
