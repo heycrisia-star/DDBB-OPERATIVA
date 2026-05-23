@@ -215,7 +215,8 @@ export default function Dashboard({ currentUser }) {
     };
 
     const activeTours = filteredTours.filter(t => t.status.toLowerCase() !== 'cancelado');
-    const realTours = activeTours.filter(t => !t.hiddenInCalendar); 
+    // We use realTours for counting hours, total tours, and pax to avoid double-counting BENE blocks
+    const realTours = activeTours.filter(t => !t.hiddenInCalendar && !(t.code && t.code.includes('-BENE')));
     
     // Venta Total should be the sum of all tours in the range, respecting ALL active filters
     const totalSales = Math.round(activeTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0));
