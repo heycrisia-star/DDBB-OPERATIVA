@@ -3043,7 +3043,7 @@ export const MOCK_TOURS = [
     "phone": "+49 172 3554261",
     "language": "EN",
     "country": "",
-    "netPrice": 150.48,
+    "netPrice": 75.24,
     "product": "Park City & Beach",
     "bookingDate": "2026-05-06",
     "id": 174
@@ -3062,7 +3062,7 @@ export const MOCK_TOURS = [
     "phone": "+49 172 3554261",
     "language": "EN",
     "country": "",
-    "netPrice": 62.18,
+    "netPrice": 75.24,
     "product": "Park City & Beach (Split)",
     "bookingDate": "2026-05-06",
     "id": 176,
@@ -3083,7 +3083,7 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 108.5,
+    "netPrice": 108.64,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-05-23"
   },
@@ -3102,7 +3102,7 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 108.5,
+    "netPrice": 108.65,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Tour of Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-05-23"
   },
@@ -3120,7 +3120,7 @@ export const MOCK_TOURS = [
     "phone": "+4916091662704",
     "language": "DE",
     "country": "",
-    "netPrice": 119,
+    "netPrice": 119.3,
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-05-17",
     "id": 211
@@ -3140,7 +3140,7 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 75.0,
+    "netPrice": 67.71,
     "product": "Nueva reserva GYG",
     "bookingDate": "2026-05-23"
   },
@@ -3159,7 +3159,7 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 75.0,
+    "netPrice": 67.72,
     "product": "Nueva reserva GYG",
     "bookingDate": "2026-05-23"
   },
@@ -3178,7 +3178,7 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "DE",
     "country": "",
-    "netPrice": 150.0,
+    "netPrice": 135.43,
     "product": "City, Park & Beach",
     "bookingDate": "2026-05-23"
   },
