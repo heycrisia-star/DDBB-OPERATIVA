@@ -3447,8 +3447,26 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-05-26"
   },
   {
-    "id": 240,
+    "id": 242,
     "code": "GYG83XG8B9FQ",
+    "date": "2026-05-28",
+    "start": "09:00",
+    "duration": 2,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 5,
+    "vehicle": "02-NR",
+    "driver": "Joao y Cristian",
+    "clientName": "Birgit Kosik 🚗🚗",
+    "phone": "+491714106316",
+    "language": "DE",
+    "country": "DE",
+    "netPrice": 0,
+    "product": "City, Park & Beach"
+  },
+  {
+    "id": 243,
+    "code": "GYG83XG8B9FQ-JOAO",
     "date": "2026-05-28",
     "start": "09:00",
     "duration": 2,
@@ -3463,18 +3481,18 @@ export const MOCK_TOURS = [
     "country": "DE",
     "netPrice": 50.0,
     "product": "City, Park & Beach",
-    "bookingDate": "2026-05-24"
+    "hiddenInCalendar": true
   },
   {
-    "id": 241,
-    "code": "GYG83XG8B9FQ-2",
+    "id": 244,
+    "code": "GYG83XG8B9FQ-CRIS",
     "date": "2026-05-28",
     "start": "09:00",
     "duration": 2,
     "operator": "GYG",
     "status": "confirmado",
     "pax": 5,
-    "vehicle": "01-NR",
+    "vehicle": "02-NR",
     "driver": "Cristian",
     "clientName": "Birgit Kosik 🚗🚗",
     "phone": "+491714106316",
@@ -3482,7 +3500,7 @@ export const MOCK_TOURS = [
     "country": "DE",
     "netPrice": 219.78,
     "product": "City, Park & Beach",
-    "bookingDate": "2026-05-24"
+    "hiddenInCalendar": true
   },
   {
     "code": "GYGG45W3NAAN",
