@@ -395,7 +395,7 @@ export default function Calendar({ currentUser }) {
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                                 {MOCK_EVENTS.filter(e => e.date === format(day, 'yyyy-MM-dd')).length > 0 && (
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#991b1b', fontSize: '0.65rem', fontWeight: 800, backgroundColor: '#fee2e2', padding: '2px 5px', borderRadius: '4px', cursor: 'help' }} title={MOCK_EVENTS.filter(e => e.date === format(day, 'yyyy-MM-dd')).map(e => `⚠️ ${e.title}\n⌚ ${e.start} - ${e.end}\nℹ️ ${e.description}`).join('\n\n')}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: 'white', fontSize: '0.65rem', fontWeight: 800, backgroundColor: '#dc2626', padding: '2px 5px', borderRadius: '4px', cursor: 'help', boxShadow: '0 0 8px rgba(220, 38, 38, 0.6)', border: '1px solid #991b1b' }} title={MOCK_EVENTS.filter(e => e.date === format(day, 'yyyy-MM-dd')).map(e => `⚠️ ${e.title}\n⌚ ${e.start} - ${e.end}\nℹ️ ${e.description}`).join('\n\n')}>
                                         <span style={{ fontSize: '10px' }}>⚠️</span>
                                         <span>TRÁFICO</span>
                                     </div>
