@@ -410,7 +410,7 @@ export default function Dashboard({ currentUser }) {
         if (!salesByDay_total[dayKey]) salesByDay_total[dayKey] = 0;
         salesByDay_total[dayKey] += price;
 
-        if (!t.hiddenInCalendar) {
+        if (!t.hiddenInCalendar && !(t.code && t.code.includes('-BENE'))) {
             if (!hoursByDay[dayKey]) hoursByDay[dayKey] = 0;
             hoursByDay[dayKey] += dur;
         }
