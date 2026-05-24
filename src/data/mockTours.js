@@ -3405,7 +3405,8 @@ export const MOCK_TOURS = [
     "netPrice": 217.26,
     "product": "Complete Barcelona",
     "bookingDate": "2026-04-28",
-    "id": 155
+    "id": 155,
+    "pickup": "Posible recogida Insside"
   },
   {
     "id": 221,
