@@ -3242,7 +3242,7 @@ export const MOCK_TOURS = [
     "date": "2026-05-24",
     "start": "15:00",
     "duration": 2,
-    "operator": "Viator",
+    "operator": "VIATOR",
     "status": "confirmado",
     "pax": 2,
     "vehicle": "02-NR",
