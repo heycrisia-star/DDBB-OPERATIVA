@@ -615,7 +615,7 @@ export default function Calendar({ currentUser }) {
                                             </td>
                                             <td style={{ padding: '0.75rem 1rem', color: 'var(--text-secondary)' }}>{tour.pax} pax</td>
                                             <td style={{ padding: '0.75rem 1rem', color: VEHICLE_COLORS[tour.vehicle] || 'var(--text-secondary)', fontWeight: 700 }}>{tour.vehicle}</td>
-                                            <td style={{ padding: '0.75rem 1rem', color: DRIVER_COLORS[tour.driver] || 'var(--text-secondary)', fontWeight: 700 }}>{renderDriverName(tour.driver, isCancelled || isPast)}</td>
+                                            <td style={{ padding: '0.75rem 1rem', color: DRIVER_COLORS[tour.driver] || 'var(--text-secondary)', fontWeight: 700 }}>{renderDriverName(tour.driver, tour.status?.toLowerCase() === 'cancelado')}</td>
                                         </tr>
                                     );
                                 })}
@@ -741,7 +741,7 @@ export default function Calendar({ currentUser }) {
                                     <div style={{ marginTop: '0.25rem', padding: '0.5rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>
                                         <UserCircle size={isMobile ? 16 : 18} color={DRIVER_COLORS[tour.driver] || 'var(--brand-primary)'} />
                                         <span>
-                                            <strong style={{ color: 'var(--text-primary)' }}>{renderDriverName(tour.driver, isCancelled || isPast)}</strong>
+                                            <strong style={{ color: 'var(--text-primary)' }}>{renderDriverName(tour.driver, tour.status?.toLowerCase() === 'cancelado')}</strong>
                                             <span style={{ color: 'var(--text-tertiary)', marginLeft: '0.4rem' }}>{tour.vehicle}</span>
                                         </span>
                                     </div>
