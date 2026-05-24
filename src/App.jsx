@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom';
 import { Calendar as CalendarIcon, LayoutDashboard, List, LogOut, AlertTriangle } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
-import Events from './pages/Events';
 import Tours from './pages/Tours';
 import Calendar from './pages/Calendar';
 import Login from './components/Login';
@@ -55,10 +54,6 @@ function App() {
               <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
                 <LayoutDashboard size={20} />
                 <span>Gestión</span>
-              </NavLink>
-              <NavLink to="/events" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                <AlertTriangle size={20} />
-                <span>Alertas</span>
               </NavLink>
             </nav>
 
@@ -115,7 +110,6 @@ function App() {
               <Route path="/" element={<Calendar currentUser={currentUser} />} />
               <Route path="/tours" element={<Tours currentUser={currentUser} />} />
               <Route path="/dashboard" element={<Dashboard currentUser={currentUser} />} />
-              <Route path="/events" element={<Events currentUser={currentUser} />} />
             </Routes>
           </main>
         </div>
