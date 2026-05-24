@@ -1727,7 +1727,7 @@ export const MOCK_TOURS = [
     "status": "confirmado",
     "pax": 2,
     "vehicle": "01-DR",
-    "driver": "Joao",
+    "driver": "Cristian",
     "clientName": "Meryem Dogan",
     "phone": "+447817993852",
     "language": "EN",

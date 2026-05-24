@@ -23,6 +23,21 @@ const DRIVERS = ['Cristian', 'Carlos', 'Joao', 'Roger'];
 const OPERATORS = ['GYG', 'FH', 'VIATOR', 'IC', 'CASH', 'PERSONAL'];
 
 const DRIVER_COLORS = { 'Cristian': '#0284c7', 'Carlos': '#ef4444', 'Joao': '#a855f7', 'Roger': '#f59e0b' };
+
+const renderDriverName = (driverName, isGray) => {
+    if (!driverName) return null;
+    if (driverName === 'Joao y Cristian') {
+        return (
+            <span style={{ color: isGray ? 'inherit' : 'var(--text-secondary)' }}>
+                <span style={{ color: isGray ? 'inherit' : DRIVER_COLORS['Joao'] }}>Joao</span>
+                <span> y </span>
+                <span style={{ color: isGray ? 'inherit' : DRIVER_COLORS['Cristian'] }}>Cristian</span>
+            </span>
+        );
+    }
+    return driverName;
+};
+
 const VEHICLE_COLORS = { '01-DR': '#ca8a04', '02-NR': '#334155' };
 const LANG_MAP = { 'EN': 'English', 'ES': 'Spanish', 'DE': 'German', 'FR': 'French', 'IT': 'Italian', 'NL': 'Dutch', 'PT': 'Portuguese' };
 const LANGUAGES = Object.keys(LANG_MAP);
@@ -452,7 +467,7 @@ export default function Calendar({ currentUser }) {
                                             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                                             marginBottom: '1px'
                                         }}
-                                        title={`${tour.operator} - ${tour.code} | Coche: ${tour.vehicle} | Chofer: ${tour.driver}${tour.pickup ? ` | Recogida: ${tour.pickup}` : ''}`}
+                                        title={`${tour.operator} - ${tour.code} | Coche: ${tour.vehicle} | Chofer: ${renderDriverName(tour.driver, isCancelled || isPast)}${tour.pickup ? ` | Recogida: ${tour.pickup}` : ''}`}
                                     >
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 800 }}>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
@@ -509,7 +524,7 @@ export default function Calendar({ currentUser }) {
                                                     color: (isCancelled || isPast) ? '#64748b' : (DRIVER_COLORS[tour.driver] || 'var(--text-secondary)'),
                                                     fontWeight: 800
                                                 }}>
-                                                    {tour.driver}
+                                                    {renderDriverName(tour.driver, isCancelled || isPast)}
                                                 </span>
                                             )}
                                         </div>
@@ -599,7 +614,7 @@ export default function Calendar({ currentUser }) {
                                             </td>
                                             <td style={{ padding: '0.75rem 1rem', color: 'var(--text-secondary)' }}>{tour.pax} pax</td>
                                             <td style={{ padding: '0.75rem 1rem', color: VEHICLE_COLORS[tour.vehicle] || 'var(--text-secondary)', fontWeight: 700 }}>{tour.vehicle}</td>
-                                            <td style={{ padding: '0.75rem 1rem', color: DRIVER_COLORS[tour.driver] || 'var(--text-secondary)', fontWeight: 700 }}>{tour.driver}</td>
+                                            <td style={{ padding: '0.75rem 1rem', color: DRIVER_COLORS[tour.driver] || 'var(--text-secondary)', fontWeight: 700 }}>{renderDriverName(tour.driver, isCancelled || isPast)}</td>
                                         </tr>
                                     );
                                 })}
@@ -725,7 +740,7 @@ export default function Calendar({ currentUser }) {
                                     <div style={{ marginTop: '0.25rem', padding: '0.5rem', backgroundColor: 'var(--bg-hover)', borderRadius: 'var(--radius-sm)', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: isMobile ? '0.75rem' : '0.875rem' }}>
                                         <UserCircle size={isMobile ? 16 : 18} color={DRIVER_COLORS[tour.driver] || 'var(--brand-primary)'} />
                                         <span>
-                                            <strong style={{ color: 'var(--text-primary)' }}>{tour.driver}</strong>
+                                            <strong style={{ color: 'var(--text-primary)' }}>{renderDriverName(tour.driver, isCancelled || isPast)}</strong>
                                             <span style={{ color: 'var(--text-tertiary)', marginLeft: '0.4rem' }}>{tour.vehicle}</span>
                                         </span>
                                     </div>
