@@ -3466,6 +3466,25 @@ export const MOCK_TOURS = [
     "id": 144
   },
   {
+    "id": 239,
+    "code": "FH350005283",
+    "date": "2026-05-29",
+    "start": "09:00",
+    "duration": 3,
+    "operator": "FH",
+    "status": "confirmado",
+    "pax": 4,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Julia Sitte",
+    "phone": "+491777644120",
+    "language": "DE",
+    "country": "DE",
+    "netPrice": 217.26,
+    "product": "Complete Barcelona",
+    "bookingDate": "2026-05-20"
+  },
+  {
     "code": "VIATOR-1398494071",
     "date": "2026-05-29",
     "start": "14:00",
