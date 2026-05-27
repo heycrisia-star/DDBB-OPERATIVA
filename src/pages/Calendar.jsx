@@ -330,6 +330,30 @@ export default function Calendar({ currentUser }) {
         return <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', backgroundColor: 'var(--bg-card)' }}>{days}</div>;
     };
 
+    const COPARENTING_JUNE_2026 = {
+        '2026-06-03': ['👦👦'],
+        '2026-06-04': ['👦👦'],
+        '2026-06-05': ['👦👦', '🎂'],
+        '2026-06-06': ['👦👦'],
+        '2026-06-07': ['👦👦'],
+        '2026-06-08': ['👦👦', '🎂'],
+        '2026-06-09': ['👨'],
+        '2026-06-11': ['👦👦', '👨'],
+        '2026-06-12': ['👦👦'],
+        '2026-06-13': ['🧡'],
+        '2026-06-14': ['🧡'],
+        '2026-06-15': ['🧡'],
+        '2026-06-16': ['👦👦'],
+        '2026-06-17': ['👦👦'],
+        '2026-06-18': ['👦👦', '🎂'],
+        '2026-06-19': ['👦👦'],
+        '2026-06-24': ['👦👦'],
+        '2026-06-25': ['👦👦'],
+        '2026-06-26': ['👦👦'],
+        '2026-06-27': ['👦👦'],
+        '2026-06-28': ['👦👦']
+    };
+
     const renderCells = () => {
         const monthStart = startOfMonth(currentMonth);
         const monthEnd = endOfMonth(monthStart);
@@ -399,9 +423,13 @@ export default function Calendar({ currentUser }) {
                                         <span>x{MOCK_CRUISES[format(day, 'yyyy-MM-dd')]}</span>
                                     </div>
                                 )}
-                                {MOCK_TOURS.filter(t => t.operator === 'PERSONAL' && t.date === format(day, 'yyyy-MM-dd')).length > 0 && (
-  <span style={{ marginLeft: '4px', fontSize: isMobile ? '0.9rem' : '1rem' }} title="Niños">👦👦</span>
-)}
+                                {COPARENTING_JUNE_2026[format(day, 'yyyy-MM-dd')] && (
+                                    <div style={{ display: 'flex', gap: '3px', fontSize: isMobile ? '0.85rem' : '1rem' }}>
+                                        {COPARENTING_JUNE_2026[format(day, 'yyyy-MM-dd')].map((icon, i) => (
+                                            <span key={i} title="Agenda personal">{icon}</span>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                             <span style={{
                                 display: 'inline-flex',
