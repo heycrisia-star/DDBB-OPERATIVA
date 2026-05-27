@@ -3646,14 +3646,15 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "01-DR",
     "driver": "Carlos y Cristian",
-    "clientName": "Joshua Vargas \ud83d\ude97\ud83d\ude97",
+    "clientName": "Joshua Vargas (Pago Carlos)",
     "phone": "+1 305-877-3682",
     "language": "EN",
     "country": "",
-    "netPrice": 47.04,
+    "netPrice": 33.37,
     "product": "Essential Barcelona",
     "bookingDate": "2026-05-13",
-    "id": 199
+    "id": 199,
+    "hiddenInCalendar": true
   },
   {
     "code": "FH348618439-BENE",
@@ -3669,7 +3670,7 @@ export const MOCK_TOURS = [
     "phone": "+1 305-877-3682",
     "language": "EN",
     "country": "",
-    "netPrice": 47.03,
+    "netPrice": 60.7,
     "product": "Essential Barcelona",
     "bookingDate": "2026-05-13",
     "hiddenInCalendar": true,
@@ -4766,7 +4767,7 @@ export const MOCK_TOURS = [
     "phone": "+1 956-357-9596",
     "language": "ES",
     "country": "",
-    "netPrice": 54,
+    "netPrice": 65.16,
     "product": "Pago conductor",
     "hiddenInCalendar": true
   },
@@ -4785,7 +4786,7 @@ export const MOCK_TOURS = [
     "phone": "+1 956-357-9596",
     "language": "ES",
     "country": "",
-    "netPrice": 306,
+    "netPrice": 294.84,
     "product": "Beneficio Cristian",
     "hiddenInCalendar": true
   }
