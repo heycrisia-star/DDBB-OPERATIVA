@@ -531,8 +531,21 @@ MANUAL_PAX_CODES = {
 }
 
 
+# Codes to COMPLETELY IGNORE — they already exist under a different code
+# (e.g. BR-xxx, xxx_CARLOS, NEW_xxx) and the parser would re-insert them
+# as duplicates with wrong/incomplete data.
+IGNORE_CODES = {
+    'VIATOR-1396370015',   # Ghost entry, no matching booking
+    'VIATOR-1398494071',   # Already exists as VIATOR-1398494071_CARLOS (Bobbi Benson)
+    'VIATOR-1401938481',   # Already exists as NEW_VIERNES_12 (Jennifer Cameron)
+    'VIATOR-1401267485',   # Already exists as BR-1401267485
+}
+
 def upsert_booking(tours, booking):
     """Insert new booking or update existing one (matched by code). Never overwrites manually-set driver/vehicle/price."""
+    if booking['code'] in IGNORE_CODES:
+        return
+
     if booking['code'] == 'GYGLMR44FKNR':
         booking['date'] = '2026-04-05'
         booking['start'] = '14:00'
