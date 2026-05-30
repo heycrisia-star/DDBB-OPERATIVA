@@ -5313,13 +5313,13 @@ export const MOCK_TOURS = [
     "status": "confirmado",
     "pax": 4,
     "vehicle": "01-DR",
-    "driver": "Roger",
-    "clientName": "Cliente Grupo (8 Pax) - Roger (Pago)",
+    "driver": "Carlos",
+    "clientName": "Cliente Grupo (8 Pax) - Carlos (Pago)",
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 75.0,
-    "product": "Barcelona: Private Tuk Tuk Sightseeing Tour (Split 2/2 - Pago Roger)",
+    "netPrice": 70.0,
+    "product": "Barcelona: Private Tuk Tuk Sightseeing Tour (Split 2/2 - Pago Carlos)",
     "bookingDate": "2026-05-30",
     "hiddenInCalendar": true
   }
