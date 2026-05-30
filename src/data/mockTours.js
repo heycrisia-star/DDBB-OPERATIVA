@@ -5153,8 +5153,8 @@ export const MOCK_TOURS = [
   },
   {
     "code": "GYG48YRA5H58",
-    "date": "2026-06-10",
-    "start": "08:00",
+    "date": "2026-06-08",
+    "start": "19:30",
     "duration": 3,
     "operator": "GYG",
     "status": "confirmado",
