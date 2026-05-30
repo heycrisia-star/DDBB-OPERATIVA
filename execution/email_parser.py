@@ -543,9 +543,9 @@ IGNORE_CODES = {
 
 def upsert_booking(tours, booking):
     """Insert new booking or update existing one (matched by code). Never overwrites manually-set driver/vehicle/price."""
-    # PROTECT CLOSED MONTHS: May 2026 and prior are fully reconciled and manually cleaned.
-    # The parser must never insert, update, or modify them.
-    if booking.get('date') and booking['date'] < '2026-06-01':
+    # PROTECT CLOSED MONTHS: May 29th 2026 and prior are fully reconciled and manually cleaned.
+    # The parser must never insert, update, or modify them. May 30th and 31st (today/tomorrow) can still be parsed.
+    if booking.get('date') and booking['date'] < '2026-05-30':
         return
 
     if booking['code'] in IGNORE_CODES:
