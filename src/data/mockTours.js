@@ -5298,7 +5298,7 @@ export const MOCK_TOURS = [
     "phone": "+15198907387",
     "language": "EN",
     "country": "",
-    "netPrice": 230.96,
+    "netPrice": 235.75,
     "product": "Barcelona: Private Tuk Tuk Sightseeing Tour (Split 1/2)",
     "bookingDate": "2026-05-30",
     "id": 10012
@@ -5314,13 +5314,12 @@ export const MOCK_TOURS = [
     "pax": 8,
     "vehicle": "01-DR",
     "driver": "Carlos",
-    "clientName": "Gina gillen (Pago Carlos)",
+    "clientName": "Gina gillen \ud83d\ude97\ud83d\ude97",
     "phone": "+15198907387",
     "language": "EN",
     "country": "",
-    "netPrice": 70.0,
+    "netPrice": 65.0,
     "product": "Barcelona: Private Tuk Tuk Sightseeing Tour (Split 2/2 - Pago Carlos)",
-    "bookingDate": "2026-05-30",
-    "hiddenInCalendar": true
+    "bookingDate": "2026-05-30"
   }
 ];
