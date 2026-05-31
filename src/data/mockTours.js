@@ -4556,25 +4556,6 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-11"
   },
   {
-    "id": 20000,
-    "code": "PERSONAL-5K",
-    "date": "2026-06-13",
-    "start": "17:00",
-    "duration": 3,
-    "operator": "PERSONAL",
-    "status": "confirmado",
-    "pax": 1,
-    "vehicle": "01-DR",
-    "driver": "Cristian",
-    "clientName": "Cursa dels 150 anys 🏃‍♂️⚠️",
-    "phone": "",
-    "language": "ES",
-    "country": "",
-    "netPrice": 0,
-    "product": "Cursa dels 150 anys (17:00 - 20:00)",
-    "bookingDate": "2026-06-01"
-  },
-  {
     "id": 10052,
     "code": "GYG32L7YAVNZ",
     "date": "2026-06-14",

@@ -355,6 +355,14 @@ export default function Calendar({ currentUser }) {
         '2026-06-28': ['👦👦']
     };
 
+    const CUSTOM_DAY_NOTES = {
+        '2026-06-13': {
+            text: 'Cursa dels 150 anys',
+            time: '17:00 a 20:00',
+            icon: '🏃‍♂️⚠️'
+        }
+    };
+
     const renderCells = () => {
         const monthStart = startOfMonth(currentMonth);
         const monthEnd = endOfMonth(monthStart);
@@ -456,6 +464,32 @@ export default function Calendar({ currentUser }) {
                             flex: 1,
                             justifyContent: 'flex-start'
                         }}>
+                            {CUSTOM_DAY_NOTES[format(day, 'yyyy-MM-dd')] && (
+                                <div style={{
+                                    fontSize: isMobile ? '0.6rem' : '0.68rem',
+                                    padding: '4px 6px',
+                                    color: '#b91c1c',
+                                    backgroundColor: '#fef2f2',
+                                    borderLeft: '3px solid #ef4444',
+                                    borderRadius: '4px',
+                                    fontWeight: 700,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '1px',
+                                    marginBottom: '3px',
+                                    boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        <span>{CUSTOM_DAY_NOTES[format(day, 'yyyy-MM-dd')].icon}</span>
+                                        <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                            {CUSTOM_DAY_NOTES[format(day, 'yyyy-MM-dd')].text}
+                                        </span>
+                                    </div>
+                                    <div style={{ fontSize: '0.55rem', opacity: 0.85, fontWeight: 600, paddingLeft: '14px' }}>
+                                        {CUSTOM_DAY_NOTES[format(day, 'yyyy-MM-dd')].time}
+                                    </div>
+                                </div>
+                            )}
                             {dayTours.sort((a, b) => a.start.localeCompare(b.start)).map(tour => {
                                 const colors = OPERATOR_COLORS[tour.operator] || { bg: '#f1f5f9', border: '#cbd5e1', text: '#475569' };
                                 const isCancelled = tour.status === 'cancelado';
