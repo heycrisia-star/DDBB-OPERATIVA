@@ -4822,7 +4822,8 @@ export const MOCK_TOURS = [
     "netPrice": 453.0,
     "product": "Park City & Beach",
     "bookingDate": "2026-06-30",
-    "id": 10036
+    "id": 10036,
+    "hiddenInCalendar": true
   },
   {
     "id": 10020,
