@@ -4192,7 +4192,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-05-31"
   },
   {
-    "id": 10037,
+    "id": 10039,
     "code": "GYGWZAWR8XXH",
     "date": "2026-06-01",
     "start": "11:00",
@@ -4202,7 +4202,7 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Smriti Bhagi",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4211,7 +4211,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-01"
   },
   {
-    "id": 10038,
+    "id": 10040,
     "code": "GYGRFQN9FK9Y",
     "date": "2026-06-01",
     "start": "13:00",
@@ -4221,7 +4221,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Angela Klein",
+    "clientName": "",
     "phone": "",
     "language": "DE",
     "country": "",
@@ -4230,7 +4230,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-01"
   },
   {
-    "id": 10039,
+    "id": 10041,
     "code": "GYG2Q9LGFHGK",
     "date": "2026-06-01",
     "start": "15:00",
@@ -4240,7 +4240,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "cornelia Heusser",
+    "clientName": "",
     "phone": "",
     "language": "DE",
     "country": "",
@@ -4262,7 +4262,7 @@ export const MOCK_TOURS = [
     "phone": "+1 305-877-3682",
     "language": "ES",
     "country": "US",
-    "netPrice": 77.74,
+    "netPrice": 33.37,
     "product": "Essential Barcelona",
     "bookingDate": "2026-05-13",
     "id": 10030
@@ -4287,7 +4287,7 @@ export const MOCK_TOURS = [
     "id": 10031
   },
   {
-    "id": 10040,
+    "id": 10042,
     "code": "GYGX7NFZFZ94",
     "date": "2026-06-03",
     "start": "18:00",
@@ -4297,7 +4297,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Jennifer Villaruben Natividad",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4325,7 +4325,7 @@ export const MOCK_TOURS = [
     "id": 216
   },
   {
-    "id": 10041,
+    "id": 10043,
     "code": "GYG48YRA8RAM",
     "date": "2026-06-05",
     "start": "15:00",
@@ -4335,7 +4335,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Claire Paturieaux",
+    "clientName": "",
     "phone": "",
     "language": "FR",
     "country": "",
@@ -4344,7 +4344,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-05"
   },
   {
-    "id": 10042,
+    "id": 10044,
     "code": "GYGMX4L9ZM8M",
     "date": "2026-06-05",
     "start": "16:00",
@@ -4354,7 +4354,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Rodrigo Cordeiro Ramos",
+    "clientName": "",
     "phone": "",
     "language": "PO",
     "country": "",
@@ -4363,7 +4363,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-05"
   },
   {
-    "id": 10043,
+    "id": 10045,
     "code": "GYGKBGBV482K",
     "date": "2026-06-05",
     "start": "18:00",
@@ -4373,7 +4373,7 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Karla Kourajian",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4382,7 +4382,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-05"
   },
   {
-    "id": 10044,
+    "id": 10046,
     "code": "GYGKBGBG6WMN",
     "date": "2026-06-06",
     "start": "11:00",
@@ -4392,7 +4392,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Anita Maxton",
+    "clientName": "",
     "phone": "",
     "language": "DE",
     "country": "",
@@ -4401,7 +4401,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-06"
   },
   {
-    "id": 10045,
+    "id": 10047,
     "code": "GYGMX4LQA8YA",
     "date": "2026-06-06",
     "start": "17:00",
@@ -4411,7 +4411,7 @@ export const MOCK_TOURS = [
     "pax": 3,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Melanie Richter",
+    "clientName": "",
     "phone": "",
     "language": "DE",
     "country": "",
@@ -4420,7 +4420,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-06"
   },
   {
-    "id": 10046,
+    "id": 10048,
     "code": "GYGBLHMQAGYV",
     "date": "2026-06-07",
     "start": "11:00",
@@ -4430,7 +4430,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Stuart Spiers",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4439,7 +4439,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-07"
   },
   {
-    "id": 10047,
+    "id": 10049,
     "code": "GYGFWWANQ8RV",
     "date": "2026-06-08",
     "start": "09:00",
@@ -4449,7 +4449,7 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Ralph Hale",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4458,7 +4458,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-08"
   },
   {
-    "id": 10048,
+    "id": 10050,
     "code": "GYGVN2897ZMX",
     "date": "2026-06-09",
     "start": "11:00",
@@ -4468,7 +4468,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Sandy Farrell",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4477,7 +4477,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-09"
   },
   {
-    "id": 10049,
+    "id": 10051,
     "code": "GYGRFQN59G4F",
     "date": "2026-06-09",
     "start": "19:00",
@@ -4487,7 +4487,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Victor Echeverri",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4496,7 +4496,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-09"
   },
   {
-    "id": 10050,
+    "id": 10052,
     "code": "GYGLMR4L6N8V",
     "date": "2026-06-10",
     "start": "09:00",
@@ -4506,7 +4506,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Gail Frank",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4515,7 +4515,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-10"
   },
   {
-    "id": 10051,
+    "id": 10053,
     "code": "GYGBLHR7FQQ4",
     "date": "2026-06-11",
     "start": "17:00",
@@ -4525,7 +4525,7 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Michael Horne",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4534,7 +4534,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-11"
   },
   {
-    "id": 10052,
+    "id": 10054,
     "code": "GYG32L7YAVNZ",
     "date": "2026-06-14",
     "start": "10:00",
@@ -4544,7 +4544,7 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "christine driesmans",
+    "clientName": "",
     "phone": "",
     "language": "DU",
     "country": "",
@@ -4553,26 +4553,26 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-14"
   },
   {
-    "id": 10058,
-    "code": "GYG14JUNCAR",
+    "id": 10060,
+    "code": "GYG2Q9LFL5VW",
     "date": "2026-06-14",
-    "start": "14:00",
+    "start": "15:00",
     "duration": 2,
     "operator": "GYG",
     "status": "confirmado",
-    "pax": 2,
+    "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Cliente Carlos",
+    "clientName": "Julie Kerber",
     "phone": "",
-    "language": "ES",
+    "language": "EN",
     "country": "",
-    "netPrice": 65.16,
+    "netPrice": 150.48,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-06-14"
   },
   {
-    "id": 10053,
+    "id": 10055,
     "code": "GYGX7NFWMKHK",
     "date": "2026-06-19",
     "start": "11:00",
@@ -4582,7 +4582,7 @@ export const MOCK_TOURS = [
     "pax": 5,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Marcus Acosta",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4591,7 +4591,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-19"
   },
   {
-    "id": 10054,
+    "id": 10056,
     "code": "GYGZGZ6WQMQW",
     "date": "2026-06-20",
     "start": "12:00",
@@ -4601,7 +4601,7 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Francisco Mondaca",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4615,7 +4615,7 @@ export const MOCK_TOURS = [
     "start": "13:00",
     "duration": 2,
     "operator": "VIATOR",
-    "status": "confirmado",
+    "status": "cancelado",
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
@@ -4623,10 +4623,48 @@ export const MOCK_TOURS = [
     "phone": "+1 530-514-8087",
     "language": "EN",
     "country": "US",
-    "netPrice": 105.48,
+    "netPrice": 0.0,
     "product": "City, Park and Beach",
     "bookingDate": "2026-05-20",
     "id": 10035
+  },
+  {
+    "code": "BR-1405161731",
+    "date": "2026-06-20",
+    "start": "14:00",
+    "duration": 3,
+    "operator": "VIATOR",
+    "status": "confirmado",
+    "pax": 3,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Philip Rowberg",
+    "phone": "+1 530-514-8087",
+    "language": "EN",
+    "country": "US",
+    "netPrice": 147.87,
+    "product": "Guided Tour City, Park and Beach Barcelona Vintage Tuk Tuk Car 14:00",
+    "bookingDate": "2026-06-01",
+    "id": 10037
+  },
+  {
+    "code": "BR-1405183547",
+    "date": "2026-06-20",
+    "start": "14:00",
+    "duration": 3,
+    "operator": "VIATOR",
+    "status": "confirmado",
+    "pax": 3,
+    "vehicle": "01-DR",
+    "driver": "Cristian",
+    "clientName": "Philip Rowberg",
+    "phone": "+1 530-514-8087",
+    "language": "EN",
+    "country": "US",
+    "netPrice": 213.48,
+    "product": "Complete Barcelona guided tour by vintage car in Tuk Tuk 14:00",
+    "bookingDate": "2026-06-01",
+    "id": 10038
   },
   {
     "code": "BR-1402533987",
@@ -4634,7 +4672,7 @@ export const MOCK_TOURS = [
     "start": "15:00",
     "duration": 2,
     "operator": "VIATOR",
-    "status": "confirmado",
+    "status": "cancelado",
     "pax": 2,
     "vehicle": "02-NR",
     "driver": "Cristian",
@@ -4642,13 +4680,13 @@ export const MOCK_TOURS = [
     "phone": "+1 630-614-8087",
     "language": "EN",
     "country": "US",
-    "netPrice": 117.22,
+    "netPrice": 0.0,
     "product": "City, Park and Beach",
     "bookingDate": "2026-05-26",
     "id": 10036
   },
   {
-    "id": 10055,
+    "id": 10057,
     "code": "GYGLMR2YAZHG",
     "date": "2026-06-20",
     "start": "15:00",
@@ -4658,7 +4696,7 @@ export const MOCK_TOURS = [
     "pax": 1,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Nikki Riseley",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4667,7 +4705,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-20"
   },
   {
-    "id": 10056,
+    "id": 10058,
     "code": "GYG6H8BAR4HZ",
     "date": "2026-06-22",
     "start": "08:00",
@@ -4677,7 +4715,7 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Anne Valsamis",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4686,7 +4724,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-22"
   },
   {
-    "id": 10057,
+    "id": 10059,
     "code": "GYG83XG762F9",
     "date": "2026-06-24",
     "start": "09:00",
@@ -4696,7 +4734,7 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Angelina Pera",
+    "clientName": "",
     "phone": "",
     "language": "EN",
     "country": "",
@@ -4718,7 +4756,7 @@ export const MOCK_TOURS = [
     "phone": "+1 956-357-9596",
     "language": "ES",
     "country": "US",
-    "netPrice": 148.76,
+    "netPrice": 65.16,
     "product": "Park City & Beach",
     "bookingDate": "2026-05-21",
     "id": 10032
