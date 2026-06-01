@@ -4231,7 +4231,7 @@ export const MOCK_TOURS = [
   },
   {
     "id": 10041,
-    "code": "GYG-MANUAL-0601-1500",
+    "code": "GYG2Q9LGFHGK",
     "date": "2026-06-01",
     "start": "15:00",
     "duration": 3,
