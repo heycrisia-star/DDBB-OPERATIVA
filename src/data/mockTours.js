@@ -4192,7 +4192,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-05-31"
   },
   {
-    "id": 10039,
+    "id": 10037,
     "code": "GYGWZAWR8XXH",
     "date": "2026-06-01",
     "start": "11:00",
@@ -4206,12 +4206,12 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 200.64,
+    "netPrice": 150.48,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-06-01"
   },
   {
-    "id": 10040,
+    "id": 10038,
     "code": "GYGRFQN9FK9Y",
     "date": "2026-06-01",
     "start": "13:00",
@@ -4219,32 +4219,13 @@ export const MOCK_TOURS = [
     "operator": "GYG",
     "status": "confirmado",
     "pax": 2,
-    "vehicle": "01-DR",
-    "driver": "Roger",
+    "vehicle": "02-NR",
+    "driver": "Cristian",
     "clientName": "Angela Klein",
     "phone": "",
     "language": "DE",
     "country": "",
-    "netPrice": 54.0,
-    "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
-    "bookingDate": "2026-06-01"
-  },
-  {
-    "id": 10041,
-    "code": "GYG2Q9LGFHGK",
-    "date": "2026-06-01",
-    "start": "15:00",
-    "duration": 3,
-    "operator": "GYG",
-    "status": "confirmado",
-    "pax": 4,
-    "vehicle": "01-DR",
-    "driver": "Roger",
-    "clientName": "Reserva 15h 3h",
-    "phone": "",
-    "language": "EN",
-    "country": "",
-    "netPrice": 81.0,
+    "netPrice": 119.3,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-06-01"
   },
@@ -4255,10 +4236,10 @@ export const MOCK_TOURS = [
     "duration": 1,
     "operator": "FH",
     "status": "confirmado",
-    "pax": 1,
+    "pax": 4,
     "vehicle": "01-DR",
     "driver": "Carlos",
-    "clientName": "Joshua Vargas",
+    "clientName": "Joshua Vargas (Carlos)",
     "phone": "+1 305-877-3682",
     "language": "ES",
     "country": "US",
@@ -4274,7 +4255,7 @@ export const MOCK_TOURS = [
     "duration": 1,
     "operator": "FH",
     "status": "confirmado",
-    "pax": 1,
+    "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
     "clientName": "Joshua Vargas",
@@ -4284,10 +4265,10 @@ export const MOCK_TOURS = [
     "netPrice": 77.74,
     "product": "Essential Barcelona",
     "bookingDate": "2026-05-13",
-    "id": 10032
+    "id": 10031
   },
   {
-    "id": 10041,
+    "id": 10039,
     "code": "GYGX7NFZFZ94",
     "date": "2026-06-03",
     "start": "18:00",
@@ -4325,7 +4306,7 @@ export const MOCK_TOURS = [
     "id": 216
   },
   {
-    "id": 10042,
+    "id": 10040,
     "code": "GYG48YRA8RAM",
     "date": "2026-06-05",
     "start": "15:00",
@@ -4344,7 +4325,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-05"
   },
   {
-    "id": 10043,
+    "id": 10041,
     "code": "GYGMX4L9ZM8M",
     "date": "2026-06-05",
     "start": "16:00",
@@ -4352,18 +4333,18 @@ export const MOCK_TOURS = [
     "operator": "GYG",
     "status": "confirmado",
     "pax": 2,
-    "vehicle": "01-DR",
-    "driver": "Roger",
+    "vehicle": "02-NR",
+    "driver": "Cristian",
     "clientName": "Rodrigo Cordeiro Ramos",
     "phone": "",
     "language": "PO",
     "country": "",
-    "netPrice": 81.0,
+    "netPrice": 175.79,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-06-05"
   },
   {
-    "id": 10044,
+    "id": 10042,
     "code": "GYGKBGBV482K",
     "date": "2026-06-05",
     "start": "18:00",
@@ -4371,18 +4352,18 @@ export const MOCK_TOURS = [
     "operator": "GYG",
     "status": "confirmado",
     "pax": 4,
-    "vehicle": "01-DR",
-    "driver": "Carlos",
+    "vehicle": "02-NR",
+    "driver": "Cristian",
     "clientName": "Karla Kourajian",
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 33.37,
+    "netPrice": 94.08,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-06-05"
   },
   {
-    "id": 10045,
+    "id": 10043,
     "code": "GYGKBGBG6WMN",
     "date": "2026-06-06",
     "start": "11:00",
@@ -4401,7 +4382,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-06"
   },
   {
-    "id": 10046,
+    "id": 10044,
     "code": "GYGMX4LQA8YA",
     "date": "2026-06-06",
     "start": "17:00",
@@ -4420,26 +4401,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-06"
   },
   {
-    "id": 10062,
-    "code": "GYGBLHMQAGYV",
-    "date": "2026-06-07",
-    "start": "11:00",
-    "duration": 3,
-    "operator": "GYG",
-    "status": "confirmado",
-    "pax": 2,
-    "vehicle": "02-NR",
-    "driver": "Cristian",
-    "clientName": "Stuart Spiers",
-    "phone": "",
-    "language": "EN",
-    "country": "",
-    "netPrice": 175.79,
-    "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
-    "bookingDate": "2026-06-07"
-  },
-  {
-    "id": 10047,
+    "id": 10045,
     "code": "GYGFWWANQ8RV",
     "date": "2026-06-08",
     "start": "09:00",
@@ -4458,7 +4420,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-08"
   },
   {
-    "id": 10048,
+    "id": 10046,
     "code": "GYGVN2897ZMX",
     "date": "2026-06-09",
     "start": "11:00",
@@ -4477,7 +4439,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-09"
   },
   {
-    "id": 10049,
+    "id": 10047,
     "code": "GYGRFQN59G4F",
     "date": "2026-06-09",
     "start": "19:00",
@@ -4496,7 +4458,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-09"
   },
   {
-    "id": 10050,
+    "id": 10048,
     "code": "GYGLMR4L6N8V",
     "date": "2026-06-10",
     "start": "09:00",
@@ -4515,7 +4477,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-10"
   },
   {
-    "id": 10051,
+    "id": 10049,
     "code": "GYGBLHR7FQQ4",
     "date": "2026-06-11",
     "start": "17:00",
@@ -4534,7 +4496,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-11"
   },
   {
-    "id": 10052,
+    "id": 10050,
     "code": "GYG32L7YAVNZ",
     "date": "2026-06-14",
     "start": "10:00",
@@ -4542,8 +4504,8 @@ export const MOCK_TOURS = [
     "operator": "GYG",
     "status": "confirmado",
     "pax": 4,
-    "vehicle": "01-DR",
-    "driver": "Carlos",
+    "vehicle": "02-NR",
+    "driver": "Cristian",
     "clientName": "christine driesmans",
     "phone": "",
     "language": "DU",
@@ -4553,7 +4515,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-14"
   },
   {
-    "id": 10053,
+    "id": 10051,
     "code": "GYGX7NFWMKHK",
     "date": "2026-06-19",
     "start": "11:00",
@@ -4561,38 +4523,18 @@ export const MOCK_TOURS = [
     "operator": "GYG",
     "status": "confirmado",
     "pax": 5,
-    "vehicle": "01-DR",
-    "driver": "Carlos",
+    "vehicle": "02-NR",
+    "driver": "Cristian",
     "clientName": "Marcus Acosta",
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 65.16,
+    "netPrice": 269.78,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-06-19"
   },
   {
-    "code": "GYGX7NFWMKHK-BENE",
-    "date": "2026-06-19",
-    "start": "11:00",
-    "duration": 2,
-    "operator": "GYG",
-    "status": "confirmado",
-    "pax": 4,
-    "vehicle": "02-NR",
-    "driver": "Cristian",
-    "clientName": "Marcus Acosta (BENE)",
-    "phone": "",
-    "language": "EN",
-    "country": "",
-    "netPrice": 204.62,
-    "product": "Essential Barcelona (Split)",
-    "bookingDate": "2026-06-19",
-    "hiddenInCalendar": true,
-    "id": 10061
-  },
-  {
-    "id": 10054,
+    "id": 10052,
     "code": "GYGZGZ6WQMQW",
     "date": "2026-06-20",
     "start": "12:00",
@@ -4627,7 +4569,7 @@ export const MOCK_TOURS = [
     "netPrice": 105.48,
     "product": "City, Park and Beach",
     "bookingDate": "2026-05-20",
-    "id": 10037
+    "id": 10035
   },
   {
     "code": "BR-1402533987",
@@ -4646,10 +4588,10 @@ export const MOCK_TOURS = [
     "netPrice": 117.22,
     "product": "City, Park and Beach",
     "bookingDate": "2026-05-26",
-    "id": 10038
+    "id": 10036
   },
   {
-    "id": 10055,
+    "id": 10053,
     "code": "GYGLMR2YAZHG",
     "date": "2026-06-20",
     "start": "15:00",
@@ -4668,7 +4610,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-20"
   },
   {
-    "id": 10056,
+    "id": 10054,
     "code": "GYG6H8BAR4HZ",
     "date": "2026-06-22",
     "start": "08:00",
@@ -4687,7 +4629,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-22"
   },
   {
-    "id": 10057,
+    "id": 10055,
     "code": "GYG83XG762F9",
     "date": "2026-06-24",
     "start": "09:00",
@@ -4712,17 +4654,17 @@ export const MOCK_TOURS = [
     "duration": 2,
     "operator": "FH",
     "status": "confirmado",
-    "pax": 1,
+    "pax": 4,
     "vehicle": "01-DR",
     "driver": "Carlos",
-    "clientName": "Ivette Pardo",
+    "clientName": "Ivette Pardo (Carlos)",
     "phone": "+1 956-357-9596",
     "language": "ES",
     "country": "US",
     "netPrice": 65.16,
     "product": "Park City & Beach",
     "bookingDate": "2026-05-21",
-    "id": 10033
+    "id": 10032
   },
   {
     "code": "FH350327864",
@@ -4731,7 +4673,7 @@ export const MOCK_TOURS = [
     "duration": 2,
     "operator": "FH",
     "status": "confirmado",
-    "pax": 1,
+    "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
     "clientName": "Ivette Pardo (14/110)",
@@ -4741,7 +4683,7 @@ export const MOCK_TOURS = [
     "netPrice": 148.76,
     "product": "Park City & Beach",
     "bookingDate": "2026-05-21",
-    "id": 10035
+    "id": 10033
   },
   {
     "code": "FH-PENDIENTE-JUNIO",
@@ -4760,7 +4702,7 @@ export const MOCK_TOURS = [
     "netPrice": 453.0,
     "product": "Park City & Beach",
     "bookingDate": "2026-06-30",
-    "id": 10036,
+    "id": 10034,
     "hiddenInCalendar": true
   },
   {
