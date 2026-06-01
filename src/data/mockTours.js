@@ -4187,7 +4187,7 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "DE",
     "country": "",
-    "netPrice": 150.48,
+    "netPrice": 200.64,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-05-31"
   },
@@ -4206,7 +4206,7 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 150.48,
+    "netPrice": 200.64,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-06-01"
   },
@@ -4478,6 +4478,25 @@ export const MOCK_TOURS = [
     "netPrice": 94.07,
     "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-06-06"
+  },
+  {
+    "id": 10062,
+    "code": "GYG7VK7DOM11",
+    "date": "2026-06-07",
+    "start": "11:00",
+    "duration": 3,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 4,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Cliente GetYourGuide",
+    "phone": "",
+    "language": "EN",
+    "country": "",
+    "netPrice": 217.0,
+    "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
+    "bookingDate": "2026-06-07"
   },
   {
     "id": 10047,
