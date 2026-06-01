@@ -4480,8 +4480,8 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-06"
   },
   {
-    "id": 10062,
-    "code": "GYG7VK7DOM11",
+    "id": 10063,
+    "code": "GYGBLHMQAGYV",
     "date": "2026-06-07",
     "start": "11:00",
     "duration": 3,
@@ -4490,7 +4490,7 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Cliente GetYourGuide",
+    "clientName": "Pendiente Nombre",
     "phone": "",
     "language": "EN",
     "country": "",
