@@ -384,7 +384,7 @@ export default function Calendar({ currentUser }) {
 
                 // Obtener tours del día
                 const dayTours = MOCK_TOURS.filter(t => {
-                    if (t.hiddenInCalendar || (t.code && t.code.includes('-BENE'))) return false;
+                    if (t.hiddenInCalendar || (t.code && (t.code.includes('-BENE') || t.code.includes('-SPLIT')))) return false;
                     if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
                     if (t.date !== format(day, 'yyyy-MM-dd')) return false;
                     if (searchTerm) {
@@ -553,7 +553,7 @@ export default function Calendar({ currentUser }) {
                                                 {tour.pax > 8 && <span style={{ fontSize: '0.65rem', marginLeft: '0.1rem', fontWeight: 600 }}>+{tour.pax - 8}</span>}
                                                 <span style={{ fontSize: '0.6rem', opacity: 0.7, fontWeight: 500 }}>{parseInt(tour.duration)}h</span>
                                                 {hasSecondCar && (
-                                                    <span style={{ display: 'flex', alignItems: 'center', gap: '2px', backgroundColor: '#e0f2fe', color: '#0369a1', padding: '1px 5px', borderRadius: '4px', fontSize: '0.55rem', fontWeight: 800 }} title="Servicio con 2 coches (Split)">
+                                                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', backgroundColor: '#e0f2fe', color: '#0369a1', padding: '1px 5px', borderRadius: '4px', fontSize: '0.55rem', fontWeight: 800, whiteSpace: 'nowrap', flexShrink: 0 }} title="Servicio con 2 coches (Split)">
                                                         🚗+🚗
                                                     </span>
                                                 )}
@@ -647,7 +647,7 @@ export default function Calendar({ currentUser }) {
         const sevenDaysAgoStr = format(last7Days, 'yyyy-MM-dd');
 
         const recentTours = [...MOCK_TOURS]
-            .filter(t => !t.hiddenInCalendar && !(t.code && t.code.includes('-BENE')))
+            .filter(t => !t.hiddenInCalendar && !(t.code && (t.code.includes('-BENE') || t.code.includes('-SPLIT'))))
             .sort((a, b) => (b.id || 0) - (a.id || 0))
             .slice(0, 10);
 
@@ -724,7 +724,7 @@ export default function Calendar({ currentUser }) {
         // Simple list view for agenda mode (better for mobile)
         const sortedTours = [...MOCK_TOURS]
             .filter(t => {
-                if (t.hiddenInCalendar || (t.code && t.code.includes('-BENE'))) return false;
+                if (t.hiddenInCalendar || (t.code && (t.code.includes('-BENE') || t.code.includes('-SPLIT')))) return false;
                 if (currentUser?.role === 'driver' && t.driver !== currentUser.name) return false;
                 if (searchTerm) {
                     const q = searchTerm.toLowerCase();
