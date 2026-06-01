@@ -497,6 +497,21 @@ export default function Calendar({ currentUser }) {
                                 // Unificar lógica de pasado: día anterior o hoy después de hora inicio
                                 const isPast = tour.date < today || (tour.date === today && tour.start <= currentTime);
 
+                                // Detect if there is a split (uses 2 cars)
+                                const hasSecondCar = MOCK_TOURS.some(t => 
+                                    t.date === tour.date && 
+                                    t.start === tour.start && 
+                                    t.code && tour.code && 
+                                    (t.code === `${tour.code}-BENE` || t.code === `${tour.code}-SPLIT` || t.code.startsWith(tour.code + '-'))
+                                );
+                                const secondTour = hasSecondCar ? MOCK_TOURS.find(t => 
+                                    t.date === tour.date && 
+                                    t.start === tour.start && 
+                                    t.code && tour.code && 
+                                    (t.code === `${tour.code}-BENE` || t.code === `${tour.code}-SPLIT` || t.code.startsWith(tour.code + '-'))
+                                ) : null;
+                                const secondDriver = secondTour?.driver;
+
                                 // Driver color overrides — makes it easy to see who's driving
                                 const cardBg = colors.bg;
                                 const cardBorder = colors.text;
@@ -530,13 +545,18 @@ export default function Calendar({ currentUser }) {
                                             boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
                                             marginBottom: '1px'
                                         }}
-                                        title={`${tour.operator} - ${tour.code} | Coche: ${tour.vehicle} | Chofer: ${tour.driver}${tour.pickup ? ` | Recogida: ${tour.pickup}` : ''}`}
+                                        title={`${tour.operator} - ${tour.code} | Coche: ${tour.vehicle} ${secondTour ? `y ${secondTour.vehicle}` : ''} | Chofer: ${tour.driver} ${secondDriver ? `y ${secondDriver}` : ''}${tour.pickup ? ` | Recogida: ${tour.pickup}` : ''}`}
                                     >
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 800 }}>
                                             <span style={{ display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
                                                 {tour.start}
                                                 {tour.pax > 8 && <span style={{ fontSize: '0.65rem', marginLeft: '0.1rem', fontWeight: 600 }}>+{tour.pax - 8}</span>}
                                                 <span style={{ fontSize: '0.6rem', opacity: 0.7, fontWeight: 500 }}>{parseInt(tour.duration)}h</span>
+                                                {hasSecondCar && (
+                                                    <span style={{ display: 'flex', alignItems: 'center', gap: '2px', backgroundColor: '#e0f2fe', color: '#0369a1', padding: '1px 5px', borderRadius: '4px', fontSize: '0.55rem', fontWeight: 800 }} title="Servicio con 2 coches (Split)">
+                                                        🚗+🚗
+                                                    </span>
+                                                )}
                                                 {tour.pickup && (
                                                     <span style={{ display: 'flex', alignItems: 'center', gap: '2px', backgroundColor: '#fef3c7', color: '#92400e', padding: '0 4px', borderRadius: '4px', fontSize: '0.55rem', fontWeight: 800 }}>
                                                         <MapPin size={10} color="#f59e0b" strokeWidth={3} />
@@ -585,10 +605,20 @@ export default function Calendar({ currentUser }) {
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     gap: '0.15rem',
-                                                    color: (isCancelled || isPast) ? '#64748b' : (DRIVER_COLORS[tour.driver] || 'var(--text-secondary)'),
+                                                    color: (isCancelled || isPast) ? '#64748b' : 'var(--text-secondary)',
                                                     fontWeight: 800
                                                 }}>
-                                                    {renderDriverName(tour.driver, isCancelled || isPast)}
+                                                    {secondDriver ? (
+                                                        <span style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                                                            <span style={{ color: (isCancelled || isPast) ? '#64748b' : DRIVER_COLORS[tour.driver] }}>{renderDriverName(tour.driver, isCancelled || isPast)}</span>
+                                                            <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>+</span>
+                                                            <span style={{ color: (isCancelled || isPast) ? '#64748b' : DRIVER_COLORS[secondDriver] }}>{renderDriverName(secondDriver, isCancelled || isPast)}</span>
+                                                        </span>
+                                                    ) : (
+                                                        <span style={{ color: (isCancelled || isPast) ? '#64748b' : (DRIVER_COLORS[tour.driver] || 'var(--text-secondary)') }}>
+                                                            {renderDriverName(tour.driver, isCancelled || isPast)}
+                                                        </span>
+                                                    )}
                                                 </span>
                                             )}
                                         </div>
