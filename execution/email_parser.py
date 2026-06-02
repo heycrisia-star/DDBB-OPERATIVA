@@ -512,12 +512,20 @@ MANUAL_PRICE_CODES = {
     'GYGVN28VL597',        # Marie Mourant 8jun Cristian split
     'GYGVN28VL597-BENE',   # Marie Mourant 8jun Roger split
     'GYG6H79362L9',        # Sonja Leutert 14aug Carlos split
-    'GYG6H79362L9-BENE'    # Sonja Leutert 14aug Cond. Pendiente split
+    'GYG6H79362L9-BENE',   # Sonja Leutert 14aug Cond. Pendiente split
+    'GYGRFQN59G4F',        # Victor Echeverri 9jun cancelled
+    'VIATOR-1405161731',   # Philip Rowberg cancelled
+    'BR-1405161731',       # Philip Rowberg cancelled
+    'VIATOR-1405183547',   # Philip Rowberg 20jun confirmed
+    'BR-1405183547'        # Philip Rowberg 20jun confirmed
 }
 
 MANUAL_STATUS_CODES = {
     'FH346502467',
-    'VIATOR-1396370015'
+    'VIATOR-1396370015',
+    'GYGRFQN59G4F',        # Victor Echeverri cancelled
+    'VIATOR-1405161731',   # Philip Rowberg cancelled
+    'BR-1405161731'        # Philip Rowberg cancelled
 }
 
 MANUAL_TIME_CODES = {
@@ -528,14 +536,18 @@ MANUAL_TIME_CODES = {
     'FH348617963',         # Joshua Vargas: move to 11:00
     'FH348618439',         # Joshua Vargas: move to 11:00
     'FH348618439',         # Joshua Vargas: move to 11:00
-    'VIATOR-1398494071'
+    'VIATOR-1398494071',
+    'VIATOR-1405183547',   # Philip Rowberg moved to 14:00
+    'BR-1405183547'        # Philip Rowberg moved to 14:00
 }
 
 MANUAL_PAX_CODES = {
     'VIATOR-1391951661',   # Christophe 9may: 2 pax
     'VIATOR-1398494071',
     'GYGVN28VL597',        # Marie Mourant 8jun Cristian split: 3 pax
-    'GYG6H79362L9'         # Sonja Leutert 14aug Carlos split: 3 pax
+    'GYG6H79362L9',        # Sonja Leutert 14aug Carlos split: 3 pax
+    'VIATOR-1405183547',   # Philip Rowberg 3 pax
+    'BR-1405183547'        # Philip Rowberg 3 pax
 }
 
 
@@ -547,6 +559,10 @@ IGNORE_CODES = {
     'VIATOR-1398494071',   # Already exists as VIATOR-1398494071_CARLOS (Bobbi Benson)
     'VIATOR-1401938481',   # Already exists as NEW_VIERNES_12 (Jennifer Cameron)
     'VIATOR-1401267485',   # Already exists as BR-1401267485
+    'VIATOR-1399848245',   # Duplicate Philip Rowberg cancelled booking
+    'BR-1399848245',
+    'VIATOR-1402533987',   # Duplicate Philip Rowberg cancelled booking
+    'BR-1402533987'
 }
 
 def upsert_booking(tours, booking):
@@ -598,7 +614,8 @@ def upsert_booking(tours, booking):
             'GYG32L7YLNRQ', 'GYG6H8BN8R75', 'GYGRFQRG7A67', 'GYG83XLG8V2R',
             'GYG7VK522QVA', 'GYGLMRZ3RWQM', 'GYG48YRZB9MX', 'GYG48YVFFBB4',
             'GYG48YVFFBB4-BENE', 'GYGX7NGAH4NG', 'GYGBLHNB9QMQ', 'GYGBLHNB9QMQ-BENE',
-            'GYGVN28VL597', 'GYGVN28VL597-BENE', 'GYG6H79362L9', 'GYG6H79362L9-BENE'
+            'GYGVN28VL597', 'GYGVN28VL597-BENE', 'GYG6H79362L9', 'GYG6H79362L9-BENE',
+            'VIATOR-1405183547', 'BR-1405183547'
         }
         if booking.get('code') not in MANUAL_DURATION_CODES:
             if booking.get('duration'):
