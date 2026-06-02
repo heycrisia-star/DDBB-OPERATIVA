@@ -4192,7 +4192,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-05-31"
   },
   {
-    "id": 10039,
+    "id": 10077,
     "code": "GYGWZAWR8XXH",
     "date": "2026-06-01",
     "start": "11:00",
@@ -4211,7 +4211,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-01"
   },
   {
-    "id": 10040,
+    "id": 10078,
     "code": "GYGRFQN9FK9Y",
     "date": "2026-06-01",
     "start": "13:00",
@@ -4230,7 +4230,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-01"
   },
   {
-    "id": 10041,
+    "id": 10079,
     "code": "GYG2Q9LGFHGK",
     "date": "2026-06-01",
     "start": "15:00",
@@ -4265,7 +4265,7 @@ export const MOCK_TOURS = [
     "netPrice": 33.37,
     "product": "Essential Barcelona",
     "bookingDate": "2026-05-13",
-    "id": 10030
+    "id": 10066
   },
   {
     "code": "FH348618439",
@@ -4284,10 +4284,10 @@ export const MOCK_TOURS = [
     "netPrice": 77.74,
     "product": "Essential Barcelona",
     "bookingDate": "2026-05-13",
-    "id": 10031
+    "id": 10067
   },
   {
-    "id": 10042,
+    "id": 10080,
     "code": "GYGX7NFZFZ94",
     "date": "2026-06-03",
     "start": "18:00",
@@ -4325,7 +4325,7 @@ export const MOCK_TOURS = [
     "id": 216
   },
   {
-    "id": 10043,
+    "id": 10081,
     "code": "GYG48YRA8RAM",
     "date": "2026-06-05",
     "start": "15:00",
@@ -4344,7 +4344,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-05"
   },
   {
-    "id": 10044,
+    "id": 10082,
     "code": "GYGMX4L9ZM8M",
     "date": "2026-06-05",
     "start": "16:00",
@@ -4363,7 +4363,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-05"
   },
   {
-    "id": 10045,
+    "id": 10083,
     "code": "GYGKBGBV482K",
     "date": "2026-06-05",
     "start": "18:00",
@@ -4382,7 +4382,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-05"
   },
   {
-    "id": 10046,
+    "id": 10084,
     "code": "GYGKBGBG6WMN",
     "date": "2026-06-06",
     "start": "11:00",
@@ -4401,7 +4401,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-06"
   },
   {
-    "id": 10047,
+    "id": 10085,
     "code": "GYGMX4LQA8YA",
     "date": "2026-06-06",
     "start": "17:00",
@@ -4420,7 +4420,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-06"
   },
   {
-    "id": 10048,
+    "id": 10086,
     "code": "GYGBLHMQAGYV",
     "date": "2026-06-07",
     "start": "11:00",
@@ -4439,7 +4439,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-07"
   },
   {
-    "id": 10049,
+    "id": 10087,
     "code": "GYGFWWANQ8RV",
     "date": "2026-06-08",
     "start": "09:00",
@@ -4458,7 +4458,45 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-08"
   },
   {
-    "id": 10050,
+    "code": "GYGVN28VL597",
+    "date": "2026-06-08",
+    "start": "19:00",
+    "duration": 1,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 6,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Marie Mourant",
+    "phone": "+15068634455",
+    "language": "EN",
+    "country": "",
+    "netPrice": 168.26,
+    "product": "Essential Barcelona",
+    "bookingDate": "2026-06-08",
+    "id": 10075
+  },
+  {
+    "code": "GYGVN28VL597-BENE",
+    "date": "2026-06-08",
+    "start": "19:00",
+    "duration": 1,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 6,
+    "vehicle": "01-DR",
+    "driver": "Roger",
+    "clientName": "Marie Mourant (BENE)",
+    "phone": "+15068634455",
+    "language": "EN",
+    "country": "",
+    "netPrice": 84.13,
+    "product": "Essential Barcelona",
+    "bookingDate": "2026-06-08",
+    "id": 10076
+  },
+  {
+    "id": 10088,
     "code": "GYGVN2897ZMX",
     "date": "2026-06-09",
     "start": "11:00",
@@ -4477,7 +4515,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-09"
   },
   {
-    "id": 10051,
+    "id": 10089,
     "code": "GYGRFQN59G4F",
     "date": "2026-06-09",
     "start": "19:00",
@@ -4496,7 +4534,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-09"
   },
   {
-    "id": 10052,
+    "id": 10090,
     "code": "GYGLMR4L6N8V",
     "date": "2026-06-10",
     "start": "09:00",
@@ -4515,7 +4553,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-10"
   },
   {
-    "id": 10053,
+    "id": 10091,
     "code": "GYGBLHR7FQQ4",
     "date": "2026-06-11",
     "start": "17:00",
@@ -4534,7 +4572,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-11"
   },
   {
-    "id": 10054,
+    "id": 10092,
     "code": "GYG32L7YAVNZ",
     "date": "2026-06-14",
     "start": "10:00",
@@ -4553,7 +4591,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-14"
   },
   {
-    "id": 10060,
+    "id": 10098,
     "code": "GYG2Q9LFL5VW",
     "date": "2026-06-14",
     "start": "15:00",
@@ -4572,7 +4610,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-14"
   },
   {
-    "id": 10055,
+    "id": 10093,
     "code": "GYGX7NFWMKHK",
     "date": "2026-06-19",
     "start": "11:00",
@@ -4591,7 +4629,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-19"
   },
   {
-    "id": 10056,
+    "id": 10094,
     "code": "GYGZGZ6WQMQW",
     "date": "2026-06-20",
     "start": "12:00",
@@ -4626,7 +4664,7 @@ export const MOCK_TOURS = [
     "netPrice": 0.0,
     "product": "City, Park and Beach",
     "bookingDate": "2026-05-20",
-    "id": 10035
+    "id": 10071
   },
   {
     "code": "BR-1405161731",
@@ -4645,7 +4683,7 @@ export const MOCK_TOURS = [
     "netPrice": 147.87,
     "product": "Guided Tour City, Park and Beach Barcelona Vintage Tuk Tuk Car 14:00",
     "bookingDate": "2026-06-01",
-    "id": 10037
+    "id": 10073
   },
   {
     "code": "BR-1405183547",
@@ -4664,7 +4702,7 @@ export const MOCK_TOURS = [
     "netPrice": 213.48,
     "product": "Complete Barcelona guided tour by vintage car in Tuk Tuk 14:00",
     "bookingDate": "2026-06-01",
-    "id": 10038
+    "id": 10074
   },
   {
     "code": "BR-1402533987",
@@ -4683,10 +4721,10 @@ export const MOCK_TOURS = [
     "netPrice": 0.0,
     "product": "City, Park and Beach",
     "bookingDate": "2026-05-26",
-    "id": 10036
+    "id": 10072
   },
   {
-    "id": 10057,
+    "id": 10095,
     "code": "GYGLMR2YAZHG",
     "date": "2026-06-20",
     "start": "15:00",
@@ -4705,7 +4743,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-20"
   },
   {
-    "id": 10058,
+    "id": 10096,
     "code": "GYG6H8BAR4HZ",
     "date": "2026-06-22",
     "start": "08:00",
@@ -4724,7 +4762,7 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-22"
   },
   {
-    "id": 10059,
+    "id": 10097,
     "code": "GYG83XG762F9",
     "date": "2026-06-24",
     "start": "09:00",
@@ -4759,7 +4797,7 @@ export const MOCK_TOURS = [
     "netPrice": 65.16,
     "product": "Park City & Beach",
     "bookingDate": "2026-05-21",
-    "id": 10032
+    "id": 10068
   },
   {
     "code": "FH350327864",
@@ -4778,7 +4816,7 @@ export const MOCK_TOURS = [
     "netPrice": 148.76,
     "product": "Park City & Beach",
     "bookingDate": "2026-05-21",
-    "id": 10033
+    "id": 10069
   },
   {
     "code": "FH-PENDIENTE-JUNIO",
@@ -4797,7 +4835,7 @@ export const MOCK_TOURS = [
     "netPrice": 453.0,
     "product": "Park City & Beach",
     "bookingDate": "2026-06-30",
-    "id": 10034,
+    "id": 10070,
     "hiddenInCalendar": true
   },
   {
@@ -4953,6 +4991,25 @@ export const MOCK_TOURS = [
     "id": 79
   },
   {
+    "id": 10065,
+    "code": "GYGWZAWN84HV",
+    "date": "2026-07-22",
+    "start": "15:00",
+    "duration": 3,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Trina Burt",
+    "phone": "",
+    "language": "EN",
+    "country": "",
+    "netPrice": 175.79,
+    "product": "1161228 [T-1161228] Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
+    "bookingDate": "2026-07-22"
+  },
+  {
     "id": 41,
     "code": "GYG48YYF2YFL",
     "date": "2026-07-23",
@@ -5085,6 +5142,44 @@ export const MOCK_TOURS = [
     "product": "Barcelona: Private Tuk-Tuk Tour – Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-05-11",
     "id": 192
+  },
+  {
+    "code": "GYG6H79362L9",
+    "date": "2026-08-14",
+    "start": "11:00",
+    "duration": 1,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 5,
+    "vehicle": "01-DR",
+    "driver": "Carlos",
+    "clientName": "Sonja Leutert",
+    "phone": "+491634715497",
+    "language": "DE",
+    "country": "",
+    "netPrice": 84.32,
+    "product": "Essential Barcelona",
+    "bookingDate": "2026-08-14",
+    "id": 10063
+  },
+  {
+    "code": "GYG6H79362L9-BENE",
+    "date": "2026-08-14",
+    "start": "11:00",
+    "duration": 1,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 5,
+    "vehicle": "02-NR",
+    "driver": "Cond. Pendiente",
+    "clientName": "Sonja Leutert (BENE)",
+    "phone": "+491634715497",
+    "language": "DE",
+    "country": "",
+    "netPrice": 84.32,
+    "product": "Essential Barcelona",
+    "bookingDate": "2026-08-14",
+    "id": 10064
   },
   {
     "code": "GYGRFQRF7M83",
