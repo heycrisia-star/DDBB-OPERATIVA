@@ -47,7 +47,9 @@ MONTHS_ES = {
     'september': '09', 'october': '10', 'november': '11', 'december': '12',
     'enero': '01', 'febrero': '02', 'marzo': '03', 'abril': '04',
     'mayo': '05', 'junio': '06', 'julio': '07', 'agosto': '08',
-    'septiembre': '09', 'octubre': '10', 'noviembre': '11', 'diciembre': '12'
+    'septiembre': '09', 'octubre': '10', 'noviembre': '11', 'diciembre': '12',
+    'jan': '01', 'feb': '02', 'mar': '03', 'apr': '04', 'jun': '06',
+    'jul': '07', 'aug': '08', 'sep': '09', 'oct': '10', 'nov': '11', 'dec': '12'
 }
 
 # ── 1. IMAP helpers ─────────────────────────────────────────────────────────
@@ -506,7 +508,11 @@ MANUAL_PRICE_CODES = {
     'GYG48YVFFBB4-BENE',   # Viktorija 15may Cristian split: 48.3€
     'GYGX7NGAH4NG',        # Roger 15may split: 47.04€
     'GYGBLHNB9QMQ',        # Hans Jansma 16may Roger split: 47.04€
-    'GYGBLHNB9QMQ-BENE'    # Hans Jansma 16may Cristian split: 47.04€
+    'GYGBLHNB9QMQ-BENE',   # Hans Jansma 16may Cristian split: 47.04€
+    'GYGVN28VL597',        # Marie Mourant 8jun Cristian split
+    'GYGVN28VL597-BENE',   # Marie Mourant 8jun Roger split
+    'GYG6H79362L9',        # Sonja Leutert 14aug Carlos split
+    'GYG6H79362L9-BENE'    # Sonja Leutert 14aug Cond. Pendiente split
 }
 
 MANUAL_STATUS_CODES = {
@@ -527,7 +533,9 @@ MANUAL_TIME_CODES = {
 
 MANUAL_PAX_CODES = {
     'VIATOR-1391951661',   # Christophe 9may: 2 pax
-    'VIATOR-1398494071'
+    'VIATOR-1398494071',
+    'GYGVN28VL597',        # Marie Mourant 8jun Cristian split: 3 pax
+    'GYG6H79362L9'         # Sonja Leutert 14aug Carlos split: 3 pax
 }
 
 
@@ -555,7 +563,9 @@ def upsert_booking(tours, booking):
         booking['date'] = '2026-04-05'
         booking['start'] = '14:00'
 
-    existing = next((t for t in tours if t.get('code') == booking['code']), None)
+    code = booking['code']
+    alt_code = code.replace('VIATOR-', 'BR-') if code.startswith('VIATOR-') else code.replace('BR-', 'VIATOR-')
+    existing = next((t for t in tours if t.get('code') in (code, alt_code)), None)
     if existing:
         # Update status, date, start, pax, phone, language
         for key in ['status', 'date', 'start', 'pax', 'phone', 'language']:
@@ -587,7 +597,8 @@ def upsert_booking(tours, booking):
             'GYGBLHR7MLMW', 'GYGFWV877LM6', 'GYG2Q9M34V8W',
             'GYG32L7YLNRQ', 'GYG6H8BN8R75', 'GYGRFQRG7A67', 'GYG83XLG8V2R',
             'GYG7VK522QVA', 'GYGLMRZ3RWQM', 'GYG48YRZB9MX', 'GYG48YVFFBB4',
-            'GYG48YVFFBB4-BENE', 'GYGX7NGAH4NG', 'GYGBLHNB9QMQ', 'GYGBLHNB9QMQ-BENE'
+            'GYG48YVFFBB4-BENE', 'GYGX7NGAH4NG', 'GYGBLHNB9QMQ', 'GYGBLHNB9QMQ-BENE',
+            'GYGVN28VL597', 'GYGVN28VL597-BENE', 'GYG6H79362L9', 'GYG6H79362L9-BENE'
         }
         if booking.get('code') not in MANUAL_DURATION_CODES:
             if booking.get('duration'):
