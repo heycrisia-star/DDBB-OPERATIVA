@@ -517,7 +517,9 @@ MANUAL_PRICE_CODES = {
     'VIATOR-1405161731',   # Philip Rowberg cancelled
     'BR-1405161731',       # Philip Rowberg cancelled
     'VIATOR-1405183547',   # Philip Rowberg 20jun confirmed
-    'BR-1405183547'        # Philip Rowberg 20jun confirmed
+    'BR-1405183547',       # Philip Rowberg 20jun confirmed
+    'GYGVN2897ZMX',        # Sandy Farrell 9jun cancelled (PAPA LEON)
+    'GYGLMR4L6N8V'         # Gail Frank 10jun cancelled (PAPA LEON)
 }
 
 MANUAL_STATUS_CODES = {
@@ -525,7 +527,9 @@ MANUAL_STATUS_CODES = {
     'VIATOR-1396370015',
     'GYGRFQN59G4F',        # Victor Echeverri cancelled
     'VIATOR-1405161731',   # Philip Rowberg cancelled
-    'BR-1405161731'        # Philip Rowberg cancelled
+    'BR-1405161731',       # Philip Rowberg cancelled
+    'GYGVN2897ZMX',        # Sandy Farrell cancelled
+    'GYGLMR4L6N8V'         # Gail Frank cancelled
 }
 
 MANUAL_TIME_CODES = {
