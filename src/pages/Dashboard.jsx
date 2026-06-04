@@ -288,7 +288,6 @@ export default function Dashboard({ currentUser }) {
     activeTours.forEach(t => {
         const price = parseFloat(t.netPrice) || 0;
         const dur = parseFloat(t.duration) || 0;
-        const pax = parseInt(t.pax) || 0;
 
         if (!driverStatsMap[t.driver]) driverStatsMap[t.driver] = { hours: 0, sales: 0 };
         driverStatsMap[t.driver].hours += dur;
@@ -298,6 +297,11 @@ export default function Dashboard({ currentUser }) {
             if (!vehicleHoursMap[t.vehicle]) vehicleHoursMap[t.vehicle] = 0;
             vehicleHoursMap[t.vehicle] += dur;
         }
+    });
+
+    realTours.forEach(t => {
+        const dur = parseFloat(t.duration) || 0;
+        const pax = parseInt(t.pax) || 0;
 
         if (pax === 1) paxStatsMap[1]++;
         else if (pax === 2) paxStatsMap[2]++;
