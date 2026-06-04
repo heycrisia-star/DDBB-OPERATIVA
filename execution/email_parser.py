@@ -548,7 +548,8 @@ MANUAL_STATUS_CODES = {
     'VIATOR-1405161731',   # Philip Rowberg cancelled
     'BR-1405161731',       # Philip Rowberg cancelled
     'GYGVN2897ZMX',        # Sandy Farrell cancelled
-    'GYGLMR4L6N8V'         # Gail Frank cancelled
+    'GYGLMR4L6N8V',        # Gail Frank cancelled
+    'FH-PENDIENTE-JUNIO'   # Protected cancelled status for pending June block
 }
 
 MANUAL_TIME_CODES = {
