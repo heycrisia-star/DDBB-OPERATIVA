@@ -219,7 +219,49 @@ export default function Dashboard({ currentUser }) {
     const realTours = activeTours.filter(t => !t.hiddenInCalendar && !(t.code && t.code.includes('-BENE')));
     
     // Venta Total should be the sum of all tours in the range, respecting ALL active filters
-    const totalSales = Math.round(realTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0));
+    // We override GYG and FH prices for June 2026 to match exactly the real Excel/CSV net prices for sales statistics,
+    // while keeping mockTours.js clean for driver payout calculations.
+    const JUNE_REAL_PRICES = {
+        "GYGWZAWR8XXH": 150.48,
+        "GYGRFQN9FK9Y": 119.3,
+        "GYG2Q9LGFHGK": 171.1,
+        "GYG83XGXNX6K": 183.14,
+        "GYGX7NFZFZ94": 119.3,
+        "GYGFWV7GFFZ9": 92.89,
+        "GYGMX4L9ZM8M": 175.79,
+        "GYGKBGBV482K": 94.08,
+        "GYGKBGBG6WMN": 119.3,
+        "GYG83XGRXBVK": 73.26,
+        "GYGMX4LQA8YA": 94.07,
+        "GYGBLHMQAGYV": 171.1,
+        "GYGFWWANQ8RV": 217.29,
+        "GYGVN28VL597": 163.77,
+        "GYGBLHR7FQQ4": 175.79,
+        "GYG32L7YAVNZ": 217.29,
+        "GYG2Q9LFL5VW": 146.47,
+        "GYGX7NFWMKHK": 269.78,
+        "GYGZGZ6WQMQW": 94.08,
+        "GYGLMR2YAZHG": 74.56,
+        "GYG6H8BAR4HZ": 94.08,
+        "GYG83XG762F9": 150.48,
+        // FH
+        "FH348617963": 94.07,
+        "FH348618439": 94.07,
+        "FH350327627": 180.00,
+        "FH350327864": 180.00
+    };
+
+    const getRealNetPrice = (t) => {
+        if (t.date && t.date.startsWith("2026-06")) {
+            const code = t.code ? t.code.split('-')[0] : '';
+            if (JUNE_REAL_PRICES[code] !== undefined) {
+                return JUNE_REAL_PRICES[code];
+            }
+        }
+        return parseFloat(t.netPrice) || 0;
+    };
+
+    const totalSales = Math.round(realTours.reduce((sum, t) => sum + getRealNetPrice(t), 0));
     const totalHours = Math.round(realTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0));
     const activeToursCount = realTours.length;
     const totalTours = filteredTours.filter(t => !t.hiddenInCalendar).length;
@@ -405,8 +447,11 @@ export default function Dashboard({ currentUser }) {
         if (selectedVehicles.length !== VEHICLES.length && !selectedVehicles.includes(t.vehicle)) return;
 
         if (!t.date) return;
+        // Skip duplicate payouts for business-level stats
+        if (t.code && t.code.includes('-BENE')) return;
+        
         const d = parseISO(t.date);
-        const price = parseFloat(t.netPrice) || 0;
+        const price = getRealNetPrice(t);
         const dur = parseFloat(t.duration) || 0;
         const dayKey = t.date;
 
