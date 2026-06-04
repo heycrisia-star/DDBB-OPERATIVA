@@ -519,8 +519,24 @@ MANUAL_PRICE_CODES = {
     'VIATOR-1405183547',   # Philip Rowberg 20jun confirmed
     'BR-1405183547',       # Philip Rowberg 20jun confirmed
     'GYGVN2897ZMX',        # Sandy Farrell 9jun cancelled (PAPA LEON)
-    'GYGLMR4L6N8V',         # Gail Frank 10jun cancelled (PAPA LEON)
-    'GYGFWV7GFFZ9'         # Wolfgang heidel 5jun Carlos payout
+    'GYGLMR4L6N8V',        # Gail Frank 10jun cancelled (PAPA LEON)
+    'GYGFWV7GFFZ9',        # Wolfgang heidel 5jun Carlos payout
+    'FH348617963',         # Carlos payout
+    'GYGKBGBV482K',        # Carlos payout
+    'GYGVN28VL597',        # Carlos payout
+    'GYG32L7YAVNZ',        # Carlos payout
+    'GYG2Q9LFL5VW',        # Carlos payout
+    'GYGX7NFWMKHK',        # Carlos payout
+    'FH350327627',         # Carlos payout
+    'FH340813175',         # Carlos payout
+    'GYG7VK2VV5X5',        # Carlos payout
+    'GYGWZAWN84HV',        # Carlos payout
+    'GYG48YYF2YFL',        # Carlos payout
+    'GYGRFQN9FK9Y',        # Roger payout
+    'GYG2Q9LGFHGK',        # Roger payout
+    'GYGMX4L9ZM8M',        # Roger payout
+    'GYGVN28VL597-BENE',   # Roger payout
+    'GYG83XGXNX6K-BENE'    # Roger payout
 }
 
 MANUAL_STATUS_CODES = {
