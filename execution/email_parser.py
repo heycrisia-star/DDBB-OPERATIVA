@@ -519,7 +519,8 @@ MANUAL_PRICE_CODES = {
     'VIATOR-1405183547',   # Philip Rowberg 20jun confirmed
     'BR-1405183547',       # Philip Rowberg 20jun confirmed
     'GYGVN2897ZMX',        # Sandy Farrell 9jun cancelled (PAPA LEON)
-    'GYGLMR4L6N8V'         # Gail Frank 10jun cancelled (PAPA LEON)
+    'GYGLMR4L6N8V',         # Gail Frank 10jun cancelled (PAPA LEON)
+    'GYGFWV7GFFZ9'         # Wolfgang heidel 5jun Carlos payout
 }
 
 MANUAL_STATUS_CODES = {
