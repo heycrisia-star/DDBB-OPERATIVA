@@ -536,7 +536,9 @@ MANUAL_PRICE_CODES = {
     'GYG2Q9LGFHGK',        # Roger payout
     'GYGMX4L9ZM8M',        # Roger payout
     'GYGVN28VL597-BENE',   # Roger payout
-    'GYG83XGXNX6K-BENE'    # Roger payout
+    'GYG83XGXNX6K-BENE',   # Roger payout
+    'CASH-20260605-1000',  # Cristian cash payout (220€) protected
+    'FH-PENDIENTE-JUNIO'   # FareHarbor pending block (357.86€) protected
 }
 
 MANUAL_STATUS_CODES = {

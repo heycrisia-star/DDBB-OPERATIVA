@@ -4300,7 +4300,7 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "ES",
     "country": "",
-    "netPrice": 230,
+    "netPrice": 220,
     "product": "Tour Privado (Efectivo)",
     "bookingDate": "2026-05-19",
     "id": 216
@@ -4947,7 +4947,7 @@ export const MOCK_TOURS = [
     "phone": "",
     "language": "EN",
     "country": "",
-    "netPrice": 453.0,
+    "netPrice": 357.86,
     "product": "Park City & Beach",
     "bookingDate": "2026-06-30",
     "id": 10070,
