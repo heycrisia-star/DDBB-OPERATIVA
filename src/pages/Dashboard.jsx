@@ -219,7 +219,7 @@ export default function Dashboard({ currentUser }) {
     const realTours = activeTours.filter(t => !t.hiddenInCalendar && !(t.code && t.code.includes('-BENE')));
     
     // Venta Total should be the sum of all tours in the range, respecting ALL active filters
-    const totalSales = Math.round(activeTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0));
+    const totalSales = Math.round(realTours.reduce((sum, t) => sum + (parseFloat(t.netPrice) || 0), 0));
     const totalHours = Math.round(realTours.reduce((sum, t) => sum + (parseFloat(t.duration) || 0), 0));
     const activeToursCount = realTours.length;
     const totalTours = filteredTours.filter(t => !t.hiddenInCalendar).length;
