@@ -81,8 +81,8 @@ export default function Calendar({ currentUser }) {
             setStartDate(format(startOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
             setEndDate(format(endOfWeek(today, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
         } else if (type === 'month') {
-            setStartDate(format(startOfMonth(today), 'yyyy-MM-dd'));
-            setEndDate(format(endOfMonth(today), 'yyyy-MM-dd'));
+            setStartDate(format(startOfMonth(currentMonth), 'yyyy-MM-dd'));
+            setEndDate(format(endOfMonth(currentMonth), 'yyyy-MM-dd'));
         } else if (type === 'all') {
             setStartDate(''); setEndDate('');
         }
@@ -123,9 +123,33 @@ export default function Calendar({ currentUser }) {
         setSelectedLanguages(selectedLanguages.length === LANGUAGES.length ? [] : LANGUAGES);
     };
 
-    const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
-    const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
-    const goToToday = () => setCurrentMonth(new Date());
+    const nextMonth = () => {
+        const nextM = addMonths(currentMonth, 1);
+        setCurrentMonth(nextM);
+        if (viewMode === 'agenda') {
+            setStartDate(format(startOfMonth(nextM), 'yyyy-MM-dd'));
+            setEndDate(format(endOfMonth(nextM), 'yyyy-MM-dd'));
+            setActiveShortcut('month');
+        }
+    };
+    const prevMonth = () => {
+        const prevM = subMonths(currentMonth, 1);
+        setCurrentMonth(prevM);
+        if (viewMode === 'agenda') {
+            setStartDate(format(startOfMonth(prevM), 'yyyy-MM-dd'));
+            setEndDate(format(endOfMonth(prevM), 'yyyy-MM-dd'));
+            setActiveShortcut('month');
+        }
+    };
+    const goToToday = () => {
+        const todayD = new Date();
+        setCurrentMonth(todayD);
+        if (viewMode === 'agenda') {
+            setStartDate(format(startOfWeek(todayD, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
+            setEndDate(format(endOfWeek(todayD, { weekStartsOn: 1 }), 'yyyy-MM-dd'));
+            setActiveShortcut('week');
+        }
+    };
 
     const toggleOperator = (op) => {
         if (selectedOperators.includes(op)) {
@@ -168,7 +192,12 @@ export default function Calendar({ currentUser }) {
                                 Mes
                             </button>
                             <button
-                                onClick={() => setViewMode('agenda')}
+                                onClick={() => {
+                                    setViewMode('agenda');
+                                    setStartDate(format(startOfMonth(currentMonth), 'yyyy-MM-dd'));
+                                    setEndDate(format(endOfMonth(currentMonth), 'yyyy-MM-dd'));
+                                    setActiveShortcut('month');
+                                }}
                                 style={{ flex: isMobile ? 1 : 'none', padding: isMobile ? '0.4rem 0.5rem' : '0.5rem 1rem', border: 'none', background: viewMode === 'agenda' ? 'var(--brand-light)' : 'transparent', color: viewMode === 'agenda' ? 'var(--brand-primary)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 600, fontSize: isMobile ? '0.8rem' : '0.875rem' }}
                             >
                                 Agenda
