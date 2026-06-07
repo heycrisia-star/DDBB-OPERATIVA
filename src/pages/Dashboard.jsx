@@ -958,10 +958,10 @@ export default function Dashboard({ currentUser }) {
                             </div>
                         </div>
                         <ResponsiveContainer width="100%" height={280}>
-                            <ChartComp data={monthlyChartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
+                            <ChartComp data={monthlyChartData} margin={{ top: 25, right: 15, left: 0, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
                                 <XAxis dataKey="mes" tick={{ fontSize: 11, fill: 'var(--text-secondary)', fontWeight: 600 }} axisLine={false} tickLine={false} />
-                                <YAxis tick={{ fontSize: 11, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} tickFormatter={v => `${v.toLocaleString('es-ES')}€`} width={70} />
+                                <YAxis domain={[0, dataMax => Math.round(dataMax * 1.15)]} tick={{ fontSize: 11, fill: 'var(--text-secondary)' }} axisLine={false} tickLine={false} tickFormatter={v => `${v.toLocaleString('es-ES')}€`} width={70} />
                                 <Tooltip content={<CustomTooltip />} />
                                 {chartMode === 'bars' ? (
                                     <>
