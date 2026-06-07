@@ -538,6 +538,7 @@ MANUAL_PRICE_CODES = {
     'GYGVN28VL597-BENE',   # Roger payout
     'GYG83XGXNX6K-BENE',   # Roger payout
     'GYGBLHMQAGYV',        # Roger payout (June 7th)
+    'GYGBLHR7FQQ4',        # Roger payout (June 11th)
     'GYGVN28LQQNX',        # Carlos payout (June 8th)
     'GYGVN28LQQNX-BENE',   # Roger payout (June 8th)
     'GYGLMRY2V729',        # Cristian (June 7th)
