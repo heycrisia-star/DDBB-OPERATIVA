@@ -538,6 +538,10 @@ MANUAL_PRICE_CODES = {
     'GYGVN28VL597-BENE',   # Roger payout
     'GYG83XGXNX6K-BENE',   # Roger payout
     'GYGBLHMQAGYV',        # Roger payout (June 7th)
+    'GYGVN28LQQNX',        # Carlos payout (June 8th)
+    'GYGVN28LQQNX-BENE',   # Roger payout (June 8th)
+    'GYGLMRY2V729',        # Cristian (June 7th)
+    'GYGLMRY2V729-BENE',   # Roger payout (June 7th)
     'CASH-20260605-1000',  # Cristian cash payout (220€) protected
     'FH-PENDIENTE-JUNIO'   # FareHarbor pending block (357.86€) protected
 }
@@ -563,16 +567,27 @@ MANUAL_TIME_CODES = {
     'FH348618439',         # Joshua Vargas: move to 11:00
     'VIATOR-1398494071',
     'VIATOR-1405183547',   # Philip Rowberg moved to 14:00
-    'BR-1405183547'        # Philip Rowberg moved to 14:00
+    'BR-1405183547',        # Philip Rowberg moved to 14:00
+    'GYGVN28LQQNX',        # Moved to 17:30
+    'GYGVN28LQQNX-BENE',   # Moved to 17:30
+    'GYGLMRY2V729',        # Set to 20:00
+    'GYGLMRY2V729-BENE',   # Set to 20:00
+    'GYGVN28VL597',        # Moved to 19:30
+    'GYGVN28VL597-BENE'    # Moved to 19:30
 }
 
 MANUAL_PAX_CODES = {
     'VIATOR-1391951661',   # Christophe 9may: 2 pax
     'VIATOR-1398494071',
     'GYGVN28VL597',        # Marie Mourant 8jun Cristian split: 3 pax
+    'GYGVN28VL597-BENE',   # Roger split: 3 pax
     'GYG6H79362L9',        # Sonja Leutert 14aug Carlos split: 3 pax
     'VIATOR-1405183547',   # Philip Rowberg 3 pax
-    'BR-1405183547'        # Philip Rowberg 3 pax
+    'BR-1405183547',        # Philip Rowberg 3 pax
+    'GYGVN28LQQNX',        # Split 8 pax into 4
+    'GYGVN28LQQNX-BENE',   # Split 8 pax into 4
+    'GYGLMRY2V729',        # Split 6 pax into 3
+    'GYGLMRY2V729-BENE'    # Split 6 pax into 3
 }
 
 
@@ -640,7 +655,9 @@ def upsert_booking(tours, booking):
             'GYG7VK522QVA', 'GYGLMRZ3RWQM', 'GYG48YRZB9MX', 'GYG48YVFFBB4',
             'GYG48YVFFBB4-BENE', 'GYGX7NGAH4NG', 'GYGBLHNB9QMQ', 'GYGBLHNB9QMQ-BENE',
             'GYGVN28VL597', 'GYGVN28VL597-BENE', 'GYG6H79362L9', 'GYG6H79362L9-BENE',
-            'VIATOR-1405183547', 'BR-1405183547'
+            'VIATOR-1405183547', 'BR-1405183547',
+            'GYGVN28LQQNX', 'GYGVN28LQQNX-BENE',
+            'GYGLMRY2V729', 'GYGLMRY2V729-BENE'
         }
         if booking.get('code') not in MANUAL_DURATION_CODES:
             if booking.get('duration'):
