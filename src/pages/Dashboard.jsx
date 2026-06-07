@@ -251,11 +251,92 @@ export default function Dashboard({ currentUser }) {
         "FH350327864": 180.00
     };
 
+    const MAY_REAL_PRICES = {
+        "FH341987082": 89.0,
+        "FH342800523": 143.0,
+        "FH344045093": 150.48,
+        "FH346102409": 217.26,
+        "FH346502354": 94.07,
+        "FH346502467": 94.07,
+        "FH347412491": 150.48,
+        "FH347413216": 150.48,
+        "FH350005283": 217.26,
+        "FH350866770": 110.0,
+        "FH352185756": 110.0,
+        "GYG2Q9LLYZVH": 94.08,
+        "GYG2Q9MVXFXV": 94.08,
+        "GYG2Q9NWYWBL": 74.16,
+        "GYG32MAV99H2": 175.79,
+        "GYG48YQ966L3": 94.07,
+        "GYG48YR2Y5XW": 74.16,
+        "GYG48YRZB9MX": 74.16,
+        "GYG48YVFFBB4": 150.48,
+        "GYG48YVL5396": 107.37,
+        "GYG6H8AF6HBQ": 74.16,
+        "GYG6H8AXG2AX": 150.48,
+        "GYG7VK522QVA": 93.60,
+        "GYG7VKX99QR3": 74.16,
+        "GYG7VKYA58R3": 107.37,
+        "GYG83XG7Q9Z3": 150.48,
+        "GYG83XG8B9FQ": 269.78,
+        "GYG83XH8GWNL": 158.21,
+        "GYG83XLG8V2R": 150.48,
+        "GYG99632L8VB": 94.08,
+        "GYG9964YQ7XB": 66.75,
+        "GYG9965Z3NGL": 119.30,
+        "GYG9966MGGBA": 74.16,
+        "GYGBLHN28FZH": 119.30,
+        "GYGBLHN2MZ7Q": 66.75,
+        "GYGBLHNB9QMQ": 94.08,
+        "GYGBLHNK7MH6": 119.30,
+        "GYGBLHR7MLMW": 94.07,
+        "GYGFWV738G5G": 74.16,
+        "GYGFWV8KNHGZ": 217.26,
+        "GYGFWV8NXLXW": 135.42,
+        "GYGG45V225KB": 119.30,
+        "GYGG45V5YAWR": 119.30,
+        "GYGG45VWZ5Q4": 66.75,
+        "GYGG45VYFYY5": 119.30,
+        "GYGG45W3NAAN": 150.48,
+        "GYGKBGBGA6R6": 150.48,
+        "GYGKBGFF5YF6": 158.21,
+        "GYGLMRZ3RWQM": 150.48,
+        "GYGMX4KLRY58": 135.43,
+        "GYGN6B46A575": 300.96,
+        "GYGN6B58M99V": 158.21,
+        "GYGN6B59FR59": 150.48,
+        "GYGN6B5HFV78": 217.29,
+        "GYGRFQQ2MWHR": 119.30,
+        "GYGRFQQLG54A": 217.29,
+        "GYGVN282KNG6": 94.08,
+        "GYGVN3F6AZLX": 94.08,
+        "GYGWZAX5QW9Y": 84.66,
+        "GYGWZAZ5KNKG": 150.48,
+        "GYGX7NF5A3YZ": 150.48,
+        "GYGX7NGAH4NG": 150.48,
+        "GYGZGZ2M4B8R": 217.29,
+        "GYGZGZ2ZAB3Y": 135.43,
+        "VIATOR-1391951661": 93.76,
+        "VIATOR-1395074415": 105.48,
+        "VIATOR-1396370015": 0.0,
+        "VIATOR-1398494071": 155.44,
+        "VIATOR-1401267485": 117.22,
+        "VIATOR-1401271967": 117.22,
+        "VIATOR-1401938481": 147.84,
+        "VIATOR-1403210725": 147.84
+    };
+
     const getRealNetPrice = (t) => {
-        if (t.date && t.date.startsWith("2026-06")) {
+        if (t.date) {
             const code = t.code ? t.code.split('-')[0] : '';
-            if (JUNE_REAL_PRICES[code] !== undefined) {
-                return JUNE_REAL_PRICES[code];
+            if (t.date.startsWith("2026-06")) {
+                if (JUNE_REAL_PRICES[code] !== undefined) {
+                    return JUNE_REAL_PRICES[code];
+                }
+            } else if (t.date.startsWith("2026-05")) {
+                if (MAY_REAL_PRICES[code] !== undefined) {
+                    return MAY_REAL_PRICES[code];
+                }
             }
         }
         return parseFloat(t.netPrice) || 0;
