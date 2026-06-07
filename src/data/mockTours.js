@@ -5940,7 +5940,8 @@ export const MOCK_TOURS = [
     "netPrice": 175.78,
     "product": "Barcelona: Private Tuk Tuk Sightseeing Tour - Gaudí, Sagrada Familia, and Highlights",
     "bookingDate": "2026-06-07",
-    "id": 10117
+    "id": 10117,
+    "pickup": "Innside"
   },
   {
     "id": 47,
