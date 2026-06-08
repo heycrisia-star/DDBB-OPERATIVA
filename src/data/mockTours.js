@@ -5016,7 +5016,7 @@ export const MOCK_TOURS = [
     "start": "09:00",
     "duration": 2,
     "operator": "GYG",
-    "status": "confirmado",
+    "status": "cancelado",
     "pax": 4,
     "vehicle": "02-NR",
     "driver": "Cristian",
