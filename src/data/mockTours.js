@@ -4933,6 +4933,25 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-19"
   },
   {
+    "id": 10135,
+    "code": "GYGX7NFWMKHK-BENE",
+    "date": "2026-06-19",
+    "start": "11:00",
+    "duration": 0,
+    "operator": "GYG",
+    "status": "confirmado",
+    "pax": 2,
+    "vehicle": "02-NR",
+    "driver": "Cristian",
+    "clientName": "Marcus Acosta (BENE)",
+    "phone": "+18326069844",
+    "language": "EN",
+    "country": "",
+    "netPrice": 0.0,
+    "product": "BENE",
+    "bookingDate": "2026-06-19"
+  },
+  {
     "code": "BR-1405161731",
     "date": "2026-06-20",
     "start": "10:00",
