@@ -4933,23 +4933,23 @@ export const MOCK_TOURS = [
     "bookingDate": "2026-06-12"
   },
   {
-    "code": "FH354921414",
+    "code": "354921414",
     "date": "2026-06-13",
     "start": "11:00",
     "duration": 2,
-    "operator": "FH",
+    "operator": "VIATOR",
     "status": "confirmado",
     "pax": 4,
     "vehicle": "01-DR",
     "driver": "Carlos",
-    "clientName": "FareHarbor Customer",
-    "phone": "---",
-    "language": "EN",
+    "clientName": "Christina Tarantola",
+    "phone": "+1 516-724-4113",
+    "language": "ES",
     "country": "",
     "netPrice": 60.74,
-    "product": "Essential Barcelona",
+    "product": "Gaudí, Sagrada Familia & Highlights Tour in a Vintage Electric Car",
     "bookingDate": "2026-06-12",
-    "id": 10153
+    "id": 10154
   },
   {
     "code": "GYG2Q9KY5AHM",
@@ -4961,14 +4961,15 @@ export const MOCK_TOURS = [
     "pax": 2,
     "vehicle": "01-DR",
     "driver": "Roger",
-    "clientName": "GYG Customer",
-    "phone": "---",
+    "clientName": "Mindy Brimmer",
+    "phone": "+1 301-461-1188",
     "language": "EN",
-    "country": "",
+    "country": "Spain",
     "netPrice": 27.0,
     "product": "Essential Barcelona",
     "bookingDate": "2026-06-12",
-    "id": 10152
+    "id": 10152,
+    "pickup": "P/U: Majestic Hotel (Passeig de Gracia)"
   },
   {
     "id": 10092,
