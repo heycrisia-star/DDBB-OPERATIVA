@@ -389,6 +389,11 @@ export default function Calendar({ currentUser }) {
             text: 'Cursa dels 150 anys',
             time: '17:00 a 20:00',
             icon: '🏃‍♂️⚠️'
+        },
+        '2026-09-12': {
+            text: 'COSMO CAIXA',
+            time: '10:00 a 13:00',
+            icon: '🏛️'
         }
     };
 
