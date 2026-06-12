@@ -5516,14 +5516,15 @@ export const MOCK_TOURS = [
     "pax": 4,
     "vehicle": "01-DR",
     "driver": "Roger",
-    "clientName": "Reserva Doble (7px)",
-    "phone": "---",
+    "clientName": "Vanessa Lerch",
+    "phone": "+4917631589255",
     "language": "DE",
-    "country": "",
+    "country": "Germany",
     "netPrice": 81.0,
-    "product": "City, Park and Beach",
+    "product": "Essential Barcelona",
     "bookingDate": "2026-06-12",
-    "id": 10149
+    "id": 10149,
+    "pickup": "P/U: Hotel Majestic (Passeig de Gràcia)"
   },
   {
     "code": "GYGBLHL7GY9A-BENE",
@@ -5535,14 +5536,15 @@ export const MOCK_TOURS = [
     "pax": 3,
     "vehicle": "02-NR",
     "driver": "Cristian",
-    "clientName": "Reserva Doble (7px) (BENE)",
-    "phone": "---",
+    "clientName": "Vanessa Lerch (BENE)",
+    "phone": "+4917631589255",
     "language": "DE",
-    "country": "",
+    "country": "Germany",
     "netPrice": 217.29,
-    "product": "City, Park and Beach",
+    "product": "Essential Barcelona",
     "bookingDate": "2026-06-12",
-    "id": 10150
+    "id": 10150,
+    "pickup": "P/U: Hotel Majestic (Passeig de Gràcia)"
   },
   {
     "code": "GYGVN28Z4239",
